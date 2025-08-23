@@ -34,9 +34,15 @@ urlpatterns = [
     
     path('apariencia', views.apariencia, name="apariencia"),
     
+  
     # URLs para Hero Settings
     path('hero/', views.hero_settings, name='hero_settings'),
-    
+    path('hero/update-background-image/', views.hero_update_background_image, name='hero_update_background_image'),
+    path('hero/remove-background-image/', views.hero_remove_background_image, name='hero_remove_background_image'),
+    path('hero/upload-additional-images/', views.hero_upload_additional_images, name='hero_upload_additional_images'),
+    path('hero/get-additional-images/', views.hero_get_additional_images, name='hero_get_additional_images'),
+    path('hero/remove-additional-image/', views.hero_remove_additional_image, name='hero_remove_additional_image'),
+
     path('menu', views.menu, name="menu"),
 
     path('actualizar/', views.actualizar_nombre_colegio, name='actualizar_nombre_colegio'),

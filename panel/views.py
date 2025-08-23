@@ -904,6 +904,10 @@ def hero_settings(request):
             
             # Si es una petición AJAX, devolver JSON
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # Invalidar cache del home
+                from django.core.cache import cache
+                cache.delete('home_data_v1')
+                
                 return JsonResponse({
                     'success': True,
                     'message': 'Configuración del Hero guardada exitosamente',
@@ -912,6 +916,10 @@ def hero_settings(request):
                 })
             
             # Si no es AJAX, redirigir como antes
+            # Invalidar cache del home
+            from django.core.cache import cache
+            cache.delete('home_data_v1')
+            
             messages.success(request, 'Configuración del Hero guardada exitosamente')
             return redirect('hero_settings')
         else:
@@ -1643,3 +1651,238 @@ def logout_view(request):
 def auth_div(request):
     """Devuelve solo el HTML del div de autenticación"""
     return render(request, 'auth_div.html')
+
+
+
+# Vistas CRUD para Hero Settings - Imágenes
+
+@login_required
+@require_POST
+def hero_update_background_image(request):
+    """Vista para actualizar la imagen de fondo principal"""
+    try:
+        hero = HeroSettings.get_or_create_default()
+        
+        if 'background_image' not in request.FILES:
+            return JsonResponse({
+                'success': False,
+                'message': 'No se recibió ningún archivo'
+            })
+        
+        image_file = request.FILES['background_image']
+        
+        # Validaciones
+        allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+        if image_file.content_type not in allowed_types:
+            return JsonResponse({
+                'success': False,
+                'message': 'Tipo de archivo no permitido. Use JPG, PNG o GIF'
+            })
+        
+        if image_file.size > 5 * 1024 * 1024:  # 5MB
+            return JsonResponse({
+                'success': False,
+                'message': 'El archivo es demasiado grande. Máximo 5MB'
+            })
+        
+        # Eliminar imagen anterior si existe
+        if hero.background_image:
+            hero.background_image.delete(save=False)
+        
+        # Guardar nueva imagen
+        hero.background_image = image_file
+        hero.save()
+        
+        # Invalidar cache del home
+        from django.core.cache import cache
+        cache.delete('home_data_v1')
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Imagen principal actualizada correctamente',
+            'image_url': hero.background_image.url
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error al actualizar la imagen: {str(e)}'
+        })
+
+@login_required
+@require_POST
+def hero_remove_background_image(request):
+    """Vista para eliminar la imagen de fondo principal"""
+    try:
+        hero = HeroSettings.get_or_create_default()
+        
+        if not hero.background_image:
+            return JsonResponse({
+                'success': False,
+                'message': 'No hay imagen para eliminar'
+            })
+        
+        # Eliminar archivo físico
+        hero.background_image.delete(save=False)
+        hero.background_image = None
+        hero.save()
+        
+        # Invalidar cache del home
+        from django.core.cache import cache
+        cache.delete('home_data_v1')
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Imagen principal eliminada correctamente'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error al eliminar la imagen: {str(e)}'
+        })
+
+@login_required
+@require_POST
+def hero_upload_additional_images(request):
+    """Vista para subir múltiples imágenes adicionales"""
+    try:
+        hero = HeroSettings.get_or_create_default()
+        
+        if 'additional_images' not in request.FILES:
+            return JsonResponse({
+                'success': False,
+                'message': 'No se recibieron archivos'
+            })
+        
+        files = request.FILES.getlist('additional_images')
+        uploaded_count = 0
+        errors = []
+        
+        # Obtener el último orden para nuevas imágenes
+        last_order = HeroImage.objects.filter(hero_settings=hero).aggregate(
+            max_order=Max('order')
+        )['max_order'] or -1
+        
+        for i, image_file in enumerate(files):
+            try:
+                # Validaciones por archivo
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+                if image_file.content_type not in allowed_types:
+                    errors.append(f'{image_file.name}: Tipo de archivo no permitido')
+                    continue
+                
+                if image_file.size > 5 * 1024 * 1024:  # 5MB
+                    errors.append(f'{image_file.name}: Archivo demasiado grande (máximo 5MB)')
+                    continue
+                
+                # Crear imagen adicional
+                HeroImage.objects.create(
+                    hero_settings=hero,
+                    image=image_file,
+                    order=last_order + i + 1
+                )
+                uploaded_count += 1
+                
+            except Exception as e:
+                errors.append(f'{image_file.name}: {str(e)}')
+        
+        if uploaded_count > 0:
+            message = f'{uploaded_count} imagen(es) subida(s) correctamente'
+            if errors:
+                message += f'. {len(errors)} archivo(s) con errores'
+            
+            # Invalidar cache del home
+            from django.core.cache import cache
+            cache.delete('home_data_v1')
+            
+            return JsonResponse({
+                'success': True,
+                'message': message,
+                'uploaded_count': uploaded_count,
+                'errors': errors
+            })
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': 'No se pudo subir ninguna imagen',
+                'errors': errors
+            })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error al subir las imágenes: {str(e)}'
+        })
+
+@login_required
+def hero_get_additional_images(request):
+    """Vista para obtener las imágenes adicionales"""
+    try:
+        hero = HeroSettings.get_or_create_default()
+        images = HeroImage.objects.filter(hero_settings=hero).order_by('order')
+        
+        images_data = []
+        for image in images:
+            images_data.append({
+                'id': image.id,
+                'url': image.image.url,
+                'order': image.order
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'images': images_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error al obtener las imágenes: {str(e)}'
+        })
+
+@login_required
+@require_POST
+def hero_remove_additional_image(request):
+    """Vista para eliminar una imagen adicional"""
+    try:
+        import json
+        data = json.loads(request.body)
+        image_id = data.get('image_id')
+        
+        if not image_id:
+            return JsonResponse({
+                'success': False,
+                'message': 'ID de imagen no proporcionado'
+            })
+        
+        try:
+            image = HeroImage.objects.get(id=image_id)
+            
+            # Eliminar archivo físico
+            if image.image:
+                image.image.delete(save=False)
+            
+            image.delete()
+            
+            # Invalidar cache del home
+            from django.core.cache import cache
+            cache.delete('home_data_v1')
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Imagen eliminada correctamente'
+            })
+            
+        except HeroImage.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Imagen no encontrada'
+            })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error al eliminar la imagen: {str(e)}'
+        })
+
