@@ -227,9 +227,21 @@ class CustomUserForm(UserCreationForm):
         fields = ('username', 'first_name', 'email', 'password1', 'password2', 'role')
 
 class FormEvento(forms.ModelForm):
+    fecha = forms.DateTimeField(
+        input_formats=['%m/%d/%Y', '%Y-%m-%d', '%m-%d-%Y', '%d/%m/%Y'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'fecha-ts form-control',
+            'placeholder': 'MM/DD/YYYY'
+        })
+    )
+    
     class Meta:
         model = Evento
         fields = '__all__'
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'texto': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
 
 
 

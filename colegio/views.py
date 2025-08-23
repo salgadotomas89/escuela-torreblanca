@@ -158,16 +158,34 @@ def registro(request):
 
 def guardar_evento(request):
     if request.method == 'POST':
-        # Acceder a los datos del comunicado enviados en la solicitud
+        # Acceder a los datos del evento enviados en la solicitud
         evento = FormEvento(request.POST)
+        print('guardando evento')
+        print('Datos recibidos:', request.POST)
+        
         if evento.is_valid():
-            evento.save()
+            evento_guardado = evento.save()
             print('evento creado')
             
             # Invalidar cache del home cuando se crea un evento
             cache.delete('home_data_v1')
             
-        return JsonResponse({'success': True})
+            return JsonResponse({
+                'success': True, 
+                'message': 'Evento guardado correctamente',
+                'evento': {
+                    'id': evento_guardado.id,
+                    'titulo': evento_guardado.titulo,
+                    'fecha': evento_guardado.fecha.strftime('%Y-%m-%d') if evento_guardado.fecha else None
+                }
+            })
+        else:
+            print('Errores de validación:', evento.errors)
+            return JsonResponse({
+                'success': False, 
+                'error': 'Error de validación',
+                'errors': evento.errors
+            })
     else:
         return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
 
