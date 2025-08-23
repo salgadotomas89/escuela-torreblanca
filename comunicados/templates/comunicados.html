@@ -1,0 +1,325 @@
+{% extends "inicio/layout_updated.html" %}
+
+{% load static %}
+{% block body %}
+{% include "common_styles.html" %}
+
+<link rel="stylesheet" href="{% static 'css/comunicados2.css' %}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+<script src="{% static 'js/comunicados2.js' %}"></script>
+
+<div class="container py-5">
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Comunicados</h1>
+            <p class="lead my-3">Sistema de comunicación entre el colegio y la comunidad educativa.</p>
+        </div>
+    </div>
+
+    <div id="content" 
+        data-initial-color="{{ appearance_settings.comunicados_card_background }}" 
+        data-csrf-token="{{ csrf_token }}"
+        data-guardar-comunicado-url="{% url 'guardar_comunicado' %}"
+        data-crear-texto-url="{% url 'crear_texto' %}"
+        data-autores-frecuentes-url="{% url 'autores_frecuentes' %}"
+        data-eliminar-antiguos-url="{% url 'eliminar_antiguos' %}"
+        data-guardar-color-url="{% url 'guardar_color_comunicados' %}">
+        <div class="row g-4">
+            <!-- Sidebar izquierda -->
+            <div class="col-lg-3 col-md-4">
+                <aside class="position-sticky" style="top: 2rem;">
+                    <div class="bg-light p-4 rounded shadow-sm">
+                        <h5 class="border-bottom pb-2 mb-3">Acciones</h5>
+                        <div class="d-grid gap-2">
+                            {% if user.is_superuser %}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addComunicadoModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                    Redactar
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarAntiguosModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3 me-2" viewBox="0 0 16 16">
+                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                    Eliminar antiguos
+                                </button>
+                                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#colorPickerModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paint-bucket me-2" viewBox="0 0 16 16">
+                                        <path d="M6.192 2.78c-.458-.677-.927-1.248-1.35-1.643a3 3 0 0 0-.71-.515c-.217-.104-.56-.205-.882-.02-.367.213-.427.63-.43.896-.003.304.064.664.173 1.044.196.687.556 1.528 1.035 2.402L.752 8.22c-.277.277-.269.656-.218.918.055.283.187.593.36.903.348.627.92 1.361 1.626 2.068.707.707 1.441 1.278 2.068 1.626.31.173.62.305.903.36.262.05.64.059.918-.218l5.615-5.615c.118.257.092.512.05.939-.03.292-.068.665-.073 1.176v.123h.003a1 1 0 0 0 1.993 0H14v-.057a1 1 0 0 0-.004-.117c-.055-1.25-.7-2.738-1.86-3.494a4 4 0 0 0-.211-.434c-.349-.626-.92-1.36-1.627-2.067-.707-.707-1.441-1.278-2.068-1.626-.31-.172-.62-.304-.903-.36-.262-.05-.64-.058-.918.219l-4.86 4.86q.182.085.365.183c.627.349 1.36.92 2.067 1.627.707.707 1.278 1.441 1.626 2.068q.098.183.183.365z"/>
+                                    </svg>
+                                    Color tarjetas
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-light" onclick="toggleOrdenamiento()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down me-2" viewBox="0 0 16 16">
+                                        <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                                    </svg>
+                                    <span id="ordenTexto">Más recientes primero</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            
+            <!-- Contenido principal -->
+            <div class="col-lg-6 col-md-8">
+                <div class="element-list">
+                    <ul class="list-unstyled">
+                        {% for comunicado in comunicados %}
+                            <li class="card mb-4 shadow-sm" data-autor="{{ comunicado.autor }}" data-comunicado-id="{{ comunicado.id }}">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="card-title mb-0">{{ comunicado.titulo }}</h5>
+                                        <small class="text-muted">{{ comunicado.fecha|default:comunicado.fecha_formateada|date:"d/m/Y" }}</small>
+                                    </div>
+                                    <p class="card-subtitle mb-2 text-muted">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                        </svg>
+                                        {{ comunicado.autor }}
+                                    </p>
+                                    <p class="card-text">{{ comunicado.texto }}</p>
+                                    
+                                    <!-- Contenedor de botones con espaciado consistente -->
+                                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                                        <!-- Grupo de botones principales -->
+                                        {% if comunicado.archivoscomunicado_set.exists %}
+                                            <a href="{{ comunicado.archivoscomunicado_set.first.archivo.url }}" class="btn btn-primary btn-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                </svg>
+                                                Descargar archivo
+                                            </a>
+                                        {% endif %}
+
+                                        <!-- Botón de compartir -->
+                                        <a href="https://www.x.com/share?text={{ comunicado.titulo }} - {{ comunicado.texto }}" class="btn btn-dark btn-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share me-1" viewBox="0 0 16 16">
+                                                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+                                            </svg>
+                                            Compartir
+                                        </a>
+
+                                        <!-- Botón administrativo -->
+                                        {% if user.is_authenticated %}
+                                            <button onclick="eliminarComunicado('{{ comunicado.id }}')" class="btn btn-danger btn-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill me-1" viewBox="0 0 16 16">
+                                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                                </svg>
+                                                Eliminar
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidebar derecha -->
+            <div class="col-lg-3 col-md-12">
+                <aside class="position-sticky" style="top: 2rem;">
+                    <div class="bg-light p-4 rounded shadow-sm mb-4">
+                        <h5 class="border-bottom pb-2 mb-3">Búsqueda</h5>
+                        <p class="text-muted mb-3">Busca un comunicado en específico escribiendo una palabra clave.</p>
+                        <div class="mb-0">
+                            <input type="text" class="form-control" id="search" name="search" placeholder="Escribe para buscar..." onkeyup="filterComunicados()">
+                        </div>
+                    </div>
+
+                    <div class="bg-light p-4 rounded shadow-sm">
+                        <h5 class="border-bottom pb-2 mb-3">Filtrar por Autor</h5>
+                        <p class="text-muted mb-3">Selecciona un autor para ver sus comunicados.</p>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center" onclick="filterByAuthor('todos', event)">
+                                Todos 
+                                <span class="badge bg-primary rounded-pill" id="total-count-right">0</span>
+                            </a>
+                            {% for autor in autores_unicos %}
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="filterByAuthor('{{ autor }}', event)">
+                                    {{ autor }} 
+                                    <span class="badge bg-secondary rounded-pill autor-count" data-autor="{{ autor }}">0</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modificaciones en el modal de agregar comunicado -->
+<div class="modal fade" id="addComunicadoModal" tabindex="-1" aria-labelledby="addComunicadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addComunicadoModalLabel">Escribir Nuevo Comunicado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addComunicadoForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="texto" class="form-label">Texto</label>
+                        <button type="button" 
+                                id="mejorarConIA" 
+                                class="btn btn-sm btn-outline-primary mb-2" 
+                                style="display: none;"
+                                data-bs-toggle="tooltip" 
+                                data-bs-placement="top" 
+                                title="Usa la información entregada para crear un texto completo">
+                            Crear texto con IA
+                        </button>
+                        <textarea class="form-control" id="texto" name="texto" rows="10" style="min-height: 200px;" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="autor" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="autor" name="autor" required list="autores-list" value="{{ request.user.get_full_name|default:request.user.username }}">
+                        <datalist id="autores-list"></datalist>
+                    </div>
+                    <div class="mb-3">
+                        <label for="archivo" class="form-label">Cargar Archivo Original (opcional)</label>
+                        <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf,.doc,.docx" onchange="handleFileSelect(event)">
+                    </div>
+                    <button type="button" id="guardarComunicadoBtn" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para generar comunicado con IA -->
+<div class="modal fade" id="aiComunicadoModal" tabindex="-1" aria-labelledby="aiComunicadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="aiComunicadoModalLabel">Generar Comunicado con IA</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="aiComunicadoForm">
+                    <div class="mb-3">
+                        <label for="tema" class="form-label">Tema del Comunicado</label>
+                        <input type="text" class="form-control" id="tema" name="tema" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detalles" class="form-label">Detalles Clave</label>
+                        <textarea class="form-control" id="detalles" name="detalles" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="generateComunicado()">Generar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar este script al final del archivo, justo antes del cierre de la etiqueta </body> -->
+
+
+<!-- Nuevo modal para enviar comunicado -->
+<div class="modal fade" id="enviarComunicadoModal" tabindex="-1" aria-labelledby="enviarComunicadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enviarComunicadoModalLabel">Enviar Comunicado a Apoderados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="enviarComunicadoForm">
+                    <div class="mb-3">
+                        <label for="enviarOpcion" class="form-label">Opciones de envío:</label>
+                        <select class="form-select" id="enviarOpcion" onchange="toggleCursoSelection()">
+                            <option value="todos">Enviar a todos</option>
+                            <option value="curso">Enviar a cursos específicos</option>
+                        </select>
+                    </div>
+                    <div id="cursoSelection" style="display: none;">
+                        <label for="cursos" class="form-label">Seleccionar cursos:</label>
+                        <select class="form-select" id="cursos" multiple>
+                            <!-- Aquí deberías cargar dinámicamente los cursos disponibles -->
+                            <option value="1">1° Básico</option>
+                            <option value="2">2° Básico</option>
+                            <option value="3">3° Básico</option>
+                            <!-- ... más opciones ... -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="enviarComunicadoConfirmado()">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar este nuevo modal antes del cierre del body -->
+<div class="modal fade" id="eliminarAntiguosModal" tabindex="-1" aria-labelledby="eliminarAntiguosModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarAntiguosModalLabel">Eliminar Comunicados Antiguos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="eliminarAntiguosForm">
+                    <div class="mb-3">
+                        <label for="cantidadEliminar" class="form-label">¿Cuántos comunicados desea eliminar?</label>
+                        <input type="number" class="form-control" id="cantidadEliminar" min="1" value="1" required>
+                        <small class="form-text text-muted">Se eliminarán los comunicados más antiguos según la cantidad especificada.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="confirmarEliminarAntiguos()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modificar el modal del color picker -->
+<div class="modal fade" id="colorPickerModal" tabindex="-1" aria-labelledby="colorPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="colorPickerModalLabel">Color de tarjetas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="cardColor" class="form-label">Selecciona un color</label>
+                    <input type="color" class="form-control form-control-color w-100" id="cardColor" value="{{ appearance_settings.comunicados_card_background }}" title="Elige un color">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarColor()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar este script para el ordenamiento -->
+
+<!-- Scripts optimizados movidos a comunicados.js -->
+
+{% endblock %}
+
+
+
+
+
+

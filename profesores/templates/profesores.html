@@ -1,0 +1,138 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% block body %}
+
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+        <h1 class="display-4 fst-italic">Profesores</h1>
+        <p class="lead my-3">Nuestro establecimiento cuenta con
+        <span class="badge rounded-pill bg-primary">{{ profesores|length }} profesores.</span></p>
+        </div>
+    </div>
+    
+    {% if profesores %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for profesor in profesores %}
+            <div class="col">
+                <div class="social-profile-card">
+                    <div class="social-profile-card__gradient"></div>
+                    <div class="social-profile-card__image-container">
+                        {% if profesor.foto %}
+                            <img class="social-profile-card__image" src="{{ profesor.foto.url }}" alt="Profesor">
+                        {% else %}
+                            <img class="social-profile-card__image" src="{% static 'images/teacher1.png' %}" alt="Profesor">
+                        {% endif %}
+                    </div>
+                    <div class="social-profile-card__content">
+                        <h3 >{{ profesor.user.first_name }} {{ profesor.user.last_name }}</h3>
+                        <p class="social-profile-card__role">{{ profesor.role|title }}</p>
+                        <div class="social-profile-card__stats">
+                            <div class="social-profile-card__stat">
+                                <span >5</span>
+                                <span class="social-profile-card__stat-label">Años</span>
+                            </div>
+                            <div class="social-profile-card__stat">
+                                <span >
+                                    {{ profesor.cursos_count|default:"0" }}
+                                </span>
+                                <span class="social-profile-card__stat-label">Cursos</span>
+                            </div>
+                            <div class="social-profile-card__stat">
+                                <span >
+                                    {{ profesor.asignaturas_count|default:"0" }}
+                                </span>
+                                <span class="social-profile-card__stat-label">Asignaturas</span>
+                            </div>
+                        </div>
+                        <!--
+                            <a href="{% url 'perfil_profesor' id=profesor.id %}" class="social-profile-card__action">Ver perfil</a>
+                            -->
+                            <!--Mostramos el correo electronico-->
+                            <a>{{ profesor.user.email }}</a>
+                            
+                            {% if user.is_superuser %}
+                            <div class="mt-3">
+                                <button type="button" 
+                                        class="btn btn-danger btn-sm" 
+                                        onclick="eliminarProfesor({{ profesor.id }}, '{{ profesor.user.first_name }} {{ profesor.user.last_name }}')"
+                                        title="Eliminar profesor">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </div>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="empty-teachers-container">
+                    <div class="empty-teachers-content">
+                        <div class="empty-teachers-icon">
+                            <i class="bi bi-person-workspace fs-1 mb-3"></i>
+                        </div>
+                        <h3 class="empty-teachers-title">¡Próximamente nuevos profesores!</h3>
+                        <p class="empty-teachers-message">Estamos en proceso de incorporar a nuestro equipo docente.</p>
+                        <div class="empty-teachers-animation">
+                            <div class="pulse-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+<link rel="stylesheet" href="{% static 'css/home/secciones/profesores-empty.css' %}">
+<link rel="stylesheet" href="{% static 'css/home/secciones/noticias-empty.css' %}">
+
+{% if user.is_superuser %}
+<script>
+function eliminarProfesor(profesorId, nombreProfesor) {
+    if (confirm(`¿Estás seguro de que deseas eliminar al profesor ${nombreProfesor}? Esta acción no se puede deshacer.`)) {
+        fetch(`/profesores/eliminar_profesor/${profesorId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Recargar la página para ver los cambios
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el profesor');
+        });
+    }
+}
+
+// Función para obtener el token CSRF
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+.actividades-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+}
+.actividades-section .card-hover {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 1.5rem; /* Esquinas más redondeadas */
+
+}
+.actividades-section .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.actividades-section .icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+.actividades-section .icon-art {
+    background: linear-gradient(135deg, #ef5350 0%, #ec407a 100%);
+}
+.actividades-section .icon-music {
+    background: linear-gradient(135deg, #42a5f5 0%, #26c6da 100%);
+}
+.actividades-section .icon-math {
+    background: linear-gradient(135deg, #66bb6a 0%, #26a69a 100%);
+}
+.actividades-section .icon-language {
+    background: linear-gradient(135deg, #ab47bc 0%, #5c6bc0 100%);
+}
+.actividades-section .section-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.actividades-section .section-subtitle {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+}
+.actividades-section .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.actividades-section .card-text {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}

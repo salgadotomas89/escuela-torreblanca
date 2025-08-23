@@ -1,0 +1,17 @@
+/*efecto de sombra para una seccion del home*/
+
+#sombra-arriba {
+  position: relative;
+  box-shadow: 0 -8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+
+#sombra-abajo {
+  position: relative;
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+

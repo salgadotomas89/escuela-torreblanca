@@ -1,0 +1,24 @@
+{% for curso_asignatura in curso_asignaturas %}
+    <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3 asignatura-link" aria-current="true" data-id="{{ curso_asignatura.asignatura.id }}">
+        <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+            <div>
+                <h6 class="mb-0">{{ curso_asignatura.asignatura.nombre }}</h6>
+            </div>
+            <div class="text-end">
+                <h6 class="mb-0">Profesor:</h6>
+                <small class="text-muted">
+                    {% if curso_asignatura.profesor %}
+                        {{ curso_asignatura.profesor.user.username }}
+                    {% else %}
+                        <span class="text-warning">Sin asignar</span>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </a>
+{% empty %}
+    <p>No hay asignaturas</p>
+{% endfor %}
+
+

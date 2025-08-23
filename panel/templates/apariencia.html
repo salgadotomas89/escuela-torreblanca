@@ -1,0 +1,558 @@
+{% extends "configuracion.html" %}
+{% load static %} 
+{% block body %}
+
+<link rel="stylesheet" href="{% static 'css/config/apariencia.css' %}">
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="display-5 mb-4 fw-semibold">Apariencia del menú</h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post" action="{% url 'apariencia' %}" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <!-- Menú Principal -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Menú Principal</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="{{ form.menu_background_color.id_for_label }}" class="form-label">
+                                                Color de Fondo
+                                                <div class="color-preview preview-menu-background"></div>
+                                            </label>
+                                            {{ form.menu_background_color }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="{{ form.menu_text_color.id_for_label }}" class="form-label">
+                                                Color del Texto
+                                                <div class="color-preview preview-menu-text"></div>
+                                            </label>
+                                            {{ form.menu_text_color }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="{{ form.menu_height.id_for_label }}" class="form-label">Altura del Menú</label>
+                                            {{ form.menu_height }}
+                                            <div class="form-text">Altura en píxeles (50-200)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mega Menú -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Mega Menú</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="{{ form.mega_menu_background_color.id_for_label }}" class="form-label">
+                                                Color de Fondo
+                                                <div class="color-preview preview-mega-menu-background"></div>
+                                            </label>
+                                            {{ form.mega_menu_background_color }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="{{ form.mega_menu_text_color.id_for_label }}" class="form-label">
+                                                Color del Texto
+                                                <div class="color-preview preview-mega-menu-text"></div>
+                                            </label>
+                                            {{ form.mega_menu_text_color }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Color Principal -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Color Principal</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="{{ form.color_principal_texto.id_for_label }}" class="form-label">
+                                                Color Principal del Sitio
+                                                <div class="color-preview preview-color-principal"></div>
+                                            </label>
+                                            {{ form.color_principal_texto }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                {{ form.usar_color_principal }}
+                                                <label class="form-check-label" for="{{ form.usar_color_principal.id_for_label }}">
+                                                    Aplicar color principal a todos los botones primary
+                                                </label>
+                                                <div class="form-text">Al activar esta opción, todos los botones primary del sitio usarán el color principal configurado</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Agregar nueva sección para eventos -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Eventos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="{{ form.eventos_card_background.id_for_label }}" class="form-label">
+                                                Color de Fondo de Tarjetas
+                                                <div class="color-preview preview-eventos-background"></div>
+                                            </label>
+                                            {{ form.eventos_card_background }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="{{ form.eventos_card_text_color.id_for_label }}" class="form-label">
+                                                Color del Texto
+                                                <div class="color-preview preview-eventos-text"></div>
+                                            </label>
+                                            {{ form.eventos_card_text_color }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Vista Previa</h5>
+                </div>
+                <div class="card-body">
+                    <div id="preview-menu" class="mb-4 p-3" style="border: 1px solid #ddd; border-radius: 4px;">
+                        <!-- La vista previa se actualizará con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.color-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.preview-eventos-background {
+    background-color: {{ form.eventos_card_background.value }};
+}
+
+.preview-eventos-text {
+    background-color: {{ form.eventos_card_text_color.value }};
+}
+
+.preview-menu-background {
+    background-color: {{ form.menu_background_color.value }};
+}
+
+.preview-menu-text {
+    background-color: {{ form.menu_text_color.value }};
+}
+
+.preview-mega-menu-background {
+    background-color: {{ form.mega_menu_background_color.value }};
+}
+
+.preview-mega-menu-text {
+    background-color: {{ form.mega_menu_text_color.value }};
+}
+
+.preview-color-principal {
+    background-color: {{ form.color_principal_texto.value }};
+}
+
+.preview-hero-title-color {
+    background-color: {{ form.hero_title_color.value }};
+}
+
+.preview-hero-subtitle-color {
+    background-color: {{ form.hero_subtitle_color.value }};
+}
+
+#preview-menu {
+    min-height: 80px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para actualizar todas las vistas previas de colores
+    function updateColorPreviews() {
+        // Actualizar vista previa del menú principal
+        const menuBg = document.querySelector('[name="menu_background_color"]').value;
+        const menuText = document.querySelector('[name="menu_text_color"]').value;
+        document.querySelector('.preview-menu-background').style.backgroundColor = menuBg;
+        document.querySelector('.preview-menu-text').style.backgroundColor = menuText;
+        
+        // Actualizar vista previa del mega menú
+        document.querySelector('.preview-mega-menu-background').style.backgroundColor = menuBg;
+        document.querySelector('.preview-mega-menu-text').style.backgroundColor = menuText;
+        
+        // Actualizar vista previa del color principal
+        const colorPrincipal = document.querySelector('[name="color_principal_texto"]').value;
+        document.querySelector('.preview-color-principal').style.backgroundColor = colorPrincipal;
+        
+        // Actualizar vista previa de eventos
+        const eventosBg = document.querySelector('[name="eventos_card_background"]').value;
+        const eventosText = document.querySelector('[name="eventos_card_text_color"]').value;
+        document.querySelector('.preview-eventos-background').style.backgroundColor = eventosBg;
+        document.querySelector('.preview-eventos-text').style.backgroundColor = eventosText;
+        
+        // Actualizar vista previa del hero
+        const heroTitleColor = document.querySelector('[name="hero_title_color"]').value;
+        const heroSubtitleColor = document.querySelector('[name="hero_subtitle_color"]').value;
+        document.querySelector('.preview-hero-title-color').style.backgroundColor = heroTitleColor;
+        document.querySelector('.preview-hero-subtitle-color').style.backgroundColor = heroSubtitleColor;
+    }
+
+    // Función para sincronizar colores del mega menú con el menú principal
+    function syncMegaMenuColors() {
+        const menuBg = document.querySelector('[name="menu_background_color"]').value;
+        const menuText = document.querySelector('[name="menu_text_color"]').value;
+        
+        // Actualizar los campos del mega menú
+        document.querySelector('[name="mega_menu_background_color"]').value = menuBg;
+        document.querySelector('[name="mega_menu_text_color"]').value = menuText;
+    }
+
+    // Función para actualizar la vista previa
+    function updatePreview() {
+        const menuBg = document.querySelector('[name="menu_background_color"]').value;
+        const menuText = document.querySelector('[name="menu_text_color"]').value;
+        const menuHeight = document.querySelector('[name="menu_height"]').value;
+        
+        const preview = document.getElementById('preview-menu');
+        preview.style.backgroundColor = menuBg;
+        preview.style.color = menuText;
+        preview.style.height = `${menuHeight}px`;
+        preview.innerHTML = `
+            <div style="height: 100%; display: flex; align-items: center;">
+                <span>Vista previa del menú</span>
+            </div>
+        `;
+    }
+
+    // Sincronizar colores cuando cambian los del menú principal
+    document.querySelector('[name="menu_background_color"]').addEventListener('input', function() {
+        syncMegaMenuColors();
+        updateColorPreviews();
+        updatePreview();
+    });
+
+    document.querySelector('[name="menu_text_color"]').addEventListener('input', function() {
+        syncMegaMenuColors();
+        updateColorPreviews();
+        updatePreview();
+    });
+
+    // Actualizar vistas previas para otros campos de color
+    document.querySelector('[name="color_principal_texto"]').addEventListener('input', updateColorPreviews);
+    document.querySelector('[name="eventos_card_background"]').addEventListener('input', updateColorPreviews);
+    document.querySelector('[name="eventos_card_text_color"]').addEventListener('input', updateColorPreviews);
+    document.querySelector('[name="hero_title_color"]').addEventListener('input', updateColorPreviews);
+    document.querySelector('[name="hero_subtitle_color"]').addEventListener('input', updateColorPreviews);
+
+    // Actualizar vista previa para la altura del menú
+    document.querySelector('[name="menu_height"]').addEventListener('input', updatePreview);
+
+    // Manejar el checkbox para usar color principal
+    document.querySelector('[name="usar_color_principal"]').addEventListener('change', function() {
+        // Solo actualizar vistas previas, la aplicación real se verá después de guardar
+        updateColorPreviews();
+    });
+
+    // === GESTIÓN AVANZADA DE IMAGEN DEL HERO ===
+    
+    // Manejo de selección de nueva imagen
+    const heroImageInput = document.querySelector('[name="hero_background_image"]');
+    const newImagePreview = document.getElementById('new-image-preview');
+    const previewImg = document.getElementById('preview-img');
+    
+    if (heroImageInput) {
+        heroImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Validaciones del lado cliente
+                if (!validateHeroImage(file)) {
+                    this.value = '';
+                    return;
+                }
+                
+                // Mostrar vista previa
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    newImagePreview.style.display = 'block';
+                    
+                    // Agregar información del archivo
+                    const fileInfo = document.createElement('small');
+                    fileInfo.className = 'text-muted d-block mt-1';
+                    fileInfo.innerHTML = `
+                        <i class="bi bi-file-earmark-image me-1"></i>
+                        ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)
+                    `;
+                    
+                    // Remover info anterior si existe
+                    const existingInfo = newImagePreview.querySelector('.file-info');
+                    if (existingInfo) existingInfo.remove();
+                    
+                    fileInfo.classList.add('file-info');
+                    newImagePreview.appendChild(fileInfo);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                newImagePreview.style.display = 'none';
+            }
+        });
+    }
+    
+    // Función de validación de imagen
+    function validateHeroImage(file) {
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        
+        // Validar tipo
+        if (!allowedTypes.includes(file.type)) {
+            showNotification('Tipo de archivo no válido. Use JPG, PNG o WebP.', 'error');
+            return false;
+        }
+        
+        // Validar tamaño
+        if (file.size > maxSize) {
+            showNotification('El archivo es demasiado grande. Máximo 5MB.', 'error');
+            return false;
+        }
+        
+        // Validar dimensiones (opcional - requiere cargar la imagen)
+        validateImageDimensions(file);
+        
+        return true;
+    }
+    
+    // Validar dimensiones de imagen
+    function validateImageDimensions(file) {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        
+        img.onload = function() {
+            const width = this.naturalWidth;
+            const height = this.naturalHeight;
+            const ratio = width / height;
+            
+            // Sugerir mejores dimensiones si no son ideales
+            if (width < 1920 || height < 1080) {
+                showNotification(
+                    `Imagen pequeña detectada (${width}x${height}). Para mejores resultados use al menos 1920x1080px.`, 
+                    'warning'
+                );
+            }
+            
+            if (ratio < 1.5 || ratio > 2.0) {
+                showNotification(
+                    'La proporción de la imagen no es ideal. Recomendamos usar imágenes con proporción 16:9.', 
+                    'warning'
+                );
+            }
+            
+            URL.revokeObjectURL(url);
+        };
+        
+        img.src = url;
+    }
+    
+    // Manejo de eliminación de imagen
+    const removeHeroImageBtn = document.getElementById('remove-hero-image');
+    if (removeHeroImageBtn) {
+        removeHeroImageBtn.addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que quieres eliminar la imagen del hero? Se usará la imagen por defecto.')) {
+                // Realizar petición AJAX para eliminar imagen
+                fetch('{% url "remove_hero_image" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Imagen eliminada exitosamente. La página se recargará...', 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showNotification('Error al eliminar la imagen', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error al eliminar la imagen', 'error');
+                });
+            }
+        });
+    }
+    
+    // Función auxiliar para obtener cookies CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // Mejorar función de notificaciones para soportar diferentes tipos
+    function showNotification(message, type = 'info') {
+        // Crear elemento de notificación
+        const notification = document.createElement('div');
+        const alertClass = type === 'success' ? 'success' : 
+                          type === 'error' ? 'danger' : 
+                          type === 'warning' ? 'warning' : 'info';
+        
+        notification.className = `alert alert-${alertClass} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '9999';
+        notification.style.maxWidth = '400px';
+        
+        const icon = type === 'success' ? 'check-circle' : 
+                     type === 'error' ? 'exclamation-triangle' : 
+                     type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+        
+        notification.innerHTML = `
+            <i class="bi bi-${icon} me-2"></i>${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        // Agregar al DOM
+        document.body.appendChild(notification);
+        
+        // Remover después de unos segundos
+        const timeout = type === 'warning' ? 5000 : 3000;
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, timeout);
+    }
+
+    // Evitar redirección al guardar el formulario
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalContent = submitButton.innerHTML;
+        
+        // Mostrar spinner y deshabilitar botón
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Guardando...
+        `;
+        
+        // Crear FormData con los datos del formulario
+        const formData = new FormData(this);
+        
+        // Enviar datos por fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mostrar mensaje de éxito y recargar
+                showNotification('Cambios guardados exitosamente. La página se recargará...', 'success');
+                
+                // Esperar 1.5 segundos y recargar la página
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                // Mostrar mensaje de error
+                showNotification('Error al guardar los cambios', 'error');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalContent;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error al guardar los cambios', 'error');
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalContent;
+        });
+    });
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type) {
+        // Crear elemento de notificación
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '9999';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Agregar al DOM
+        document.body.appendChild(notification);
+        
+        // Remover después de 3 segundos
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Inicializar sincronización y vista previa
+    syncMegaMenuColors();
+    updateColorPreviews();
+    updatePreview();
+});
+</script>
+
+{% endblock %}

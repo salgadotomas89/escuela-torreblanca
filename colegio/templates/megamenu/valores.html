@@ -1,0 +1,132 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% block body %}
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Nuestros Valores</h1>
+            <p class="lead my-3">Los principios que nos definen como comunidad educativa y guían nuestro actuar.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="text-center mb-5">
+                            <i class="bi bi-gem text-info" style="font-size: 3rem;"></i>
+                            <h2 class="mt-3 text-info">Valores {{ colegio.nombre }}</h2>
+                            <p class="lead text-muted">Los valores que guían nuestro quehacer educativo</p>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Respeto -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-hand-thumbs-up text-primary" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-primary">Respeto</h4>
+                                        <p class="card-text text-muted">
+                                            Valoramos la dignidad de cada persona, promoviendo un ambiente de 
+                                            convivencia armoniosa basado en la tolerancia y el reconocimiento mutuo.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Responsabilidad -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-shield-check text-success" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-success">Responsabilidad</h4>
+                                        <p class="card-text text-muted">
+                                            Fomentamos el compromiso personal con las propias acciones y decisiones, 
+                                            desarrollando ciudadanos conscientes de su rol en la sociedad.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Honestidad -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-heart text-danger" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-danger">Honestidad</h4>
+                                        <p class="card-text text-muted">
+                                            Cultivamos la transparencia y sinceridad en todas nuestras relaciones, 
+                                            construyendo confianza y credibilidad en nuestra comunidad.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Solidaridad -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-people-fill text-warning" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-warning">Solidaridad</h4>
+                                        <p class="card-text text-muted">
+                                            Promovemos el apoyo mutuo y la colaboración, formando una comunidad 
+                                            unida que se preocupa por el bienestar de todos sus miembros.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Excelencia -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-trophy text-info" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-info">Excelencia</h4>
+                                        <p class="card-text text-muted">
+                                            Buscamos constantemente la mejora continua en todos nuestros procesos, 
+                                            aspirando siempre a dar lo mejor de nosotros mismos.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Perseverancia -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-mountain text-dark" style="font-size: 2.5rem;"></i>
+                                        <h4 class="card-title mt-3 text-dark">Perseverancia</h4>
+                                        <p class="card-text text-muted">
+                                            Enseñamos la importancia de mantener el esfuerzo y la dedicación 
+                                            ante los desafíos, desarrollando la capacidad de superar obstáculos.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-5">
+                            <div class="card bg-light border-0">
+                                <div class="card-body p-4">
+                                    <h5 class="text-muted">
+                                        "Los valores no se enseñan con palabras, se viven con el ejemplo"
+                                    </h5>
+                                    <p class="text-muted mb-0">- Comunidad Educativa {{ colegio.nombre }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="{% url 'inicio' %}" class="btn btn-info btn-lg">
+                                <i class="bi bi-house me-2"></i>Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% block body %}
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Nuestra Misión</h1>
+            <p class="lead my-3">El propósito que nos guía cada día en nuestra labor educativa.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-body p-5">
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-bullseye text-danger" style="font-size: 3rem;"></i>
+                                </div>
+                                
+                                <h2 class="text-center mb-4 text-danger">Misión {{ colegio.nombre }}</h2>
+                                
+                                <div class="mision-content">
+                                    <p class="text-muted fs-5 lh-lg text-center">
+                                        Brindar una educación integral de calidad que potencie las habilidades académicas, 
+                                        socioemocionales y ciudadanas de nuestros estudiantes, a través de metodologías 
+                                        innovadoras y un ambiente de aprendizaje colaborativo, preparándolos para enfrentar 
+                                        los desafíos del siglo XXI con valores sólidos y pensamiento crítico.
+                                    </p>
+                                    
+                                    <hr class="my-4">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-book text-primary me-3" style="font-size: 1.5rem;"></i>
+                                                <div>
+                                                    <h5>Educación Integral</h5>
+                                                    <p class="text-muted">Desarrollo académico, emocional y social</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-gear text-warning me-3" style="font-size: 1.5rem;"></i>
+                                                <div>
+                                                    <h5>Metodologías Innovadoras</h5>
+                                                    <p class="text-muted">Herramientas modernas de enseñanza</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-heart text-success me-3" style="font-size: 1.5rem;"></i>
+                                                <div>
+                                                    <h5>Valores Sólidos</h5>
+                                                    <p class="text-muted">Formación ética y ciudadana</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-puzzle text-info me-3" style="font-size: 1.5rem;"></i>
+                                                <div>
+                                                    <h5>Pensamiento Crítico</h5>
+                                                    <p class="text-muted">Habilidades para el siglo XXI</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-4">
+                                    <a href="{% url 'inicio' %}" class="btn btn-danger btn-lg">
+                                        <i class="bi bi-house me-2"></i>Volver al Inicio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

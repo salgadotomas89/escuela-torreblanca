@@ -1,0 +1,284 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %} 
+{% block body %}
+
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+  <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+    <div class="col-md-6 px-0">
+      <h1 class="display-4 fst-italic">CONTACTO</h1>
+      <p class="lead my-3">
+        {% if colegio and colegio.nombre %}
+          ¡Estamos aquí para ayudarte! Ponte en contacto con {{ colegio.nombre }} y resolveremos todas tus dudas.
+        {% else %}
+          ¡Estamos aquí para ayudarte! Ponte en contacto con nosotros y resolveremos todas tus dudas.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-5">
+    <!-- Imagen lado izquierdo -->
+    <div class="col-md-6">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="text-center mb-4">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m11!1m3!1d588.6647748698776!2d-71.729121525611!3d-35.59215877816916!2m2!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9665e8f049734b2d%3A0x14e2336e25cc1621!2sTorreblanca%202348%2C%203660388%20Linares%2C%20San%20Javier%20de%20Loncomilla%2C%20Maule!5e1!3m2!1ses!2scl!4v1753887226828!5m2!1ses!2scl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        
+        <div class="p-4 mb-3 bg-light rounded shadow-sm">
+          <h4 class="fst-italic border-bottom pb-2 mb-3">Información de Contacto</h4>
+          
+          {% if colegio %}
+            <div class="mb-3">
+              <i class="fas fa-map-marker-alt text-primary me-2"></i>
+              <strong>Dirección:</strong><br>
+              <span class="ms-4">{{ colegio.direccion|default:"Dirección no disponible" }}</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-phone text-primary me-2"></i>
+              <strong>Teléfono:</strong><br>
+              <span class="ms-4">{{ colegio.telefono|default:"Teléfono no disponible" }}</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-envelope text-primary me-2"></i>
+              <strong>Email:</strong><br>
+              <span class="ms-4">{{ colegio.email|default:"Email no disponible" }}</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-clock text-primary me-2"></i>
+              <strong>Horario de Atención:</strong><br>
+              <span class="ms-4">{{ colegio.horario|default:"Lunes a Viernes: 8:00 - 18:00" }}</span>
+            </div>
+            {% if colegio.region %}
+            <div class="mb-3">
+              <i class="fas fa-map text-primary me-2"></i>
+              <strong>Región:</strong><br>
+              <span class="ms-4">{{ colegio.region }}, {{ colegio.pais|default:"Chile" }}</span>
+            </div>
+            {% endif %}
+          {% else %}
+            <!-- Información de respaldo si no hay datos del colegio -->
+            <div class="mb-3">
+              <i class="fas fa-map-marker-alt text-primary me-2"></i>
+              <strong>Dirección:</strong><br>
+              <span class="ms-4">Información no disponible</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-phone text-primary me-2"></i>
+              <strong>Teléfono:</strong><br>
+              <span class="ms-4">Información no disponible</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-envelope text-primary me-2"></i>
+              <strong>Email:</strong><br>
+              <span class="ms-4">Información no disponible</span>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-clock text-primary me-2"></i>
+              <strong>Horario de Atención:</strong><br>
+              <span class="ms-4">Lunes a Viernes: 8:00 - 18:00</span>
+            </div>
+          {% endif %}
+        </div>
+
+        
+      </div>
+    </div>
+
+    <!-- Formulario lado derecho -->
+    <div class="col-md-6">
+      <div class="bg-white p-4 rounded shadow-sm">
+        <h3 class="mb-4 text-primary">Envíanos un mensaje</h3>
+        
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form id="contacto-form" class="needs-validation" method="post">
+          {% csrf_token %}
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre *</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" required>
+              <div class="invalid-feedback">
+                Por favor ingresa tu nombre.
+              </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="apellido" class="form-label">Apellido *</label>
+              <input type="text" class="form-control" id="apellido" name="apellido" required>
+              <div class="invalid-feedback">
+                Por favor ingresa tu apellido.
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="invalid-feedback">
+              Por favor ingresa un email válido.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono">
+          </div>
+
+          <div class="mb-3">
+            <label for="asunto" class="form-label">Asunto *</label>
+            <select class="form-select" id="asunto" name="asunto" required>
+              <option value="">Selecciona un asunto</option>
+              <option value="consulta_general">Consulta General</option>
+              <option value="admisiones">Admisiones</option>
+              <option value="reclamo">Reclamo</option>
+              <option value="sugerencia">Sugerencia</option>
+              <option value="otro">Otro</option>
+            </select>
+            <div class="invalid-feedback">
+              Por favor selecciona un asunto.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="mensaje" class="form-label">Mensaje *</label>
+            <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
+            <div class="invalid-feedback">
+              Por favor ingresa tu mensaje.
+            </div>
+          </div>
+
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="acepto_politicas" name="acepto_politicas" required>
+            <label class="form-check-label" for="acepto_politicas">
+              Acepto los <a href="{% url 'terminos_condiciones' %}" target="_blank" class="text-primary">términos y condiciones</a> y autorizo el tratamiento de mis datos personales conforme a las políticas de privacidad del colegio *
+            </label>
+            <div class="invalid-feedback">
+              Debes aceptar los términos y condiciones y autorizar el tratamiento de tus datos personales.
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+              <span class="btn-content">
+                <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+              </span>
+              <span class="btn-loading d-none">
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Enviando...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+  }
+  
+  .btn-primary:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    opacity: 1;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+  }
+  
+  .spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  #submit-btn {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contacto-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnContent = submitBtn.querySelector('.btn-content');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        // Verificar que todos los campos requeridos están llenos
+        const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+        let allValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            allValid = false;
+          }
+        });
+        
+        // Verificar checkbox de términos
+        const terminosCheckbox = document.getElementById('acepto_politicas');
+        if (!terminosCheckbox.checked) {
+          allValid = false;
+        }
+        
+        // Solo mostrar spinner si el formulario es válido
+        if (allValid) {
+          // Mostrar spinner y deshabilitar botón
+          btnContent.classList.add('d-none');
+          btnLoading.classList.remove('d-none');
+          submitBtn.disabled = true;
+          
+          // Re-habilitar botón después de 10 segundos (por si hay error)
+          setTimeout(function() {
+            btnContent.classList.remove('d-none');
+            btnLoading.classList.add('d-none');
+            submitBtn.disabled = false;
+          }, 10000);
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}
+
+{% endblock %}

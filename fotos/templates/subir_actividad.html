@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subir Actividad</title>
+</head>
+<body>
+    <h1>Subir Nueva Actividad</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ formset.management_form }}
+        {% for image_form in formset %}
+            {{ image_form.as_p }}
+        {% endfor %}
+        <button type="submit">Subir</button>
+    </form>
+    <a href="{% url 'lista_actividades' %}">Volver a la Galería</a>
+</body>
+</html>

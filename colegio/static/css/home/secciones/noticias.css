@@ -1,0 +1,127 @@
+/* Espaciado vertical consistente para la sección noticias */
+#noticias {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Ajustar la altura y alineación de los elementos del carousel */
+#noticias .carousel-item {
+    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Espaciado consistente para los contenedores de noticias */
+#noticias .container {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* Espaciado consistente para las filas */
+#noticias .row {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Espaciado consistente para columnas */
+#noticias .col-md-6 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* Espaciado consistente para títulos */
+#noticias h2,
+#noticias .display-6 {
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+}
+
+/* Espaciado consistente para textos */
+#noticias p,
+#noticias .lead {
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+}
+
+/* Espaciado consistente para botones */
+#noticias .btn,
+#noticias a.btn {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Espaciado consistente para imágenes */
+#noticias img {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Contenedor para noticias vacías */
+#noticias .empty-news-container {
+    padding: 1.5rem 1rem;
+    margin: 1rem auto;
+}
+
+#noticias .empty-news-content {
+    padding: 1rem;
+}
+
+#noticias .empty-news-icon {
+    margin-bottom: 0.75rem;
+}
+
+#noticias .empty-news-title {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+#noticias .empty-news-message {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+/* Ajustes para flex container */
+#noticias .d-flex {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* Ajustes específicos para eliminar espacios entre secciones */
+#noticias + #sombra-abajo {
+    margin-top: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Asegurarse de que no haya espacios verticales excesivos */
+.main-content section:not(:first-child) {
+    margin-top: 0;
+}
+
+/* Corrección para el espaciado interior consistente en el calendario */
+#sombra-abajo h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+/* Eliminar espacios innecesarios en los contenedores de noticias */
+#noticias .noticia-contenido {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Ajustes para responsive */
+@media (max-width: 768px) {
+    #noticias .col-md-6 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    #noticias .d-flex {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+}
+

@@ -1,0 +1,75 @@
+<!-- Componente reutilizable para mostrar redes sociales -->
+
+{% if redes_sociales.facebook or redes_sociales.twitter or redes_sociales.instagram or redes_sociales.youtube %}
+    <div class="redes-sociales-container">
+        {% if style == 'buttons' %}
+            <!-- Estilo de botones (usado en footer) -->
+            {% if redes_sociales.facebook %}
+                <a href="{{ redes_sociales.facebook }}" target="_blank" class="btn btn-primary me-1" 
+                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                   title="Síguenos en Facebook">
+                    <i class="fa-brands fa-facebook"></i> Facebook
+                </a>
+            {% endif %}
+            
+            {% if redes_sociales.twitter %}
+                <a href="{{ redes_sociales.twitter }}" target="_blank" class="btn btn-secondary me-1" 
+                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                   title="Síguenos en Twitter/X">
+                    <i class="fa-brands fa-twitter"></i> X
+                </a>
+            {% endif %}
+            
+            {% if redes_sociales.youtube %}
+                <a href="{{ redes_sociales.youtube }}" target="_blank" class="btn btn-warning me-1" 
+                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                   title="Síguenos en YouTube">
+                    <i class="fa-brands fa-youtube"></i> YouTube
+                </a>
+            {% endif %}
+            
+            {% if redes_sociales.instagram %}
+                <a href="{{ redes_sociales.instagram }}" target="_blank" class="btn btn-info me-1" 
+                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                   title="Síguenos en Instagram">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+            {% endif %}
+            
+        {% elif style == 'links' %}
+            <!-- Estilo de enlaces (usado en sidebar) -->
+            {% if redes_sociales.instagram %}
+                <li><a href="{{ redes_sociales.instagram }}" target="_blank" class="text-decoration-none" title="Síguenos en Instagram">
+                    <i class="fab fa-instagram me-2"></i>Instagram
+                </a></li>
+            {% endif %}
+            {% if redes_sociales.twitter %}
+                <li><a href="{{ redes_sociales.twitter }}" target="_blank" class="text-decoration-none" title="Síguenos en Twitter/X">
+                    <i class="fab fa-twitter me-2"></i>Twitter
+                </a></li>
+            {% endif %}
+            {% if redes_sociales.facebook %}
+                <li><a href="{{ redes_sociales.facebook }}" target="_blank" class="text-decoration-none" title="Síguenos en Facebook">
+                    <i class="fab fa-facebook me-2"></i>Facebook
+                </a></li>
+            {% endif %}
+            {% if redes_sociales.youtube %}
+                <li><a href="{{ redes_sociales.youtube }}" target="_blank" class="text-decoration-none" title="Síguenos en YouTube">
+                    <i class="fab fa-youtube me-2"></i>YouTube
+                </a></li>
+            {% endif %}
+        {% endif %}
+    </div>
+{% else %}
+    <!-- Mostrar mensaje si no hay redes sociales configuradas -->
+    <div class="no-social-networks text-muted text-center">
+        {% if user.is_authenticated and show_config_link|default:True %}
+            <i class="bi bi-gear"></i> 
+            <a href="{% url 'configuracion_redes_sociales' %}" class="text-decoration-none">
+                Configurar redes sociales
+            </a>
+        {% else %}
+            <i class="bi bi-clock"></i> Próximamente en redes sociales
+        {% endif %}
+    </div>
+{% endif %}

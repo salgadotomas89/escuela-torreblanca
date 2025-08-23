@@ -1,0 +1,189 @@
+:root {
+    --menu-background-color: #FFFFFF;            /* Color de fondo por defecto para el menú principal. */
+    --menu-text-color: #000000;                  /* Color de texto por defecto para el menú principal. */
+    --menu-height: 80px;                         /* Altura por defecto para el menú. */
+    /* ... mega menu ... */
+    --mega-menu-background-color: white;       /* Color de fondo por defecto para el mega menú. */
+    --mega-menu-text-color: #000000;             /* Color de texto por defecto para el mega menú. */
+    --color_principal_texto: #000000;
+    --color_principal_texto-dark: color-mix(in srgb, var(--color_principal_texto) 70%, black 30%);
+}
+
+
+.btn.btn {
+  border-radius: 2rem !important;
+}
+
+/* ...existing code... */
+
+/* Efecto 2D para botones primary */
+.btn-primary {
+  background: #f7d26a !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 var(--color_principal_texto-dark), 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 var(--color_principal_texto-dark), 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.btn-primary:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 var(--color_principal_texto-dark), 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+
+/* Efecto 2D para botones warning */
+.btn-warning {
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #b68c19, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+
+.btn-warning:active,
+.btn-warning:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #b68c19, 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.btn-warning:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #b68c19, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones danger */
+.btn-danger {
+  background: #dc3545 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #a71d2a, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-danger:active,
+.btn-danger:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #a71d2a, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-danger:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #a71d2a, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones success */
+.btn-success {
+  background: #28a745 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #1e7e34, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-success:active,
+.btn-success:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #1e7e34, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-success:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #1e7e34, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones info */
+.btn-info {
+  background: #17a2b8 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #117a8b, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-info:active,
+.btn-info:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #117a8b, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-info:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #117a8b, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones light */
+.btn-light {
+  background: #f8f9fa !important;
+  color: #212529 !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #cfcfcf, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-light:active,
+.btn-light:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #cfcfcf, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-light:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #cfcfcf, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones dark */
+.btn-dark {
+  background: #343a40 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #1d2124, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-dark:active,
+.btn-dark:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #1d2124, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-dark:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #1d2124, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}
+
+/* Efecto 2D para botones secondary */
+.btn-secondary {
+  background: #6c757d !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 0 #494f54, 0 8px 15px rgba(0,0,0,0.05);
+  font-weight: bold;
+  transition: all 0.15s cubic-bezier(.17,.67,.83,.67);
+  position: relative;
+}
+.btn-secondary:active,
+.btn-secondary:focus {
+  top: 8px;
+  box-shadow: 0 0px 0 #494f54, 0 2px 6px rgba(0,0,0,0.08);
+}
+.btn-secondary:hover {
+  top: 2px;
+  box-shadow: 0 4px 0 #494f54, 0 6px 12px rgba(0,0,0,0.07);
+  filter: brightness(1.05);
+}

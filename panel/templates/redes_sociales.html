@@ -1,0 +1,287 @@
+{% extends "configuracion.html" %}
+{% load static %}
+
+{% block body %}
+
+<h2 class="display-5 mb-3 fw-semibold lh-sm">Configuración de Redes Sociales</h2>
+
+<!-- Mensajes de alerta -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Formulario de configuración -->
+<form method="post" id="redes-sociales-form">
+    {% csrf_token %}
+    
+    <div class="row">
+        <!-- Facebook -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <div class="social-icon facebook mb-3">
+                        <i class="bi bi-facebook fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Facebook</h5>
+                    <div class="form-group">
+                        <label for="facebook_url" class="form-label">URL de Facebook:</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="facebook_url" 
+                               name="facebook_url" 
+                               value="{{ apariencia.facebook_url|default:'' }}"
+                               placeholder="https://facebook.com/tu-pagina">
+                        <div class="form-text">
+                            Ejemplo: https://facebook.com/tu-colegio
+                        </div>
+                    </div>
+                    {% if apariencia.facebook_url %}
+                        <div class="mt-2">
+                            <a href="{{ apariencia.facebook_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i> Vista previa
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Twitter/X -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-dark">
+                <div class="card-body text-center">
+                    <div class="social-icon twitter mb-3">
+                        <i class="bi bi-twitter-x fs-1"></i>
+                    </div>
+                    <h5 class="card-title">Twitter / X</h5>
+                    <div class="form-group">
+                        <label for="twitter_url" class="form-label">URL de Twitter/X:</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="twitter_url" 
+                               name="twitter_url" 
+                               value="{{ apariencia.twitter_url|default:'' }}"
+                               placeholder="https://twitter.com/tu-cuenta">
+                        <div class="form-text">
+                            Ejemplo: https://twitter.com/tu-colegio
+                        </div>
+                    </div>
+                    {% if apariencia.twitter_url %}
+                        <div class="mt-2">
+                            <a href="{{ apariencia.twitter_url }}" target="_blank" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-eye"></i> Vista previa
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Instagram -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-danger">
+                <div class="card-body text-center">
+                    <div class="social-icon instagram mb-3">
+                        <i class="bi bi-instagram fs-1 text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Instagram</h5>
+                    <div class="form-group">
+                        <label for="instagram_url" class="form-label">URL de Instagram:</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="instagram_url" 
+                               name="instagram_url" 
+                               value="{{ apariencia.instagram_url|default:'' }}"
+                               placeholder="https://instagram.com/tu-cuenta">
+                        <div class="form-text">
+                            Ejemplo: https://instagram.com/tu-colegio
+                        </div>
+                    </div>
+                    {% if apariencia.instagram_url %}
+                        <div class="mt-2">
+                            <a href="{{ apariencia.instagram_url }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-eye"></i> Vista previa
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- YouTube -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-body text-center">
+                    <div class="social-icon youtube mb-3">
+                        <i class="bi bi-youtube fs-1 text-warning"></i>
+                    </div>
+                    <h5 class="card-title">YouTube</h5>
+                    <div class="form-group">
+                        <label for="youtube_url" class="form-label">URL de YouTube:</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="youtube_url" 
+                               name="youtube_url" 
+                               value="{{ apariencia.youtube_url|default:'' }}"
+                               placeholder="https://youtube.com/channel/tu-canal">
+                        <div class="form-text">
+                            Ejemplo: https://youtube.com/channel/UC...
+                        </div>
+                    </div>
+                    {% if apariencia.youtube_url %}
+                        <div class="mt-2">
+                            <a href="{{ apariencia.youtube_url }}" target="_blank" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-eye"></i> Vista previa
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+            <i class="bi bi-arrow-clockwise"></i> Limpiar
+        </button>
+        <div>
+            <button type="button" class="btn btn-outline-primary me-2" onclick="previsualizarCambios()">
+                <i class="bi bi-eye"></i> Previsualizar
+            </button>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-lg"></i> Guardar Configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Información adicional -->
+<div class="mt-5">
+    <div class="alert alert-info">
+        <h6><i class="bi bi-info-circle"></i> Información importante:</h6>
+        <ul class="mb-0">
+            <li>Las URLs configuradas aquí aparecerán automáticamente en el footer y otras secciones del sitio web.</li>
+            <li>Si dejas un campo vacío, esa red social no aparecerá en el sitio.</li>
+            <li>Asegúrate de usar URLs completas (incluyendo https://).</li>
+            <li>Los cambios se aplicarán inmediatamente después de guardar.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Modal de previsualización -->
+<div class="modal fade" id="previsualizacionModal" tabindex="-1" aria-labelledby="previsualizacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previsualizacionModalLabel">Previsualización de Redes Sociales</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Vista previa de cómo aparecerán las redes sociales en el footer:</p>
+                <div class="p-3 bg-light rounded">
+                    <div id="preview-social-links">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.social-icon {
+    transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transition: box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+</style>
+
+<script>
+function limpiarFormulario() {
+    if (confirm('¿Estás seguro de que quieres limpiar todos los campos?')) {
+        document.getElementById('facebook_url').value = '';
+        document.getElementById('twitter_url').value = '';
+        document.getElementById('instagram_url').value = '';
+        document.getElementById('youtube_url').value = '';
+    }
+}
+
+function previsualizarCambios() {
+    const facebook = document.getElementById('facebook_url').value;
+    const twitter = document.getElementById('twitter_url').value;
+    const instagram = document.getElementById('instagram_url').value;
+    const youtube = document.getElementById('youtube_url').value;
+    
+    let previewHTML = '<div class="d-flex justify-content-center gap-3">';
+    
+    if (facebook) {
+        previewHTML += `<a href="${facebook}" target="_blank" class="btn btn-primary btn-sm">
+            <i class="bi bi-facebook"></i> Facebook
+        </a>`;
+    }
+    
+    if (twitter) {
+        previewHTML += `<a href="${twitter}" target="_blank" class="btn btn-dark btn-sm">
+            <i class="bi bi-twitter-x"></i> Twitter
+        </a>`;
+    }
+    
+    if (instagram) {
+        previewHTML += `<a href="${instagram}" target="_blank" class="btn btn-danger btn-sm">
+            <i class="bi bi-instagram"></i> Instagram
+        </a>`;
+    }
+    
+    if (youtube) {
+        previewHTML += `<a href="${youtube}" target="_blank" class="btn btn-warning btn-sm">
+            <i class="bi bi-youtube"></i> YouTube
+        </a>`;
+    }
+    
+    previewHTML += '</div>';
+    
+    if (!facebook && !twitter && !instagram && !youtube) {
+        previewHTML = '<p class="text-center text-muted">No hay redes sociales configuradas</p>';
+    }
+    
+    document.getElementById('preview-social-links').innerHTML = previewHTML;
+    
+    // Mostrar el modal
+    const modal = new bootstrap.Modal(document.getElementById('previsualizacionModal'));
+    modal.show();
+}
+
+// Validación en tiempo real
+document.querySelectorAll('input[type="url"]').forEach(input => {
+    input.addEventListener('input', function() {
+        if (this.value && !this.value.match(/^https?:\/\/.+/)) {
+            this.setCustomValidity('La URL debe comenzar con http:// o https://');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+});
+</script>
+
+{% endblock %}

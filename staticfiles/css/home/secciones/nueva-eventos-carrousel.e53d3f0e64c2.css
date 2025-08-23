@@ -1,0 +1,121 @@
+.carousel-eventos {
+    margin: 0 auto;
+    padding: 20px 0;
+    overflow: hidden;
+    display: flex;
+    > * {
+      flex: 0 0 100%;
+    }
+    &:hover .group {
+      animation-play-state: paused;
+    }
+  }
+
+  .card-carousel {
+    width: 100%;
+    color: black;
+    border-radius: 15px;
+    box-shadow: rgba(130, 130, 130, 0.1) 5px 5px 20px 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    background: white;
+    border: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .card-carousel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    background-color: #f8f9fa;
+    color: #1c1d1f;
+  }
+
+  .card-carousel .card-body {
+    position: relative;
+    padding: 1.5rem;
+    display: flex;
+    height: 100%;
+    background-color: var(--eventos-card-background, white) !important;
+    color: var(--eventos-card-text-color, black) !important;
+  }
+
+  .card-carousel .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .card-carousel .event-day {
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--color_principal_texto) !important;
+    font-weight: 700;
+  }
+
+  .card-carousel .event-month {
+    font-size: 1rem;
+    color: #1c1d1f;
+    text-transform: uppercase;
+  }
+
+  .card-carousel .event-content {
+    width: 70%;
+    padding-left: 1rem;
+    text-align: left;
+  }
+
+  .card-carousel .event-divider {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    height: 80%;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .card-carousel h5 {
+    color: var(--eventos-card-text-color, #1c1d1f) !important;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .card-carousel:hover h5 {
+    color: var(--color_principal_texto) !important;
+  }
+
+  .card-carousel p {
+    color: var(--eventos-card-text-color, #1c1d1f) !important;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .card-carousel:hover p {
+    color: #1c1d1f !important;
+  }
+
+   /* Group the cards for better structure. */
+  .group {
+    display: flex;
+    gap: 20px;
+    /* Add padding to the right to create a gap between the last and first card. */
+    padding-right: 20px;
+
+     will-change: transform; /* We should be nice to the browser - let it know what we're going to animate. */
+    animation: scrolling 10s linear infinite;
+  }
+
+   @keyframes scrolling {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }

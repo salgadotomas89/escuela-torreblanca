@@ -1,0 +1,402 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% load tz %}
+{% block body %}
+
+{% include "common_styles.html" %}
+
+<link rel="stylesheet" href="{% static 'css/noticias-style.css' %}">
+
+
+<div class="container py-5">
+  <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+    <div class="col-md-6 px-0">
+      <h1 class="display-4 fst-italic">NOTICIAS</h1>
+      <p class="lead my-3">¡Bienvenido a nuestra sección de noticias, aquí encontrarás las últimas novedades y eventos educativos!.</p>
+      {% if user.is_authenticated %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNoticia">
+          Agregar noticia
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+  
+  <!--seccion penultima y ante penultima noticia -->
+  {% if noticias %}
+    <div class="row mb-2">
+      {% for noticia in noticias %}
+        <div class="col-md-6 mb-4">
+          <article class="featured-news-article">
+            <div class="d-flex">
+              <div class="noticia-content flex-grow-1">
+              <strong class="d-inline-block mb-2 text-primary">{{noticia.tema}}</strong>
+              <div class="mb-1 text-muted">{{noticia.date|localtime|date:"d M Y"}}</div>
+
+              <h3 class="mb-0">{{noticia.titulo}}</h3>
+              <div class="card-text">{{noticia.subtitulo|truncatechars:100|safe}}</div>
+              <div class="mt-3">
+                {% if user.is_authenticated %}
+                <!--btn para eliminar noticia-->
+                      <button class="btn btn-outline-danger btn-sm eliminar-noticia" data-noticia-id="{{ noticia.id }}">
+                      <i class="fas fa-trash-alt"></i> 
+                    </button>
+
+                {% endif %}
+                <a href="{% url 'noticias' id=noticia.id %}" class="btn btn-primary btn-sm">Continuar leyendo</a>
+              </div>
+              </div>
+              <div class="noticia-imagen-container position-relative">
+                {% if noticia.images_set.all %}
+                  <img class="noticia-imagen" 
+                       src="{{ noticia.images_set.first.image.url }}" 
+                       alt="Imagen de la noticia"
+                       onclick="openImageGallery('{{ noticia.titulo }}', [{% for img in noticia.images_set.all %}'{{ img.image.url }}'{% if not forloop.last %},{% endif %}{% endfor %}], 0)"
+                       style="cursor: pointer;">
+                  {% if noticia.images_set.all|length > 1 %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                      <span class="badge bg-dark bg-opacity-75">{{ noticia.images_set.all|length }}</span>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+    
+  {% endif %}
+
+
+  <div class="row g-5">
+    <!--seccion ultima noticia -->
+    <div class="col-md-8">
+        {% if principal %}
+            <article class="featured-news-article">
+                <div class="featured-news-header">
+                </div>
+                
+                <div class="featured-news-content">
+                  <div class="featured-news-meta">
+                    <span class="news-date">
+                      <i class="far fa-calendar-alt"></i>
+                      {{principal.date|localtime|date:"d M Y"}}
+                    </span>
+                    <span class="news-author">
+                      <i class="far fa-user"></i>
+                      {{principal.redactor}}
+                    </span>
+                  </div>
+                  
+                  <h1 class="featured-news-title">{{principal.titulo}}</h1>
+                  <h2 class="featured-news-subtitle">{{principal.subtitulo}}</h2>
+                  
+                  <div class="featured-news-text">
+                    {{principal.texto|safe}}
+                  </div>
+                  
+                  {% if principal.images_set.all %}
+                    <div class="featured-news-image-container-bottom">
+                      <img class="featured-news-image-small" 
+                           src="{{ principal.images_set.first.image.url }}" 
+                           alt="{{ principal.titulo }}" 
+                           onclick="openImageGallery('{{ principal.titulo }}', [{% for img in principal.images_set.all %}'{{ img.image.url }}'{% if not forloop.last %},{% endif %}{% endfor %}], 0)"
+                           style="cursor: pointer;">
+                      <p class="image-caption">
+                        Haz clic en la imagen para ampliarla
+                        {% if principal.images_set.all|length > 1 %}
+                          <span class="badge bg-primary ms-2">{{ principal.images_set.all|length }} fotos</span>
+                        {% endif %}
+                      </p>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="featured-news-footer">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                      <span class="reading-time">
+                        <i class="far fa-clock"></i>
+                        Tiempo de lectura estimado: 3-5 min
+                      </span>
+                      {% if user.is_authenticated %}
+                        <button class="btn btn-outline-danger btn-sm eliminar-noticia" data-noticia-id="{{ principal.id }}">
+                          <i class="fas fa-trash-alt"></i> 
+                        </button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </article>
+        {% else %}
+            <div class="row justify-content-center">
+              <div class="col-12 col-md-10 col-lg-8">
+                <div class="empty-news-container">
+                  <div class="empty-news-content">
+                    <div class="empty-news-icon">
+                      <i class="bi bi-newspaper fs-1"></i>
+                    </div>
+                    <h3 class="empty-news-title">¡Próximamente nuevas noticias!</h3>
+                    <p class="empty-news-message">Estamos preparando contenido interesante para mantener informada a nuestra comunidad educativa. ¡Vuelve pronto para ver las últimas novedades!</p>
+                    <div class="empty-news-animation">
+                      <div class="pulse-circle"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+    </div>
+    <!--fin seccion ultima noticia -->
+
+
+    <!--sidebar noticias-->
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="p-4 mb-3 bg-light rounded shadow-sm sidebar-section">
+          <h4 class="fst-italic border-bottom pb-2 mb-3">Acerca de noticias</h4>
+          <p class="mb-0">Mantente informado sobre las últimas novedades y eventos educativos. Nuestras noticias te mantendrán al día con todo lo que sucede en nuestra comunidad escolar.</p>
+        </div>
+
+        {% if principal %}
+        <div class="p-4 mb-3 bg-success text-white rounded shadow-sm sidebar-section">
+          <h4 class="fst-italic border-bottom pb-2 mb-3">Revive esta noticia</h4>
+          <p class="mb-0">Escucha el audio de esta noticia:</p>
+          
+          {% if principal.audio %}
+            <audio controls class="w-100 mt-2">
+              <source src="{{ principal.audio.url }}" type="audio/mpeg">
+              Tu navegador no soporta la etiqueta de audio.
+            </audio>
+          {% else %}
+            <p class="mt-2 font-italic">No hay archivo de audio disponible</p>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="p-4 mb-3 bg-light rounded shadow-sm sidebar-section">
+          <h4 class="fst-italic border-bottom pb-2 mb-3">Archivos</h4>
+          {% if archivos_organizados %}
+            <div class="archivos-container">
+              {% for año, meses in archivos_organizados.items %}
+                <div class="archivo-año mb-3">
+                  <h6 class="archivo-año-titulo d-flex align-items-center cursor-pointer" data-bs-toggle="collapse" data-bs-target="#año-{{ año }}" aria-expanded="false">
+                    <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                    <span>{{ año }}</span>
+                    <i class="fas fa-chevron-down ms-auto transition-rotate"></i>
+                  </h6>
+                  <div class="collapse" id="año-{{ año }}">
+                    <div class="archivo-meses ms-3">
+                      {% for mes, noticias_mes in meses.items %}
+                        <div class="archivo-mes mb-2">
+                          <h6 class="archivo-mes-titulo d-flex align-items-center cursor-pointer text-secondary" data-bs-toggle="collapse" data-bs-target="#mes-{{ año }}-{{ mes }}" aria-expanded="false">
+                            <i class="fas fa-folder me-2"></i>
+                            <span>{{ mes }} ({{ noticias_mes|length }})</span>
+                            <i class="fas fa-chevron-down ms-auto transition-rotate"></i>
+                          </h6>
+                          <div class="collapse" id="mes-{{ año }}-{{ mes }}">
+                            <div class="archivo-noticias ms-3">
+                              {% for noticia in noticias_mes %}
+                                <div class="archivo-noticia mb-2">
+                                  <a href="{% url 'noticias' id=noticia.id %}" class="text-decoration-none d-block p-2 rounded hover-bg-light">
+                                    <div class="d-flex align-items-start">
+                                      <i class="fas fa-newspaper me-2 text-info mt-1"></i>
+                                      <div class="flex-grow-1">
+                                        <div class="archivo-noticia-titulo text-dark fw-medium">{{ noticia.titulo|truncatechars:40 }}</div>
+                                        <div class="archivo-noticia-meta text-muted small">
+                                          <i class="fas fa-user me-1"></i>{{ noticia.redactor }}
+                                          <span class="mx-1">•</span>
+                                          <i class="fas fa-calendar me-1"></i>{{ noticia.fecha|date:"d M" }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted mb-0">No hay noticias archivadas aún.</p>
+          {% endif %}
+        </div>
+
+        <div class="p-4 bg-light rounded shadow-sm sidebar-section">
+          <h4 class="fst-italic border-bottom pb-2 mb-3">Síguenos</h4>
+          <ol class="list-unstyled">
+            {% include 'components/redes_sociales.html' with style='links' %}
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal para ampliar imagen -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content bg-dark border-0">
+        <div class="modal-header border-0 pb-2">
+          <h5 class="modal-title text-white" id="imageModalLabel"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center p-0 position-relative">
+          <!-- Imagen principal -->
+          <img id="modalImage" class="img-fluid" style="max-height: 80vh; border-radius: 10px;" alt="">
+          
+          <!-- Controles de navegación -->
+          <div id="imageNavigation" class="position-absolute top-50 start-0 end-0 d-flex justify-content-between align-items-center px-3" style="pointer-events: none;">
+            <button type="button" class="btn btn-dark btn-lg rounded-circle opacity-75" id="prevImageBtn" style="pointer-events: all; width: 60px; height: 60px;" title="Imagen anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="btn btn-dark btn-lg rounded-circle opacity-75" id="nextImageBtn" style="pointer-events: all; width: 60px; height: 60px;" title="Imagen siguiente">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          
+          <!-- Indicador de posición -->
+          <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3">
+            <span id="imageCounter" class="badge bg-dark bg-opacity-75 text-white px-3 py-2 rounded-pill"></span>
+          </div>
+          
+          <!-- Miniaturas -->
+          <div id="imageThumbnails" class="d-flex justify-content-center gap-2 mt-3 px-3 pb-3" style="max-height: 100px; overflow-x: auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para agregar noticia -->
+  <div class="modal fade" id="modalNoticia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar noticia</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Contenedor para mensajes de alerta SIEMPRE visible -->
+          <div id="liveAlertPlaceholder" class="position-fixed top-0 end-0 p-3" style="z-index: 1080; min-width: 300px; max-width: 400px;"></div>
+
+          <!-- Formulario para agregar noticia -->
+          <form id="noticia-form" class="needs-validation" method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form }}
+            <div class="form-group">
+              <label for="inputAddress">Título</label>
+              <input name="titulo" type="text" class="form-control" id="inputAddress" required>
+              <div class="invalid-feedback">
+                Escriba un título.
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <label for="subtitulo">Subtitulo</label>
+              <input name="subtitulo" type="text" class="form-control" id="subtitulo" required>
+              <div class="invalid-feedback">
+                Escriba un subtítulo.
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <label for="editor">Escriba su noticia</label>
+              <div id="editor-toolbar">
+                <button type="button" data-command="bold" class="editor-btn" title="Negrita"><i class="fas fa-bold"></i></button>
+                <button type="button" data-command="italic" class="editor-btn" title="Cursiva"><i class="fas fa-italic"></i></button>
+                <button type="button" data-command="underline" class="editor-btn" title="Subrayado"><i class="fas fa-underline"></i></button>
+                <button type="button" data-command="insertUnorderedList" class="editor-btn" title="Lista con viñetas"><i class="fas fa-list-ul"></i></button>
+                <button type="button" data-command="insertOrderedList" class="editor-btn" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
+                <button type="button" data-command="createLink" class="editor-btn" title="Insertar enlace"><i class="fas fa-link"></i></button>
+              </div>
+              <div id="editor-content" contenteditable="true" class="form-control" placeholder="Escriba aquí el contenido de su noticia..."></div>
+              <textarea name="texto" id="hidden-editor" style="display: none;" required></textarea>
+              <div class="invalid-feedback">
+                Escriba su noticia.
+              </div>
+            </div>
+          
+            <!-- Add validation classes and required attribute to the input fields below -->
+            <div class="form-group">
+              <div class="custom-file-upload">
+                <input name="imagenes" type="file" multiple class="file-input" id="imagenes" accept="image/*">
+                <label for="imagenes" class="file-label">
+                  <i class="fas fa-cloud-upload-alt"></i> Seleccionar imágenes
+                </label>
+              </div>
+              <div id="imagenes-selected" class="selected-files"></div>
+              <!-- La validación ya no es obligatoria para imágenes -->
+            </div>
+
+
+            <div class="form-group">
+              <div class="custom-file-upload">
+                <input name="audio" type="file" class="file-input" id="audio">
+                <label for="audio" class="file-label">
+                  <i class="fas fa-music"></i> Seleccionar audio
+                </label>
+              </div>
+              <div id="audio-selected" class="selected-files"></div>
+              <!-- La validación ya no es obligatoria para audio -->
+            </div>
+          
+            <div class="form-group">
+              <label for="redactor">Redactor</label>
+              <input name="redactor" type="text" class="form-control" id="redactor" 
+                     value="{% if user.is_superuser and user_full_name %}{{ user_full_name }}{% endif %}" 
+                     placeholder="{% if user.is_superuser %}Nombre del redactor{% else %}Ingrese el nombre del redactor{% endif %}" 
+                     required>
+              <div class="invalid-feedback">
+                Porfavor ingresar un nombre.
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <label>En galería</label>
+              <div class="form-text text-muted mb-2">
+                <i class="fas fa-info-circle"></i> Si selecciona "Sí", las imágenes de esta noticia también aparecerán en la sección de galería del sitio web.
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value='True' type="radio" name="galeria" id="galeria-si" required>
+                <label class="form-check-label" for="galeria-si">
+                  Sí
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value='False' type="radio" name="galeria" id="galeria-no" checked required>
+                <label class="form-check-label" for="galeria-no">
+                  No
+                </label>
+                <div class="invalid-feedback">
+                  Por favor seleccionar una opción.
+                </div>
+              </div>
+            </div>
+          
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+   
+</div>
+  
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+<link rel="stylesheet" href="{% static 'css/image-gallery.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/noticias-app.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

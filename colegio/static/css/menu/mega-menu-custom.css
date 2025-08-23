@@ -1,0 +1,93 @@
+:root {
+    --menu-background-color: #FFFFFF;            /* Color de fondo por defecto para el menú principal. */
+    --menu-text-color: #000000;                  /* Color de texto por defecto para el menú principal. */
+    --menu-height: 80px;                         /* Altura por defecto para el menú. */
+    /* ... mega menu ... */
+    --mega-menu-background-color: white;       /* Color de fondo por defecto para el mega menú. */
+    --mega-menu-text-color: #000000;             /* Color de texto por defecto para el mega menú. */
+    --color_principal_texto: #000000;
+    --color_principal_texto-dark: color-mix(in srgb, var(--color_principal_texto) 70%, black 30%);
+}
+
+.mega-menu .hover-bg:hover {
+    background: var(--color_principal_texto);
+    transition: background 0.2s;
+}
+.mega-menu a {
+    font-size: 1.08rem;
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+    border: none;
+    background: #f0f4ff;
+    box-shadow: none;
+    border-radius: 2rem; /* Añadido para redondear las esquinas */
+
+}
+.mega-menu a:hover {
+    color: var(--color_principal_texto);
+    background: #f0f4ff;
+    text-decoration: none;
+    border-radius: 2rem; /* Añadido para redondear las esquinas */
+}
+
+.mega-menu .icon {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+.mega-menu .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+.mega-menu .col-md-4 {
+    min-width: 220px;
+}
+@media (max-width: 767px) {
+    .mega-menu .col-md-4 {
+        min-width: 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .mega-menu .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+/*
+ * ESTILOS PARA EL MEGA MENÚ (Funciona para 3, 4 o más columnas)
+ */
+
+
+/* 2. Estilo para CADA columna */
+.mega-menu-column {
+    /* Opcional: si quieres que todas las columnas tengan exactamente el mismo ancho */
+    flex: 1; 
+}
+
+/* 3. Estilo para la primera columna "Acerca de" */
+.mega-menu-about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    text-align: center;
+}
+
+.mega-menu-about h2 {
+    margin-bottom: 0.5rem;
+}
+
+/* 4. Estilo para las columnas de enlaces */
+.mega-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espacio vertical entre cada enlace */
+    
+}
+
+
+
+.mega-menu-links a .icon {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+}

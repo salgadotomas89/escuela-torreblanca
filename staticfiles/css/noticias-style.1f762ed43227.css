@@ -1,0 +1,908 @@
+/* ========================================
+   NOTICIAS STYLES CSS
+   ========================================
+   
+   This file includes the field-sizing CSS property which is experimental.
+   Browser support: Chrome/Edge (supported), Firefox/Safari (not supported as of 2025)
+   The property gracefully degrades in unsupported browsers.
+   
+   More info: https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing
+   ======================================== */
+
+/* Estilos para el estado vacío de noticias */
+.empty-news-container {
+    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 20px;
+    padding: 4rem 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    margin: 2rem auto;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.empty-news-content {
+    text-align: center;
+    width: 100%;
+}
+
+.empty-news-icon {
+    color: #0d6efd;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+    animation: float 3s ease-in-out infinite;
+}
+
+.empty-news-icon i {
+    font-size: 4rem;
+}
+
+.empty-news-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #0d6efd, #0a58ca);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.empty-news-message {
+    font-size: 1.1rem;
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.empty-news-animation {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.empty-news-animation .pulse-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: #0d6efd;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   ESTILOS PARA CONTENIDO ENRIQUECIDO
+   ======================================== */
+
+.noticia-contenido {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #333;
+    text-align: justify;
+}
+
+.noticia-contenido p {
+    margin-bottom: 1.5rem;
+    text-indent: 2rem;
+}
+
+.noticia-contenido b,
+.noticia-contenido strong {
+    font-weight: 700;
+    color: #0d6efd;
+}
+
+.noticia-contenido i,
+.noticia-contenido em {
+    font-style: italic;
+    color: #495057;
+}
+
+.noticia-contenido u {
+    text-decoration: underline;
+    text-decoration-color: #0d6efd;
+    text-decoration-thickness: 2px;
+}
+
+.noticia-contenido ul {
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.noticia-contenido ol {
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.noticia-contenido li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.noticia-contenido a {
+    color: #0d6efd;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.noticia-contenido a:hover {
+    border-bottom-color: #0d6efd;
+}
+
+/* ========================================
+   ESTILOS PARA TARJETAS DE NOTICIAS
+   ======================================== */
+
+.noticia-card {
+    display: flex;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    height: 250px;
+}
+
+.noticia-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.noticia-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.noticia-imagen-container {
+    width: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.noticia-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.noticia-card:hover .noticia-imagen {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   ESTILOS PARA EL EDITOR
+   ======================================== */
+
+#editor-toolbar {
+    border: 1px solid #ddd;
+    border-bottom: none;
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    gap: 0.25rem;
+}
+
+.editor-btn {
+    border: none;
+    background: none;
+    padding: 0.375rem 0.5rem;
+    border-radius: 4px;
+    color: #495057;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.editor-btn:hover {
+    background-color: #e9ecef;
+}
+
+.editor-btn.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+#editor-content {
+    /* field-sizing: content enables automatic content-based sizing
+     * The contenteditable div will adjust its size to fit the text content
+     * Combined with min/max height constraints for optimal UX */
+    field-sizing: content;
+    min-height: 150px;
+    max-height: 500px;
+    border-radius: 0 0 4px 4px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    resize: vertical;
+    overflow-y: auto;
+}
+
+#editor-content:focus {
+    outline: none;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+#editor-content[placeholder]:empty::before {
+    content: attr(placeholder);
+    color: #6c757d;
+    cursor: text;
+}
+
+#editor-content[placeholder]:empty:focus::before {
+    content: "";
+}
+
+#editor-content.is-invalid {
+    border-color: #dc3545;
+}
+
+#editor-content.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Apply field-sizing to textareas for better content-based sizing 
+ * field-sizing: content allows form controls to adjust their size to fit their contents
+ * For textareas specifically:
+ * - They grow horizontally until max-width is reached
+ * - Then they grow vertically to display additional rows
+ * - When max-height is reached, they show a scrollbar
+ * - rows/cols attributes have no effect with field-sizing: content
+ * 
+ * Note: field-sizing is experimental (supported in Chrome/Edge but not Firefox/Safari as of 2025)
+ * Fallback behavior relies on min/max height constraints
+ */
+textarea {
+    field-sizing: content;
+    min-height: 100px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* ========================================
+   ESTILOS PARA ARCHIVOS PERSONALIZADOS
+   ======================================== */
+
+.custom-file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-label {
+    display: block;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #495057;
+    font-weight: 500;
+}
+
+.file-label:hover {
+    border-color: #0d6efd;
+    background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+    color: #0d6efd;
+}
+
+.file-label i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.selected-files {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+/* ========================================
+   ESTILOS PARA SIDEBAR
+   ======================================== */
+
+.sidebar-section {
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-section:hover {
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   ESTILOS PARA NOTICIA DESTACADA
+   ======================================== */
+
+.featured-news-article {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+
+.featured-news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem 1rem;
+    background: #ffffff;
+}
+
+
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Contenedor de imagen original - ya no se usa */
+
+.featured-news-content {
+    padding: 2rem;
+}
+
+.featured-news-meta {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+.featured-news-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.featured-news-meta i {
+    color: #0d6efd;
+}
+
+.featured-news-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #212529 0%, #495057 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: capitalize;
+}
+
+.featured-news-subtitle {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+    text-transform: capitalize;
+    padding-left: 1rem;
+    border-left: 4px solid #0d6efd;
+}
+
+.featured-news-text {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #333;
+    text-align: justify;
+    text-transform: capitalize;
+}
+
+.featured-news-text p {
+    margin-bottom: 1.5rem;
+    text-indent: 2rem;
+}
+
+.featured-news-text p:first-child {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #495057;
+    text-indent: 0;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    border-left: 4px solid #0d6efd;
+}
+
+/* Footer de la noticia destacada */
+.featured-news-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reading-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.reading-time i {
+    color: #0d6efd;
+}
+
+/* Efecto hover para toda la tarjeta */
+.featured-news-article {
+    cursor: default;
+    position: relative;
+}
+
+/* Removido el borde azul en hover */
+
+/* Estilos para la imagen pequeña debajo del texto */
+.featured-news-image-container-bottom {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.featured-news-image-small {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-news-image-small:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.image-caption {
+    margin-top: 0.8rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Estilos para el modal de imagen */
+#imageModal .modal-content {
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+#imageModal .modal-dialog {
+    max-width: 90vw;
+}
+
+#modalImage {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .featured-news-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    
+    
+    .featured-news-content {
+        padding: 1.5rem;
+    }
+    
+    .featured-news-title {
+        font-size: 2rem;
+    }
+    
+    .featured-news-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .featured-news-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .featured-news-image-container {
+        height: 250px;
+    }
+    
+    .featured-news-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .noticia-card {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .noticia-imagen-container {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .noticia-contenido {
+        font-size: 1rem;
+    }
+    
+    .noticia-contenido p {
+        text-indent: 1rem;
+    }
+    
+    .featured-news-image-small {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .featured-news-image-container-bottom {
+        margin-top: 1.5rem;
+    }
+    
+    .image-caption {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   MEJORAS ADICIONALES PARA EL DISEÑO
+   ======================================== */
+
+/* Animación para elementos que aparecen */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.featured-news-article {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Mejora del botón eliminar */
+.btn-outline-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Efecto de lectura progresiva */
+.featured-news-text p {
+    animation: fadeInUp 0.8s ease;
+    animation-fill-mode: backwards;
+}
+
+.featured-news-text p:nth-child(1) { animation-delay: 0.1s; }
+.featured-news-text p:nth-child(2) { animation-delay: 0.2s; }
+.featured-news-text p:nth-child(3) { animation-delay: 0.3s; }
+.featured-news-text p:nth-child(4) { animation-delay: 0.4s; }
+
+/* Mejora de enlaces dentro del contenido */
+.featured-news-text a {
+    color: #0d6efd;
+    text-decoration: none;
+    position: relative;
+    font-weight: 500;
+}
+
+.featured-news-text a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, #0d6efd, #0a58ca);
+    transition: width 0.3s ease;
+}
+
+.featured-news-text a:hover::after {
+    width: 100%;
+}
+
+/* Mejora para listas en el contenido */
+.featured-news-text ul,
+.featured-news-text ol {
+    background: #f8f9fa;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    border-left: 4px solid #0d6efd;
+    margin: 1.5rem 0;
+}
+
+.featured-news-text li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+/* Estilo para texto en negrita y cursiva */
+.featured-news-text strong,
+.featured-news-text b {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.featured-news-text em,
+.featured-news-text i {
+    color: #6c757d;
+    font-style: italic;
+    position: relative;
+}
+
+/* Separador visual entre secciones */
+.featured-news-text hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0d6efd, transparent);
+    margin: 2rem 0;
+}
+
+/* Citas destacadas */
+.featured-news-text blockquote {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-left: 5px solid #0d6efd;
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-radius: 0 10px 10px 0;
+    font-style: italic;
+    position: relative;
+}
+
+.featured-news-text blockquote::before {
+    content: '"';
+    font-size: 4rem;
+    color: #0d6efd;
+    opacity: 0.3;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-family: Georgia, serif;
+}
+
+/* Scroll suave para contenido largo */
+.featured-news-content {
+    scroll-behavior: smooth;
+}
+
+/* Indicador de lectura */
+.featured-news-article::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #0d6efd, #0a58ca);
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+/* Mejora del estado vacío */
+.empty-news-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-news-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(13, 110, 253, 0.05), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* ========================================
+   ESTILOS PARA CAPITALIZACIÓN
+   ======================================== */
+
+/* Capitalizar títulos */
+.featured-news-title,
+h3.mb-0 {
+    text-transform: capitalize;
+}
+
+/* Capitalizar subtítulos */
+.featured-news-subtitle,
+.card-text {
+    text-transform: capitalize;
+}
+
+/* Capitalizar texto de noticias */
+.featured-news-text {
+    text-transform: capitalize;
+}
+
+/* Capitalizar nombre del autor */
+.news-author {
+    text-transform: capitalize;
+}
+
+/* ========================================
+   ESTILOS PARA SIDEBAR DE ARCHIVOS
+   ======================================== */
+
+.archivos-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.archivo-año-titulo,
+.archivo-mes-titulo {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.archivo-año-titulo:hover,
+.archivo-mes-titulo:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.transition-rotate {
+    transition: transform 0.3s ease;
+}
+
+.collapsed .transition-rotate {
+    transform: rotate(-90deg);
+}
+
+.archivo-noticia {
+    border-left: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.archivo-noticia:hover {
+    border-left-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+    border-radius: 0 4px 4px 0;
+}
+
+.archivo-noticia-titulo {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+}
+
+.archivo-noticia-meta {
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+.hover-bg-light:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.archivo-meses,
+.archivo-noticias {
+    border-left: 1px solid #e9ecef;
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+/* Animación suave para colapsos */
+.collapsing {
+    transition: height 0.35s ease;
+}
+
+/* Scrollbar personalizado para el contenedor de archivos */
+.archivos-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.archivos-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.archivos-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.archivos-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Indicador de cantidad de noticias */
+.archivo-mes-titulo span {
+    font-weight: 500;
+}
+
+/* Mejoras para móvil */
+@media (max-width: 768px) {
+    .archivos-container {
+        max-height: 300px;
+    }
+    
+    .archivo-noticia-titulo {
+        font-size: 0.8rem;
+    }
+    
+    .archivo-noticia-meta {
+        font-size: 0.7rem;
+    }
+}

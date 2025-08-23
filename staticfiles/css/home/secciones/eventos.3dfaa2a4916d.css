@@ -1,0 +1,299 @@
+.eventos-section {
+    position: relative;
+    background: rgba(253, 218, 112, 0.823);
+    /* Puedes ajustar los colores pastel a tu gusto */
+    overflow: hidden;
+}
+.eventos-section h1 {
+    color: #1f2021 !important; /* Título en color oscuro para contraste */
+}
+
+.event-card {
+    transition: all 0.3s ease;
+    background-color: var(--eventos-card-background) !important;
+    color: var(--eventos-card-text-color) !important;
+    border-radius: 15px;
+    overflow: hidden;
+    border: none;
+}
+
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); /* Sombra clara para contraste */
+    background-color: #f8f9fa; /* Color de fondo claro al hover */
+    color: #1c1d1f; /* Color de texto oscuro al hover */
+}
+
+.event-card .card-header {
+    border-bottom: none;
+    padding: 1rem;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    background-color: #5b636f; /* Color de fondo inicial del header más oscuro */
+    color: #1c1d1f; /* Color de texto oscuro al hover */
+}
+
+.event-card:hover .card-header {
+    background-color: #ffffff; /* Color de fondo claro del header al hover */
+    color: #212529; /* Color de texto oscuro al hover */
+}
+
+.event-card .card-body {
+    position: relative;
+    padding: 1.5rem;
+    display: flex;
+    height: 100%;
+    background-color: var(--eventos-card-background) !important;
+    color: var(--eventos-card-text-color) !important;
+}
+
+.event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.event-day {
+    font-size: 5rem; /* Aumentado el tamaño del día */
+    line-height: 1;
+    color: var(--eventos-card-text-color) !important; /* Día en color blanco */
+    font-weight: 700; /* Negrita para el día */
+}
+
+.event-month {
+    font-size: 1rem;
+    color: #1c1d1f; /* Cambiado el color del mes a #1c1d1f */
+    text-transform: uppercase;
+}
+
+.event-divider {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    height: 80%;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.event-content {
+    width: 70%;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+.event-card .card-title {
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease-in-out;
+    color: #1c1d1f; /* Color claro inicial */
+}
+
+.event-card:hover .card-title {
+    color: var(--eventos-card-text-color) !important; /* Color del título al hover */
+}
+
+.event-card .card-text {
+    transition: color 0.3s ease-in-out;
+    color: #1c1d1f; /* Color de texto oscuro al hover */
+}
+
+.event-card:hover .card-text {
+    color: #1c1d1f; /* Color del texto oscuro al hover */
+}
+
+.bi-calendar3 {
+    vertical-align: text-bottom;
+}
+
+/* Asegura que todas las cards tengan el mismo tamaño */
+.row-cols-md-3 > * {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-cols-md-3 .card {
+    flex: 1 0 auto;
+}
+
+.event-card h5 {
+    color: var(--eventos-card-text-color) !important;
+}
+
+.event-card p {
+    color: var(--eventos-card-text-color) !important;
+}
+
+
+/* Burbujas animadas solo para la sección de eventos */
+.event-bubbles-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.bg-dark.py-5.text-center {
+    position: relative;
+    overflow: hidden;
+}
+
+.event-bubbles-bg .bubble {
+    position: absolute;
+    bottom: -120px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    animation: bubble-up 8s linear infinite;
+}
+
+.event-bubbles-bg .bubble:nth-child(1) {
+    left: 10%;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 183, 197, 0.8); /* rosa pastel */
+    animation-duration: 7s;
+    animation-delay: 0s;
+}
+.event-bubbles-bg .bubble:nth-child(2) {
+    left: 25%;
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 241, 118, 0.8); /* amarillo pastel */
+    animation-duration: 9s;
+    animation-delay: 2s;
+}
+.event-bubbles-bg .bubble:nth-child(3) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    background: rgba(129, 212, 250, 1); /* celeste pastel */
+    animation-duration: 11s;
+    animation-delay: 1s;
+}
+.event-bubbles-bg .bubble:nth-child(4) {
+    left: 55%;
+    width: 30px;
+    height: 30px;
+    background: rgba(186, 104, 200, 0.8); /* lila pastel */
+    animation-duration: 8s;
+    animation-delay: 3s;
+}
+.event-bubbles-bg .bubble:nth-child(5) {
+    left: 70%;
+    width: 50px;
+    height: 50px;
+    background: rgba(174, 213, 129, 0.8); /* verde pastel */
+    animation-duration: 10s;
+    animation-delay: 0.5s;
+}
+.event-bubbles-bg .bubble:nth-child(6) {
+    left: 80%;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 224, 178, 0.8); /* durazno pastel */
+    animation-duration: 6s;
+    animation-delay: 2.5s;
+}
+.event-bubbles-bg .bubble:nth-child(7) {
+    left: 90%;
+    width: 35px;
+    height: 35px;
+    background: rgba(128, 222, 234, 0.8); /* turquesa pastel */
+    animation-duration: 12s;
+    animation-delay: 1.5s;
+}
+.event-bubbles-bg .bubble:nth-child(8) {
+    left: 60%;
+    width: 15px;
+    height: 15px;
+    background: rgba(255, 204, 188, 1); /* coral pastel */
+    animation-duration: 7.5s;
+    animation-delay: 4s;
+}
+
+algadotomas/PycharmProjects/torreblanca/colegio/static/css/home/secciones/eventos.css
+.event-bubbles-bg .bubble:nth-child(9) {
+    left: 15%;
+    width: 22px;
+    height: 22px;
+    background: rgba(255, 204, 188, 0.7); /* coral pastel */
+    animation-duration: 8s;
+    animation-delay: 3.5s;
+}
+.event-bubbles-bg .bubble:nth-child(10) {
+    left: 35%;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 241, 118, 1); /* amarillo pastel */
+    animation-duration: 10s;
+    animation-delay: 1.2s;
+}
+.event-bubbles-bg .bubble:nth-child(11) {
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    background: rgba(129, 212, 250, 0.7); /* celeste pastel */
+    animation-duration: 9s;
+    animation-delay: 2.8s;
+}
+.event-bubbles-bg .bubble:nth-child(12) {
+    left: 65%;
+    width: 32px;
+    height: 32px;
+    background: rgba(186, 104, 200, 0.9); /* lila pastel */
+    animation-duration: 11s;
+    animation-delay: 0.7s;
+}
+.event-bubbles-bg .bubble:nth-child(13) {
+    left: 75%;
+    width: 24px;
+    height: 24px;
+    background: rgba(174, 213, 129, 0.7); /* verde pastel */
+    animation-duration: 7s;
+    animation-delay: 5s;
+}
+.event-bubbles-bg .bubble:nth-child(14) {
+    left: 85%;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 224, 178, 0.98); /* durazno pastel */
+    animation-duration: 12s;
+    animation-delay: 2.2s;
+}
+.event-bubbles-bg .bubble:nth-child(15) {
+    left: 5%;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 183, 197, 0.6); /* rosa pastel */
+    animation-duration: 8.5s;
+    animation-delay: 4.3s;
+}
+.event-bubbles-bg .bubble:nth-child(16) {
+    left: 95%;
+    width: 30px;
+    height: 30px;
+    background: rgba(128, 222, 234, 0.973); /* turquesa pastel */
+    animation-duration: 13s;
+    animation-delay: 1.8s;
+}
+
+@keyframes bubble-up {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-110vh) scale(1.2);
+        opacity: 0;
+    }
+}

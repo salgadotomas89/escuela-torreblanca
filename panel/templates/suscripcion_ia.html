@@ -1,0 +1,115 @@
+{% extends "configuracion.html" %}
+{% load static %} 
+{% block body %}
+
+<div class="container py-4">
+    <h2 class="display-5 mb-4 fw-semibold">Configuración de Inteligencia Artificial</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post" action="{% url 'suscripcion_ia' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <!-- Estado de suscripción -->
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <strong>Uso actual:</strong> {{ subscription.current_usage }}
+                                    {% if subscription.monthly_limit > 0 %}
+                                        de {{ subscription.monthly_limit }} usos este mes
+                                    {% else %}
+                                        usos este mes (ilimitado)
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Funcionalidades -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Funcionalidades Habilitadas</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    {{ form.openai_noticias_enabled }}
+                                                    <label class="form-check-label" for="{{ form.openai_noticias_enabled.id_for_label }}">
+                                                        {{ form.openai_noticias_enabled.label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    {{ form.openai_comunicados_enabled }}
+                                                    <label class="form-check-label" for="{{ form.openai_comunicados_enabled.id_for_label }}">
+                                                        {{ form.openai_comunicados_enabled.label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    {{ form.openai_biblioteca_enabled }}
+                                                    <label class="form-check-label" for="{{ form.openai_biblioteca_enabled.id_for_label }}">
+                                                        {{ form.openai_biblioteca_enabled.label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Límites -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">Límites de Uso</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="{{ form.monthly_limit.id_for_label }}" class="form-label">
+                                                {{ form.monthly_limit.label }}
+                                            </label>
+                                            {{ form.monthly_limit }}
+                                            <div class="form-text">Dejar en 0 para uso ilimitado</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Guardar Configuración
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de información -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Información</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        Configure qué funcionalidades de IA están disponibles para su colegio.
+                    </p>
+                    <ul class="list-unstyled small">
+                        <li><strong>Noticias:</strong> Generación automática de contenido</li>
+                        <li><strong>Comunicados:</strong> Mejora de textos</li>
+                        <li><strong>Biblioteca:</strong> Recomendaciones de libros</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

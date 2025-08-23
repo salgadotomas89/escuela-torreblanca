@@ -1,0 +1,24 @@
+:root {
+    --menu-background-color: #FFFFFF;            /* Color de fondo por defecto para el menú principal. */
+    --menu-text-color: #000000;                  /* Color de texto por defecto para el menú principal. */
+    --menu-height: 80px;                         /* Altura por defecto para el menú. */
+    /* ... mega menu ... */
+    --mega-menu-background-color: white;       /* Color de fondo por defecto para el mega menú. */
+    --mega-menu-text-color: #000000;             /* Color de texto por defecto para el mega menú. */
+    --color_principal_texto: #000000;
+}
+
+.menu-hamburguesa .icon-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex; 
+    font-size: 1.0rem;
+}
+.menu-hamburguesa .icon-item {
+    background: var(--color_principal_texto);
+}
+
+

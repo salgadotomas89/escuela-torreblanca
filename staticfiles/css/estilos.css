@@ -1,0 +1,255 @@
+.form-group {
+    margin-bottom: 0.5rem;
+  }
+
+#editor-toolbar {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-bottom: none;
+  border-radius: 0.25rem 0.25rem 0 0;
+  padding: 0.5rem;
+}
+
+
+.editor-btn {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+#editor-content {
+  border: 1px solid #ddd;
+  min-height: 200px;
+  padding: 10px;
+}
+
+#editor-content:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Estilos para el modal */
+.modal-content {
+  border-radius: 0.5rem;
+}
+
+.modal-header {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+/* Estilos para los botones del editor */
+#editor-toolbar .btn-outline-secondary {
+  color: #6c757d;
+  border-color: #ced4da;
+}
+
+#editor-toolbar .btn-outline-secondary:hover {
+  background-color: #e9ecef;
+}
+
+/* Estilos para los campos de formulario */
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Estilos para los botones del formulario */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+/* Añade esto al final del archivo */
+@media (min-width: 992px) {
+  .modal-lg {
+    max-width: 800px; /* O el valor en píxeles que prefieras */
+  }
+}
+
+/* Mejora el espaciado de los elementos del formulario */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Estilos para el botón de subida de archivos personalizado */
+.custom-file-upload {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.file-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.file-label:hover {
+  background-color: #0056b3;
+}
+
+.file-label i {
+  margin-right: 5px;
+}
+
+.selected-files {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+/* Estilos para la sección de noticias recientes */
+.noticia-card {
+  display: flex;
+  height: 250px;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.noticia-content {
+  flex: 1;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.noticia-imagen-container {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 10px;
+}
+
+.noticia-imagen {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.noticia-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.noticia-card .text-muted {
+  font-size: 0.875rem;
+}
+
+.noticia-card .card-text {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 767.98px) {
+  .noticia-card {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .noticia-imagen-container {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+/* ... (estilos posteriores) ... */
+
+/* Estilos para el sidebar de noticias */
+.sidebar-section {
+  transition: all 0.3s ease;
+}
+
+.sidebar-section:hover {
+  transform: translateY(-5px);
+}
+
+.sidebar-section h4 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.sidebar-section .list-unstyled li {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-section .list-unstyled a {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.sidebar-section .list-unstyled a:hover {
+  color: #0056b3;
+}
+
+.bg-primary {
+  background-color: #007bff !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+
+audio {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Estilo para el botón "Me gusta" */
+.btn-like {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-like:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+  transform: scale(1.05);
+}
+
+.btn-like svg {
+  margin-right: 0.5rem;
+}
+

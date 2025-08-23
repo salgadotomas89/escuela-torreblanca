@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+    <span class="navbar-text me-3">
+        Hola, {{ user.username }}
+    </span>
+    <a href="#" id="logout-link" class="btn btn-outline-primary">Logout</a>
+{% else %}
+    <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+{% endif %}

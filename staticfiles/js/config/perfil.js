@@ -1,0 +1,1 @@
+// Este archivo puede ser eliminado ya que la lógica está en perfil.html 

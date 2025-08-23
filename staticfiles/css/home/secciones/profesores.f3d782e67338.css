@@ -1,0 +1,173 @@
+/* Contenedor principal */
+.social-profile-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 280px;
+    height: 450px; /* Aumentado de 420px para dar más espacio */
+    position: relative;
+    border: none;
+    margin: 20px auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
+}
+
+.social-profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.social-profile-card__gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 220px; /* Aumentado de 160px para mejor presentación de fotos verticales */
+    background: linear-gradient(135deg, #000000 0%, #000000 50%, #000000 100%);
+    z-index: 1;
+}
+
+.social-profile-card__image-container {
+    position: relative;
+    width: 100%;
+    height: 220px; /* Aumentado para coincidir con el gradiente */
+    overflow: hidden;
+    z-index: 2;
+}
+
+.social-profile-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la proporción y cubre el área */
+    object-position: center top; /* Prioriza mostrar la parte superior de la imagen */
+    transition: transform 0.4s ease;
+}
+
+.social-profile-card:hover .social-profile-card__image {
+    transform: scale(1.05);
+}
+
+.social-profile-card__content {
+    position: relative;
+    padding: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: calc(100% - 220px); /* Altura restante después de la imagen */
+}
+
+
+
+.social-profile-card__role {
+    color: #4B5563;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 5px 0 15px;
+    letter-spacing: 0.5px;
+}
+
+.social-profile-card__stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 10px 0;
+    border-top: 1px solid #E5E7EB;
+    margin-top: auto;
+}
+
+.social-profile-card__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.social-profile-card__stat-label {
+    font-size: 0.75rem;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.social-profile-card__action {
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    width: 80%;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-profile-card__action:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+}
+
+.social-profile-card__action:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.social-profile-card__action:hover:before {
+    width: 300px;
+    height: 300px;
+}
+
+#profesores {
+    background-color: #efd56a;
+    padding: 40px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#profesores::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -150px;
+    left: -150px;
+}
+
+#profesores::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    bottom: -100px;
+    right: -100px;
+}
+
+/* Eliminar estilos anteriores que ya no se usan */
+.social-profile-card::before,
+.social-profile-card .card-clip,
+.social-profile-card__barcode,
+.social-profile-card__qr,
+.social-profile-card__status-dot,
+.social-profile-card__button,
+.social-profile-card__header,
+.social-profile-card__icons {
+    display: none;
+}

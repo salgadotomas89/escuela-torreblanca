@@ -1,0 +1,616 @@
+{% extends "configuracion.html" %}
+{% load static %}
+{% block body %}
+
+<h1 class="display-5 fw-bold lh-1 mb-3 py-4">Usuarios</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover w-100">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Email</th>
+                <th scope="col">Username</th>
+                <th scope="col">Permisos</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <th scope="row">1</th>
+                    <td>{{ usuario.first_name }}</td>
+                    <td>
+                        {% for role_display in usuario.userprofile.get_roles_display %}
+                            <span class="badge bg-primary me-1">{{ role_display }}</span>
+                        {% empty %}
+                            <span class="badge bg-secondary">Sin rol</span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>
+                        {% if usuario.is_superuser %}
+                            <span class="badge bg-danger">Superuser</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Normal</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-info" type="button" data-user-id="{{ usuario.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver detalles del usuario">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-dark" type="button" data-user-id="{{ usuario.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Reestablecer contraseña">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-danger" type="button" data-user-id="{{ usuario.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar usuario">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                              </svg>
+                        </button>
+                        <button class="btn btn-primary" type="button" data-user-id="{{ usuario.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Cambiar rol">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                              </svg>
+                        </button>
+                        <button class="btn btn-warning" type="button" data-user-id="{{ usuario.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{% if usuario.is_superuser %}Quitar superuser{% else %}Otorgar superuser{% endif %}">
+                            {% if usuario.is_superuser %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-x" viewBox="0 0 16 16">
+                                    <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                    <path d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16">
+                                    <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                    <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            {% endif %}
+                        </button>
+                       
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para restablecer contraseña -->
+<div class="modal fade" id="modalResetPassword" tabindex="-1" aria-labelledby="modalResetPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalResetPasswordLabel">Reestablecer Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="resetPasswordForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="usuario_id" name="usuario_id">
+                    <div class="mb-3">
+                        <label for="new_password1" class="form-label">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password2" class="form-label">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="new_password2" name="new_password2" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modificar el botón de reset password en la tabla -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Manejo de tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    // 1.5. Manejo de ver detalles del usuario
+    const viewDetailsButtons = document.querySelectorAll('td button.btn-info');
+    console.log('Botones de ver detalles encontrados:', viewDetailsButtons.length);
+    
+    viewDetailsButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            console.log('Botón ver detalles clickeado');
+            const userId = this.getAttribute('data-user-id');
+            console.log('User ID para ver detalles:', userId);
+            
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('modalDetallesUsuario'));
+            modal.show();
+            
+            // Mostrar spinner y ocultar contenido
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('user-details').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
+            // Obtener detalles del usuario
+            fetch(`/configuracion/usuario-detalles/${userId}/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-spinner').style.display = 'none';
+                
+                if (data.success) {
+                    // Llenar los datos del usuario
+                    const user = data.user;
+                    
+                    // Foto de perfil
+                    const userPhoto = document.getElementById('user-photo');
+                    if (user.foto) {
+                        userPhoto.src = user.foto;
+                    } else {
+                        userPhoto.src = '/static/img/default-profile.png';
+                    }
+                    
+                    // Datos básicos
+                    document.getElementById('user-username').textContent = user.username || 'No especificado';
+                    document.getElementById('user-fullname').textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'No especificado';
+                    document.getElementById('user-email').textContent = user.email || 'No especificado';
+                    document.getElementById('user-role').innerHTML = `<span class="badge bg-primary">${user.role_display || 'No especificado'}</span>`;
+                    
+                    // Permisos
+                    let permissionsHtml = '';
+                    if (user.is_superuser) {
+                        permissionsHtml += '<span class="badge bg-danger me-1">Superuser</span>';
+                    }
+                    if (user.is_staff) {
+                        permissionsHtml += '<span class="badge bg-warning me-1">Staff</span>';
+                    }
+                    if (!user.is_superuser && !user.is_staff) {
+                        permissionsHtml = '<span class="badge bg-secondary">Usuario normal</span>';
+                    }
+                    document.getElementById('user-permissions').innerHTML = permissionsHtml;
+                    
+                    // Fechas
+                    document.getElementById('user-date-joined').textContent = user.date_joined ? new Date(user.date_joined).toLocaleString('es-ES') : 'No disponible';
+                    document.getElementById('user-last-login').textContent = user.last_login ? new Date(user.last_login).toLocaleString('es-ES') : 'Nunca';
+                    
+                    // Estado
+                    const statusBadge = user.is_active ? 
+                        '<span class="badge bg-success">Activo</span>' : 
+                        '<span class="badge bg-danger">Inactivo</span>';
+                    document.getElementById('user-status').innerHTML = statusBadge;
+                    
+                    document.getElementById('user-details').style.display = 'block';
+                } else {
+                    document.getElementById('error-message').textContent = data.message || 'Error al cargar los detalles del usuario';
+                    document.getElementById('error-message').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('error-message').textContent = 'Error al procesar la solicitud';
+                document.getElementById('error-message').style.display = 'block';
+            });
+        });
+    });
+
+    // Función para obtener cookie CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // 2. Manejo de reset password
+    const resetButtons = document.querySelectorAll('td button.btn-dark');
+    console.log('Botones de reset encontrados:', resetButtons.length);
+    
+    resetButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            console.log('Botón reset clickeado');
+            const userId = this.getAttribute('data-user-id');
+            console.log('User ID para reset:', userId);
+            document.getElementById('usuario_id').value = userId;
+            const modal = new bootstrap.Modal(document.getElementById('modalResetPassword'));
+            modal.show();
+        });
+    });
+
+    // 3. Manejo de eliminar usuario
+    const deleteButtons = document.querySelectorAll('td button.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-user-id');
+            const userName = this.closest('tr').querySelector('td:nth-child(2)').textContent.trim();
+            
+            // Confirmación mejorada con nombre del usuario
+            if (confirm(`¿Estás seguro de que deseas eliminar al usuario "${userName}"?\n\nEsta acción eliminará:\n- Los datos del usuario\n- Su foto de perfil\n- No se puede deshacer`)) {
+                
+                // Deshabilitar el botón y mostrar spinner
+                const originalContent = this.innerHTML;
+                this.disabled = true;
+                this.innerHTML = `
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Eliminando...</span>
+                    </div>
+                `;
+                
+                const formData = new FormData();
+                formData.append('usuario_id', userId);
+                
+                fetch('/configuracion/eliminar-usuario/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Animar la eliminación de la fila
+                        const row = this.closest('tr');
+                        row.style.opacity = '0.5';
+                        row.style.transition = 'opacity 0.3s ease';
+                        
+                        setTimeout(() => {
+                            row.remove();
+                            
+                            // Mostrar notificación de éxito más elegante
+                            const notification = document.createElement('div');
+                            notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                            notification.innerHTML = `
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                ${data.message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+                            document.body.appendChild(notification);
+                            
+                            // Auto-remover la notificación después de 5 segundos
+                            setTimeout(() => {
+                                if (notification.parentNode) {
+                                    notification.remove();
+                                }
+                            }, 5000);
+                        }, 300);
+                        
+                    } else {
+                        // Restaurar el botón en caso de error
+                        this.disabled = false;
+                        this.innerHTML = originalContent;
+                        
+                        // Mostrar error
+                        const errorNotification = document.createElement('div');
+                        errorNotification.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+                        errorNotification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                        errorNotification.innerHTML = `
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.body.appendChild(errorNotification);
+                        
+                        setTimeout(() => {
+                            if (errorNotification.parentNode) {
+                                errorNotification.remove();
+                            }
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    
+                    // Restaurar el botón en caso de error
+                    this.disabled = false;
+                    this.innerHTML = originalContent;
+                    
+                    // Mostrar error de conexión
+                    const errorNotification = document.createElement('div');
+                    errorNotification.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+                    errorNotification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                    errorNotification.innerHTML = `
+                        <i class="bi bi-wifi-off me-2"></i>
+                        Error de conexión al eliminar el usuario
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.body.appendChild(errorNotification);
+                    
+                    setTimeout(() => {
+                        if (errorNotification.parentNode) {
+                            errorNotification.remove();
+                        }
+                    }, 5000);
+                });
+            }
+        });
+    });
+
+    // 4. Manejo de cambio de rol
+    const changeRolButtons = document.querySelectorAll('td button.btn-primary');
+    console.log('Botones de cambio de rol encontrados:', changeRolButtons.length);
+    
+    changeRolButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Botón cambio de rol clickeado');
+            e.preventDefault();
+            const userId = this.getAttribute('data-user-id');
+            console.log('User ID para cambio de rol:', userId);
+            
+            document.getElementById('usuario_id_rol').value = userId;
+            
+            // Limpiar checkboxes antes de cargar
+            document.querySelectorAll('.role-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Obtener los roles actuales del usuario
+            fetch(`/configuracion/obtener-roles-usuario/${userId}/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Marcar los checkboxes correspondientes a los roles actuales
+                    data.roles.forEach(role => {
+                        const checkbox = document.getElementById(`role_${role}`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar roles:', error);
+            });
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalCambiarRol'));
+            modal.show();
+        });
+    });
+
+    // 5. Manejo de toggle superuser
+    const superuserButtons = document.querySelectorAll('td button.btn-warning');
+    console.log('Botones de superuser encontrados:', superuserButtons.length);
+    
+    superuserButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Botón superuser clickeado');
+            e.preventDefault();
+            const userId = this.getAttribute('data-user-id');
+            console.log('User ID para toggle superuser:', userId);
+            
+            if (confirm('¿Estás seguro de que deseas cambiar el estado de superuser para este usuario?')) {
+                const formData = new FormData();
+                formData.append('usuario_id', userId);
+                
+                fetch('/configuracion/toggle-superuser/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(data.message || 'Error al cambiar el estado de superuser');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al procesar la solicitud');
+                });
+            }
+        });
+    });
+
+    // 6. Manejo del formulario de reset password
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    if (resetPasswordForm) {
+        resetPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/configuracion/reset-password/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalResetPassword'));
+                    modal.hide();
+                    resetPasswordForm.reset();
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud');
+            });
+        });
+    }
+
+    // 7. Manejo del formulario de cambio de rol
+    const cambiarRolForm = document.getElementById('cambiarRolForm');
+    if (cambiarRolForm) {
+        cambiarRolForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Verificar que al menos un rol esté seleccionado
+            const checkboxes = document.querySelectorAll('.role-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Debe seleccionar al menos un rol');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            
+            fetch('/configuracion/cambiar-rol/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalCambiarRol'));
+                    modal.hide();
+                    alert(data.message);
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Error al cambiar los roles');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud');
+            });
+        });
+    }
+});
+</script>
+
+<!-- modal para cambiar el rol de usuario -->
+<div class="modal fade" id="modalCambiarRol" tabindex="-1" aria-labelledby="modalCambiarRolLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCambiarRolLabel">Cambiar Roles de Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cambiarRolForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="usuario_id_rol" name="usuario_id" value="">
+                    <div class="mb-3">
+                        <label class="form-label">Seleccionar Roles</label>
+                        <div class="form-text mb-2">Puede seleccionar múltiples roles para el usuario</div>
+                        <!-- Checkboxes para seleccionar roles múltiples -->
+                        {% for value, label in ROLES %}
+                            <div class="form-check">
+                                <input class="form-check-input role-checkbox" type="checkbox" name="roles[]" value="{{ value }}" id="role_{{ value }}">
+                                <label class="form-check-label" for="role_{{ value }}">
+                                    {{ label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver detalles del usuario -->
+<div class="modal fade" id="modalDetallesUsuario" tabindex="-1" aria-labelledby="modalDetallesUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetallesUsuarioLabel">Detalles del Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="loading-spinner" class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+                <div id="user-details" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img id="user-photo" src="" alt="Foto de perfil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Nombre de usuario:</strong></div>
+                                <div class="col-sm-8" id="user-username"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Nombre completo:</strong></div>
+                                <div class="col-sm-8" id="user-fullname"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Email:</strong></div>
+                                <div class="col-sm-8" id="user-email"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Rol:</strong></div>
+                                <div class="col-sm-8" id="user-role"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Permisos:</strong></div>
+                                <div class="col-sm-8" id="user-permissions"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Fecha de registro:</strong></div>
+                                <div class="col-sm-8" id="user-date-joined"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Último acceso:</strong></div>
+                                <div class="col-sm-8" id="user-last-login"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Estado:</strong></div>
+                                <div class="col-sm-8" id="user-status"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+

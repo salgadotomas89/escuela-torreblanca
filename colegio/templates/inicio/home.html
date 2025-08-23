@@ -1,0 +1,593 @@
+{% extends "inicio/layout_updated.html" %}
+{% block body %}
+{% load static %}
+{% load whatsapp_tags %}
+
+{% load compress %}
+{% compress css %}
+<!-- Cargamos los estilos para la sección noticias -->
+<link rel="stylesheet" href="{% static 'css/home/secciones/noticias.css' %}">
+<!-- Cargamos los estilos para la sección hero -->
+<link rel="stylesheet" href="{% static 'css/home/secciones/hero.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/home/secciones/eventos.css' %}">
+
+<!-- Cargamos los estilos para hero con múltiples imágenes -->
+<link rel="stylesheet" href="{% static 'css/home/secciones/hero-multiple-images.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/home/secciones/nueva-eventos-carrousel.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/home/secciones/actividades.css' %}">
+<link rel="stylesheet" href="{% static 'css/home/secciones/profesores.css' %}">
+{% endcompress %}
+
+<!--seccion hero image parallax-->
+{% if hero %}
+<section id="hero" class="hero-section">
+    <div class="hero-parallax" id="hero-parallax">
+        <!-- Imágenes de fondo múltiples -->
+        <div class="hero-backgrounds">
+            {% if hero.background_image %}
+                <div class="hero-bg active" style="background-image: url('{{ hero.background_image.url }}');"></div>
+            {% endif %}
+            {% for img in hero.hero_images.all %}
+                <div class="hero-bg lazy-bg" data-bg="{{ img.image.url }}"></div>
+            {% endfor %}
+        </div>
+        
+        <!-- Overlay -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Contenido -->
+        <div class="hero-content">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+        {# ...existing code... #}
+        <h1 class="hero-title display-2 fw-bold mb-4">
+            {% for word in hero.title.split %}
+                <span class="pastel-word pastel-{{ forloop.counter0 }}">{{ word }}</span>
+            {% endfor %}
+        </h1>
+        {# ...existing code... #}                        
+        <div class="hero-buttons">
+                            <a href="{{ hero.btn_primary_url }}" class="btn btn-primary btn-lg me-3 px-4 py-3">{{ hero.btn_primary_text }}</a>
+                            <a href="{{ hero.btn_secondary_url }}" class="btn btn-warning btn-lg px-4 py-3">{{ hero.btn_secondary_text }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Indicador de scroll -->
+        <div class="hero-scroll-indicator">
+            <div class="scroll-arrow">
+                <i class="bi bi-chevron-down"></i>
+            </div>
+        </div>
+        
+        <!-- Indicadores de imágenes (opcional) -->
+        {% if hero.get_all_images|length > 1 %}
+        <div class="hero-indicators">
+            {% for img_url in hero.get_all_images %}
+            <button class="hero-indicator {% if forloop.first %}active{% endif %}" 
+                    data-slide="{{ forloop.counter0 }}"
+                    aria-label="Imagen {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endif %}
+
+<!--seccion noticias-->
+<section id="noticias" class="container-fluid text-center" style="margin-top: 0; padding-top: 4rem;">
+    {% if noticias %}
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for noticia in noticias %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="container h-100">
+                        <div class="row align-items-center justify-content-center g-4 h-100">
+                            <div class="col-md-6 text-center text-md-start">
+                                <div class="d-flex flex-column mx-lg-5 px-5 noticia-contenido">
+                                    <h2 class="display-6 fw-bold lh-1">{{ noticia.titulo }}</h2>
+                                    <p class="lead">{{ noticia.texto|truncatechars:100|safe }}</p>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                        <a href="{% url 'noticias' id=noticia.id %}" class="btn btn-primary btn-lg px-4">Leer más..</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                                {% if noticia.images_set.first %}
+                                    <img data-src="{{ noticia.images_set.first.image.url }}" 
+                                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3C/svg%3E" 
+                                         class="d-block noticia-imagen lazy" 
+                                         style="width: 700px; height: 500px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.40);" 
+                                         alt="{{ noticia.titulo }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+                    </svg>
+                </span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                    </svg>
+                </span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="empty-news-container">
+                    <div class="empty-news-content">
+                        <div class="empty-news-icon">
+                            <i class="bi bi-newspaper fs-1"></i>
+                        </div>
+                        <h3 class="empty-news-title">¡Próximamente nuevas noticias!</h3>
+                        <p class="empty-news-message">Estamos preparando contenido interesante para mantener informada a nuestra comunidad educativa.</p>
+                        <div class="empty-news-animation">
+                            <div class="pulse-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</section>
+<!--fin seccion noticias-->
+
+<!--el id sombra-abajo se encuentra en common_styles.html y es para darle sombra al div -->
+<!-- Sección de Actividades -->
+    <section class="py-5 gradient-bg actividades-section">
+        <div class="container">
+            <!-- Título de la sección -->
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="display-4 section-title">Nuestras Actividades</h2>
+                    <p class="section-subtitle mx-auto" style="max-width: 600px;">
+                        Aprendizaje divertido a través de actividades creativas y educativas
+                    </p>
+                </div>
+            </div>
+            
+
+            <!-- Grid de Actividades -->
+            <div class="row g-4">
+                <!-- Arte y Creatividad -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle icon-art">
+                                <i class="bi bi-palette-fill text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Arte y Creatividad</h5>
+                            <p class="card-text">
+                                Pintura, dibujo y manualidades para expresar la creatividad de cada niño
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Música y Canto -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle icon-music">
+                                <i class="bi bi-music-note-beamed text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Música y Canto</h5>
+                            <p class="card-text">
+                                Desarrollo musical con instrumentos y coros infantiles para estimular el oído
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Matemáticas Divertidas -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle icon-math">
+                                <i class="bi bi-calculator-fill text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Matemáticas Divertidas</h5>
+                            <p class="card-text">
+                                Aprendizaje de números y operaciones a través de juegos educativos
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Idiomas -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle icon-language">
+                                <i class="bi bi-globe text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Idiomas</h5>
+                            <p class="card-text">
+                                Inglés y otros idiomas de manera natural y divertida para los pequeños
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actividades Adicionales -->
+            <div class="row g-4 mt-4">
+                <!-- Deportes -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle" style="background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);">
+                                <i class="bi bi-trophy-fill text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Deportes y Recreación</h5>
+                            <p class="card-text">
+                                Actividades físicas que promueven el trabajo en equipo y la vida saludable
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Teatro -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle" style="background: linear-gradient(135deg, #8e24aa 0%, #7b1fa2 100%);">
+                                <i class="bi bi-mask text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Teatro y Drama</h5>
+                            <p class="card-text">
+                                Expresión corporal y verbal para desarrollar la confianza y creatividad
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ciencias -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle" style="background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);">
+                                <i class="bi bi-lightbulb-fill text-white" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h5 class="card-title mb-3">Ciencias Exploratorias</h5>
+                            <p class="card-text">
+                                Experimentos y descubrimientos que despiertan la curiosidad científica
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </section>
+
+
+<!--seccion comunicados-->
+<!--color section se encuentra dentro de common_styles.html y es para manejar el cambio de color de fondo-->
+<div class="color-section container-fluid h-50 text-start py-5">
+    <div class="container-fluid col-xxl-12">
+        <div class="row flex-lg-row align-items-center">
+            <div class="col-10 col-sm-8 col-lg-6 py-4 d-flex justify-content-center">
+                <img src="{% static 'images/comunicados.png' %}" class="img-fluid" alt="Bootstrap Themes" width="400" height="400">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Comunicados</h1>
+                <p class="lead mb-4">
+                    Explore los comunicados más recientes del colegio, 
+                    abarcando temas esenciales en diversas áreas académicas y 
+                    administrativas. Manténgase informado con las últimas actualizaciones y anuncios importantes.</p>
+                <a href="{% url 'comunicados' %}" class="btn btn-primary btn-lg">Ver todos</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin seccion comunicados-->
+
+
+<!--nueva seccion de eventos-->
+<div class="eventos-section py-5 text-center">
+    <!-- Burbujas animadas solo para la sección de eventos -->
+    <!-- Burbujas animadas solo para la sección de eventos -->
+<div class="event-bubbles-bg">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold text-white mb-5">Eventos próximos</h1>
+            {% if eventos %}
+                <div class="carousel-eventos">
+                    <div class="group">
+                        {% for evento in eventos %}
+                            <div class="card event-card card-carousel h-100">
+                                <div class="card-body d-flex">
+                                    <div class="event-date">
+                                        <span class="event-day">{{ evento.fecha|date:"d" }}</span>
+                                        <span class="event-month">{{ evento.fecha|date:"M"|upper }}</span>
+                                    </div>
+                                    <div class="event-content">
+                                        <h5 class="fw-bold">{{ evento.titulo }}</h5>
+                                        <p>{{ evento.texto }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Add `aria-hidden` to hide the duplicated cards from screen readers. -->
+                    <div aria-hidden class="group">
+                        {% for evento in eventos %}
+                            <div class="card event-card card-carousel h-100">
+                                <div class="card-body d-flex">
+                                    <div class="event-date">
+                                        <span class="event-day">{{ evento.fecha|date:"d" }}</span>
+                                        <span class="event-month">{{ evento.fecha|date:"M"|upper }}</span>
+                                    </div>
+                                    <div class="event-content">
+                                        <h5 class="fw-bold">{{ evento.titulo }}</h5>
+                                        <p>{{ evento.texto }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div class="empty-events-container">
+                        <div class="empty-events-content">
+                            <div class="empty-events-icon">
+                            <i class="bi bi-calendar-event fs-1 mb-3"></i>
+                            </div>
+                            <h3 class="empty-events-title">¡Próximamente nuevos eventos!</h3>
+                            <p class="empty-events-message">Estamos preparando actividades emocionantes para nuestra comunidad educativa.</p>
+                            <div class="empty-events-animation">
+                            <div class="pulse-circle"></div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user.is_superuser %}
+                <button type="button" class="btn btn-outline-dark btn-lg mt-4 px-4 me-sm-3 fw-bold position-relative" data-bs-toggle="modal" data-bs-target="#nuevoEvento">Agregar evento</button>
+            {% endif %}
+    </div>
+</div>
+
+<!--fin seccion nueva de eventos-->
+
+
+<!--vamos a cargar los estilos de eventos-empty.css-->
+<link rel="stylesheet" href="{% static 'css/home/secciones/eventos-empty.css' %}">
+
+<!--seccion de profesores-->
+
+<section id="profesores" class="py-5 text-center">
+         
+
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold mb-5">Educadoras</h1>
+
+
+        
+        {% if profesores %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for profesor in profesores %}
+                <div class="col">
+                    <div class="social-profile-card card-color-{{ forloop.counter0 }}">
+                        <div class="social-profile-card__gradient"></div>
+                        <div class="social-profile-card__image-container">
+                            {% if profesor.foto %}
+<img class="social-profile-card__image lazy" data-src="{{ profesor.foto.url }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3C/svg%3E" alt="Profesor">
+                            {% else %}
+<img class="social-profile-card__image lazy" data-src="{% static 'images/teacher1.png' %}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3C/svg%3E" alt="Profesor">
+                            {% endif %}                        </div>
+                        <div class="social-profile-card__content">
+                            <h3 >{{ profesor.user.first_name }} {{ profesor.user.last_name }}                            <i class="bi bi-clipboard-heart-fill"></i>     
+</h3>
+                            <p class="social-profile-card__role">{{ profesor.role|title }}</p>
+                            <div class="profile-dotted-line"></div>
+
+                            <div class="social-profile-card__stats">
+                                <div class="social-profile-card__stat">
+                                    <span>5</span>
+                                    <span class="social-profile-card__stat-label">Años</span>
+                                </div>
+                                <div class="social-profile-card__stat">
+                                    <span >8</span>
+                                    <span class="social-profile-card__stat-label">Cursos</span>
+                                </div>
+                                <div class="social-profile-card__stat">
+                                    <span >3</span>
+                                    <span class="social-profile-card__stat-label">Asignaturas</span>
+                                </div>
+                            </div>
+                            <!--
+                            <a href="{% url 'perfil_profesor' id=profesor.id %}" class="social-profile-card__action">Ver perfil</a>
+                            -->
+                            <!--Mostramos el correo electronico-->
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <a href="{% url 'profesores' %}" type="button" class="btn btn-primary btn-lg mt-4 px-4 me-sm-3 fw-bold position-relative">Ver todos</a>
+        {% else %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="empty-teachers-container">
+                        <div class="empty-teachers-content">
+                            <div class="empty-teachers-icon">
+                                <i class="bi bi-person-workspace fs-1 mb-3"></i>
+                            </div>
+                            <h3 class="empty-teachers-title">¡Próximamente nuevos profesores!</h3>
+                            <p class="empty-teachers-message">Estamos en proceso de incorporar a nuestro equipo docente.</p>
+                            <div class="empty-teachers-animation">
+                                <div class="pulse-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+        {% if user.is_superuser %}
+
+                <button type="button" class="btn btn-primary btn-lg mt-4 px-4 me-sm-3 fw-bold position-relative" data-bs-toggle="modal" data-bs-target="#nuevoProfesor">Agregar profesor</button>
+        {% endif %}
+    </div>
+</section>
+<!--fin seccion profesores-->
+
+<!-- seccion preguntas frecuentes -->
+<section id="preguntas-frecuentes" class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold mb-3">Preguntas Frecuentes</h1>
+                    <p class="lead text-muted">Encuentra respuestas a las consultas más comunes de nuestra comunidad educativa</p>
+                </div>
+                
+                <div class="accordion accordion-flush" id="faqAccordion">
+                    {% if preguntas_frecuentes %}
+                        {% for pregunta in preguntas_frecuentes %}
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header" id="faq{{ forloop.counter }}">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                                    {{ pregunta.pregunta }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="faq{{ forloop.counter }}" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted">
+                                    {{ pregunta.respuesta|linebreaks }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-question-circle fs-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">No hay preguntas frecuentes disponibles</h4>
+                            <p class="text-muted">Las preguntas frecuentes aparecerán aquí una vez que sean agregadas.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-3">¿No encontraste la respuesta que buscabas?</p>
+                    <a href="{% url 'contacto' %}" class="btn btn-outline-primary">Contáctanos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--fin seccion preguntas frecuentes-->
+
+
+
+
+
+{% include 'modal_nuevo_profesor.html' %}
+
+
+<!--modaal evento-->
+<div class="modal fade" id="nuevoEvento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="eventoForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form }}
+                    <div class="form-group">
+                        <label for="inputAddress">Título</label>
+                        <input name="titulo" type="text" class="form-control" id="inputAddress">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tiny">Escribir texto</label>
+                        <textarea name="texto" class="form-control" id="tiny" rows="12" style="white-space: pre-wrap;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Fecha del evento</label>
+                        <input name="fecha" type="text" class="fecha-ts form-control">
+                    </div>
+
+                    <div class="form-group pt-2">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Estilos del botón flotante de WhatsApp -->
+<link rel="stylesheet" href="{% static 'css/whatsapp-float.css' %}">
+
+<!-- Botón flotante de WhatsApp -->
+{% whatsapp_button %}
+
+<link rel="stylesheet" href="{% static 'css/home/secciones/profesores-empty.css' %}">
+<link rel="stylesheet" href="{% static 'css/home/secciones/noticias-empty.css' %}">
+
+{% compress js %}
+
+<script src="{% static 'js/home/profesores.js' %}"></script>
+<script src="{% static 'js/comunicados.js' %}"></script>
+<script src="{% static 'js/evento.js' %}"></script>
+<script src="{% static 'js/desplazamiento.js' %}"></script>
+<script src="{% static 'js/home/hero-parallax.js' %}"></script>
+<script src="{% static 'js/home/hero-multiple-images.js' %}"></script>
+<script src="{% static 'js/whatsapp-float.js' %}"></script>
+<script src="{% static 'js/home/actividades.js' %}"></script>
+
+{% endcompress %}
+{% endblock %}
+
+
+
+

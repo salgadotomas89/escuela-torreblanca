@@ -1,0 +1,136 @@
+<style>
+
+    :root {
+          --menu-background-color: {{ apariencia.menu_background_color }}; 
+          --menu-text-color: {{ apariencia.menu_text_color }};
+          --menu-height: {{ apariencia.menu_height }}px;  
+          --mega-menu-background-color: {{ apariencia.mega_menu_background_color }};
+          --mega-menu-text-color: {{ apariencia.mega_menu_text_color }};
+          --color_principal_texto: {{ apariencia.color_principal_texto }};
+          --eventos-card-background: {{ apariencia.eventos_card_background }};
+          --eventos-card-text-color: {{ apariencia.eventos_card_text_color }};
+          {% if hero.background_image %}
+          --hero-background-image: url('{{ hero.background_image.url }}?v={{ hero.background_image.name|slugify }}');
+          {% endif %}
+
+          /* Aplicar la imagen directamente al hero como fallback */
+          {% if hero.background_image %}
+          #hero .hero-parallax::before {
+              background-image: url('{{ hero.background_image.url }}?v={{ hero.background_image.name|slugify }}') !important;
+          }
+          {% endif %}
+          --hero-title-color: {{ hero.title_color }};
+          --hero-subtitle-color: {{ hero.subtitle_color }};
+    }
+
+    .color-section {
+        background-color: {{ apariencia.comunicados_background }};
+    }
+
+    #profesores {
+        background-color: {{ apariencia.profesores_background }};
+    }
+
+    .event-card {
+        background-color: var(--eventos-card-background) !important;
+        color: var(--eventos-card-text-color) !important;
+    }
+
+    /* Clases para usar el color principal */
+    .text-primary-custom {
+        color: var(--color_principal_texto) !important;
+    }
+
+    .bg-primary-custom {
+        background-color: var(--color_principal_texto) !important;
+    }
+
+    .border-primary-custom {
+        border-color: var(--color_principal_texto) !important;
+    }
+
+    .btn-primary-custom {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        color: #ffffff !important;
+    }
+
+    .btn-primary-custom:hover {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        opacity: 0.9;
+        color: #ffffff !important;
+    }
+
+    .btn-outline-primary-custom {
+        color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        background-color: transparent !important;
+    }
+
+    .btn-outline-primary-custom:hover {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        color: #ffffff !important;
+    }
+
+    /* Enlaces con color principal */
+    .link-primary-custom {
+        color: var(--color_principal_texto) !important;
+        text-decoration: none;
+    }
+
+    .link-primary-custom:hover {
+        color: var(--color_principal_texto) !important;
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+
+    /* Badges con color principal */
+    .badge-primary-custom {
+        background-color: var(--color_principal_texto) !important;
+        color: #ffffff !important;
+    }
+
+    /* Cards con acento del color principal */
+    .card-header-primary-custom {
+        background-color: var(--color_principal_texto) !important;
+        color: #ffffff !important;
+    }
+
+    /* Alertas con color principal */
+    .alert-primary-custom {
+        color: var(--color_principal_texto) !important;
+        background-color: rgba(var(--color_principal_texto), 0.1) !important;
+        border-color: var(--color_principal_texto) !important;
+    }
+
+    /* Sobrescribir botones primary para usar color principal cuando esté habilitado */
+    {% if apariencia.usar_color_principal %}
+    .btn-primary {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        opacity: 0.9;
+    }
+
+    .btn-outline-primary {
+        color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus,
+    .btn-outline-primary:active {
+        background-color: var(--color_principal_texto) !important;
+        border-color: var(--color_principal_texto) !important;
+        color: #ffffff !important;
+    }
+    {% endif %}
+</style>

@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Rum+Raisin&display=swap');
+/* Hero Section with Parallax Effect - Optimizado */
+.hero-section {
+    position: relative;
+    height: var(--hero-height-desktop, 100vh);
+    min-height: 600px;
+    overflow: hidden;
+    contain: layout style paint;
+}
+
+.hero-parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    will-change: transform;
+    transform: translate3d(0, 0, 0); /* Forzar aceleración hardware */
+    backface-visibility: hidden; /* Prevenir flickering */
+}
+
+
+/* Pseudo-elemento para la imagen con opacidad */
+.hero-parallax::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--hero-background-image, url('../../../images/heroimage.jpeg'));
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.8; /* Solo la imagen tiene opacidad */
+    z-index: -1;
+    transform: translateZ(0); /* Forzar nueva capa */
+    backface-visibility: hidden; /* Prevenir flickering */
+    -webkit-backface-visibility: hidden;
+}
+
+/* Overlay dinámico */
+.hero-parallax::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, var(--hero-overlay-opacity, 0.4));
+    z-index: 0;
+    pointer-events: none;
+}
+
+@media (min-width: 769px) {
+    .hero-parallax {
+        background-attachment: fixed;
+    }
+}
+
+/* Contenido del hero */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    will-change: opacity;
+}
+
+/* Títulos optimizados con colores dinámicos */
+.hero-title {
+    font-family: 'Rum Raisin', sans-serif;
+    font-size: 6rem;
+    color: var(--hero-title-color, white);
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    color: var(--hero-subtitle-color, rgba(255, 255, 255, 0.95));
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+
+
+/* Indicador de scroll simplificado */
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.scroll-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.scroll-arrow:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive simplificado */
+@media (max-width: 768px) {
+    .hero-section {
+        height: var(--hero-height-mobile, 100vh);
+        min-height: 500px;
+    }
+    
+    .hero-parallax {
+        background-attachment: scroll;
+        height: 100%;
+        transform: none !important;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-buttons .btn {
+        padding: 12px 24px;
+        margin: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* Mejoras para rendimiento */
+@media (prefers-reduced-motion: reduce) {
+    .hero-parallax {
+        background-attachment: scroll;
+        transform: none !important;
+    }
+    
+    .hero-buttons .btn {
+        transition: none;
+    }
+    
+    .scroll-arrow {
+        transition: none;
+    }
+}
+
+/* Smooth scroll solo donde es necesario */
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* Paleta de colores pastel para cada palabra del título */
+.pastel-word.pastel-0 { color: #FFB3BA; }  /* Rosa pastel */
+.pastel-word.pastel-1 { color: #FFDFBA; }  /* Naranja pastel */
+.pastel-word.pastel-2 { color: #FFFFBA; }  /* Amarillo pastel */
+.pastel-word.pastel-3 { color: #BAFFC9; }  /* Verde pastel */
+.pastel-word.pastel-4 { color: #BAE1FF; }  /* Azul pastel */
+.pastel-word.pastel-5 { color: #E2BAFF; }  /* Lila pastel */
+.pastel-word.pastel-6 { color: #FFD6E0; }  /* Rosa claro pastel */
+.pastel-word.pastel-7 { color: #B5EAD7; }  /* Verde agua pastel */
+.pastel-word.pastel-8 { color: #C7CEEA; }  /* Azul lavanda pastel */

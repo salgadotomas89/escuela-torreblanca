@@ -1,0 +1,142 @@
+/* Definición de variables CSS */
+:root {
+    --menu-background-color: #FFFFFF;         /* Color de fondo para el menú principal */
+    --menu-text-color: #000000;               /* Color de texto para el menú principal */
+    --menu-height: 80px;                      /* Altura del menú principal */
+    /* Variables adicionales para el mega menú */
+    --mega-menu-background-color: white;      /* Color de fondo para el mega menú */
+    --mega-menu-text-color: #000000;          /* Color de texto para el mega menú */
+    --color_principal_texto: #000000;         /* Color principal del texto */
+    --border-color: #cccccc;  /* Gris claro para el borde */
+}
+
+
+/* Estilos para el botón de hamburguesa */
+.btn-hamburger {
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+}
+
+/* Ocultar el botón de hamburguesa por defecto */
+.btn-hamburger {
+    display: none;
+}
+
+/* Estilos para el menú desplegable en dispositivos móviles */
+#hamburger-dropdown {
+    width: 100vw;                           /* Ocupa el ancho completo de la ventana */
+    position: fixed;                        /* Fijar posición para que aparezca sobre el contenido */
+    top: var(--menu-height, 80px);          /* Posición debajo de la barra de navegación */
+    left: 0;
+    opacity: 0;                             /* Inicialmente oculto */
+    pointer-events: none;                   /* No bloquear eventos en otros elementos */
+    transition: opacity 0.5s, transform 0.5s;  /* Transición suave para abrir y cerrar */
+    transform: translateY(-20px);           /* Comienza ligeramente por encima de su posición final */
+    background-color: var(--menu-background-color) !important;
+    z-index: 1000;                          /* Asegura que aparezca sobre otros elementos */
+    border: none;
+    border-radius: 0; /* Establece el radio del borde a 0 para hacerlo cuadrado */
+    padding-top: 0; /* Elimina el padding superior */
+    padding-bottom: 0; /* Elimina el padding inferior */
+}
+
+/* Estilos cuando el menú desplegable está activo (abierto) */
+#hamburger-dropdown.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+#hamburger-dropdown .dropdown-item:active {
+    background-color: transparent !important; 
+    color: inherit !important;  /* Mantiene el color del texto sin cambios al hacer clic */
+    outline: none !important;
+}
+
+/* Cambia el color al hacer hover en los items del menú móvil */
+#hamburger-dropdown .dropdown-item:hover {
+    background-color: var(--color_principal_texto) !important; /* ...el fondo se vuelve negro. */
+    color: var(--menu-background-color) !important;           /* ...el texto y el ícono (que hereda el color) se vuelven blancos. */
+}
+
+/* Estilos principales para items del menú (incluyendo mega menú) */
+#hamburger-dropdown .dropdown-item {
+    padding: 6px 20px;  /* Aumenta el padding para incrementar el alto */
+}
+
+#hamburger-dropdown .submenu-parent {
+    /* Quitamos el padding del contenedor div */
+    padding: 6px;
+    border-bottom: 1px solid #f0f0f0; /* Añade una línea divisoria sutil */
+}
+
+
+#hamburger-dropdown .submenu-parent:hover {
+    background-color: var(--color_principal_texto) !important;
+    color: var(--menu-background-color) !important;
+}
+
+/* Estilos para el toggle del submenú */
+#hamburger-dropdown .submenu-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+    width: 100%;
+}
+
+/* Estilos adicionales para diferenciar los elementos del submenú móvil */
+#hamburger-dropdown .submenu .dropdown-item {
+    padding: 6px 20px 6px 40px;           /* Aumenta el padding izquierdo para crear indentación */
+    background-color: #f8f9fa !important; /* Fondo ligeramente diferente para distinguir */
+    border-bottom: 1px solid #e9ecef;     /* Borde más sutil para los subelementos */
+    font-size: 0.95em;                    /* Texto ligeramente más pequeño */
+}
+
+#hamburger-dropdown .submenu .dropdown-item:hover {
+    background-color: var(--color_principal_texto) !important;
+    color: var(--menu-background-color) !important;
+}
+
+#hamburger-dropdown .submenu-parent .submenu-toggle {
+    padding: 6px 20px;
+    width: 100%;
+}
+
+/* Estilos para los submenús dentro del menú de hamburguesa */
+.submenu {
+    display: none;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    z-index: 1000;                          
+}
+
+/* En dispositivos móviles */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.1rem !important;
+        max-width: 30vw !important;
+        white-space: normal !important;      /* Permite saltos de línea */
+        word-break: break-word !important;   /* Rompe palabras largas si es necesario */
+        line-height: 1.1 !important;
+        text-align: left;
+        display: inline-block;
+    }
+    /* Muestra el botón de hamburguesa y oculta el botón de inicio de sesión */
+    .btn-hamburger {
+        display: block;
+    }
+    .btn-primary {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    /* Oculta el menú desplegable en pantallas más grandes */
+    #hamburger-dropdown {
+        display: none !important;
+    }
+}
+

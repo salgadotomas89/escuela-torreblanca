@@ -1,0 +1,190 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% block body %}
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Reglamentos</h1>
+            <p class="lead my-3">Normas y procedimientos para una convivencia armoniosa en nuestra comunidad educativa.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="text-center mb-5">
+                            <i class="bi bi-journal-text text-warning" style="font-size: 3rem;"></i>
+                            <h2 class="mt-3 text-warning">Reglamentos {{ colegio.nombre }}</h2>
+                            <p class="lead text-muted">Marco normativo para una convivencia escolar positiva</p>
+                        </div>
+                        
+                        <!-- Reglamento Interno -->
+                        <div class="accordion" id="reglamentosAccordion">
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#reglamentoInterno">
+                                        <i class="bi bi-house-door me-2 text-primary"></i>
+                                        <strong>Reglamento Interno</strong>
+                                    </button>
+                                </h2>
+                                <div id="reglamentoInterno" class="accordion-collapse collapse show" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Disposiciones Generales</h5>
+                                        <ul class="text-muted">
+                                            <li>Horarios de funcionamiento del establecimiento</li>
+                                            <li>Protocolos de entrada y salida</li>
+                                            <li>Uso de instalaciones y espacios comunes</li>
+                                            <li>Procedimientos de emergencia y evacuación</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#convivenciaEscolar">
+                                        <i class="bi bi-people me-2 text-success"></i>
+                                        <strong>Reglamento de Convivencia Escolar</strong>
+                                    </button>
+                                </h2>
+                                <div id="convivenciaEscolar" class="accordion-collapse collapse" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Principios de Convivencia</h5>
+                                        <ul class="text-muted">
+                                            <li>Derechos y deberes de los estudiantes</li>
+                                            <li>Normas de comportamiento en el aula</li>
+                                            <li>Protocolos de resolución de conflictos</li>
+                                            <li>Medidas formativas y disciplinarias</li>
+                                            <li>Procedimientos de mediación escolar</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#evaluacion">
+                                        <i class="bi bi-clipboard-check me-2 text-info"></i>
+                                        <strong>Reglamento de Evaluación</strong>
+                                    </button>
+                                </h2>
+                                <div id="evaluacion" class="accordion-collapse collapse" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Normas de Evaluación</h5>
+                                        <ul class="text-muted">
+                                            <li>Modalidades y tipos de evaluación</li>
+                                            <li>Escala de calificaciones</li>
+                                            <li>Procedimientos de evaluación diferenciada</li>
+                                            <li>Promoción y repitencia</li>
+                                            <li>Certificación de estudios</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uniformes">
+                                        <i class="bi bi-person-badge me-2 text-warning"></i>
+                                        <strong>Reglamento de Uniformes y Presentación Personal</strong>
+                                    </button>
+                                </h2>
+                                <div id="uniformes" class="accordion-collapse collapse" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Normas de Presentación</h5>
+                                        <ul class="text-muted">
+                                            <li>Descripción del uniforme oficial</li>
+                                            <li>Uniformes para educación física</li>
+                                            <li>Normas de higiene personal</li>
+                                            <li>Uso de accesorios y elementos personales</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tecnologia">
+                                        <i class="bi bi-laptop me-2 text-danger"></i>
+                                        <strong>Reglamento de Uso de Tecnología</strong>
+                                    </button>
+                                </h2>
+                                <div id="tecnologia" class="accordion-collapse collapse" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Uso Responsable de Tecnología</h5>
+                                        <ul class="text-muted">
+                                            <li>Política de uso de dispositivos móviles</li>
+                                            <li>Normas para el uso de computadores e internet</li>
+                                            <li>Prevención del ciberbullying</li>
+                                            <li>Protección de datos personales</li>
+                                            <li>Uso educativo de redes sociales</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item border-0 shadow-sm mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#apoderados">
+                                        <i class="bi bi-person-hearts me-2 text-secondary"></i>
+                                        <strong>Reglamento para Padres y Apoderados</strong>
+                                    </button>
+                                </h2>
+                                <div id="apoderados" class="accordion-collapse collapse" data-bs-parent="#reglamentosAccordion">
+                                    <div class="accordion-body">
+                                        <h5>Participación de la Familia</h5>
+                                        <ul class="text-muted">
+                                            <li>Derechos y deberes de los apoderados</li>
+                                            <li>Participación en actividades escolares</li>
+                                            <li>Canales de comunicación con el colegio</li>
+                                            <li>Procedimientos de reclamos y sugerencias</li>
+                                            <li>Compromiso con el proceso educativo</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Información adicional -->
+                        <div class="card bg-light border-0 mt-5">
+                            <div class="card-body p-4 text-center">
+                                <h5 class="text-muted mb-3">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Información Importante
+                                </h5>
+                                <p class="text-muted mb-3">
+                                    Todos los reglamentos son de cumplimiento obligatorio para toda la comunidad educativa. 
+                                    Son revisados y actualizados anualmente por el Consejo Escolar.
+                                </p>
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <i class="bi bi-download text-primary" style="font-size: 1.5rem;"></i>
+                                        <p class="small text-muted mt-2">Documentos disponibles para descarga</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="bi bi-calendar-event text-success" style="font-size: 1.5rem;"></i>
+                                        <p class="small text-muted mt-2">Revisión anual de normativas</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="bi bi-question-circle text-info" style="font-size: 1.5rem;"></i>
+                                        <p class="small text-muted mt-2">Consultas en secretaría</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="{% url 'inicio' %}" class="btn btn-warning btn-lg">
+                                <i class="bi bi-house me-2"></i>Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

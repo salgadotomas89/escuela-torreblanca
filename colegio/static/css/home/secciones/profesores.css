@@ -1,0 +1,186 @@
+/* Colores de fondo para las tarjetas */
+.card-color-0 { background-color: #FA83A9 !important; }
+.card-color-1 { background-color: #f7e381 !important; }
+.card-color-2 { background-color: #83FAD4 !important; }
+.card-color-3 { background-color: #83A9FA !important; }
+.card-color-4 { background-color: #83E4FA !important; }
+
+/* Contenedor principal */
+.social-profile-card {
+    background-color: #FA83A9;
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 280px;
+    height: 450px; /* Aumentado de 420px para dar más espacio */
+    position: relative;
+    border: none;
+    margin: 20px auto;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
+}
+
+.social-profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.social-profile-card__gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 220px; /* Aumentado de 160px para mejor presentación de fotos verticales */
+    background: linear-gradient(135deg, #000000 0%, #000000 50%, #000000 100%);
+    z-index: 1;
+}
+
+.social-profile-card__image-container {
+    position: relative;
+    width: 100%;
+    height: 220px; /* Aumentado para coincidir con el gradiente */
+    overflow: hidden;
+    z-index: 2;
+}
+
+.social-profile-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la proporción y cubre el área */
+    object-position: center top; /* Prioriza mostrar la parte superior de la imagen */
+    transition: transform 0.4s ease;
+}
+
+.social-profile-card:hover .social-profile-card__image {
+    transform: scale(1.05);
+}
+
+.social-profile-card__content {
+    position: relative;
+    padding: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: calc(100% - 220px); /* Altura restante después de la imagen */
+}
+
+
+
+.social-profile-card__role {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 5px 0 15px;
+    letter-spacing: 0.5px;
+}
+
+.social-profile-card__stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
+.social-profile-card__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.social-profile-card__stat-label {
+    font-size: 0.75rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.social-profile-card__action {
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    width: 80%;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-profile-card__action:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+}
+
+.social-profile-card__action:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.social-profile-card__action:hover:before {
+    width: 300px;
+    height: 300px;
+}
+
+#profesores {
+    background-color: #fff;
+    padding: 40px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#profesores::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -150px;
+    left: -150px;
+}
+
+#profesores::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    bottom: -100px;
+    right: -100px;
+}
+
+
+.social-profile-card {
+    color: #fff !important;
+}
+.social-profile-card h3,
+.social-profile-card p,
+.social-profile-card__stat-label,
+.social-profile-card__stat span {
+    color: #fff !important;
+}
+
+.profile-dotted-line {
+    border: none;
+    border-top: 4px dashed #fff;
+    opacity: 0.7;
+    width: 90%;
+    margin: 12px auto 18px auto;
+    height: 0;
+}

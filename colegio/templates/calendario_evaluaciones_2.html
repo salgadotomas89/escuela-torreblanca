@@ -1,0 +1,105 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %} 
+{% block body %}
+
+{% include "common_styles.html" %}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<div class="container py-5">
+    <h2 class="display-5 mb-3 fw-semibold lh-sm">Calendario de evaluaciones <span id="selected-course-name"></span></h2>
+
+
+    <div class="p-4 mb-3 border rounded-3 bg-light">
+        <!-- Dropdown to select a course -->
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Seleccionar curso
+            </button>
+
+            <!-- Dropdown menu with available courses -->
+            <ul class="dropdown-menu">
+                {% if cursos %}
+                    {% for curso in cursos %}
+                        <li><button class="dropdown-item curso-btn-2" data-curso-id="{{ curso.id }}">{{ curso.nombre }}</button></li>
+                    {% endfor %}
+                {% else %}
+                    <li><button class="dropdown-item" type="button" disabled>No hay cursos</button></li>
+                {% endif %}
+            </ul>
+
+            
+
+
+            <a id="descargar-pdf-btn" class="btn btn-success" href="#" data-curso-id=""><span class="btn-text">Descargar PDF</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+              </svg>
+            
+            </a>
+
+        </div>
+    </div>
+
+    <div id="calendario-container-2" class="mb-4" >
+        <!-- Aquí se cargará dinámicamente el calendario -->
+
+
+        
+
+    </div>
+
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+    <script>
+        
+        var cursoId;  // Declarar la variable global para almacenar el ID del curso
+
+        $(document).ready(function() {
+            // Manejar clic en botón de curso
+            $('.curso-btn-2').click(function() {
+                cursoId = $(this).data('curso-id');
+                cargarCalendario(cursoId);
+
+                // Mostrar el nombre del curso seleccionado
+                var cursoNombre = $(this).text();
+                $('#selected-course-name').text(`${cursoNombre}`);
+
+                // Establecer el ID del curso en el enlace Descargar PDF
+                $('#descargar-pdf-btn').data('curso-id', cursoId);
+
+                // Mostrar el botón Descargar PDF
+                $('#descargar-pdf-btn').show();
+            });
+
+            // Ocultar el botón Descargar PDF al cargar la página
+        $('#descargar-pdf-btn').hide();
+
+            // Manejar clic en el enlace Descargar PDF
+        $('#descargar-pdf-btn').click(function() {
+            // Obtener el ID del curso desde el enlace y construir la URL
+            var cursoId = $(this).data('curso-id');
+            var url = `/calendario/generar_pdf/${cursoId}/`;
+            // Redirigir a la página de generación de PDF
+            window.location.href = url;
+        });
+
+            
+            function cargarCalendario(cursoId) {
+                        $.ajax({
+                            type: 'GET',
+                            url: `calendario/get/${cursoId}`,
+                            success: function(data) {
+                                $('#calendario-container-2').html(data);
+                            },
+                            error: function() {
+                                console.log(error);
+                                alert('Error al cargar el calendario.');
+                            }
+                        });        
+            }
+
+        });
+    </script>
+
+{% endblock %}

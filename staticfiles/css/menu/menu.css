@@ -1,0 +1,125 @@
+:root {
+    --menu-background-color: #FFFFFF;            /* Color de fondo por defecto para el menú principal. */
+    --menu-text-color: #000000;                  /* Color de texto por defecto para el menú principal. */
+    --menu-height: 80px;                         /* Altura por defecto para el menú. */
+    /* ... mega menu ... */
+    --mega-menu-background-color: white;       /* Color de fondo por defecto para el mega menú. */
+    --mega-menu-text-color: #000000;             /* Color de texto por defecto para el mega menú. */
+    --color_principal_texto: #000000;
+}
+
+/* Estilos para la barra de navegación principal. */
+.main-content {
+    margin-top: var(--menu-height, 80px) !important;
+}
+
+
+.navbar {
+    height: var(--menu-height, 80px);  
+    display: flex;                                    /* Utiliza flexbox para distribuir elementos en la barra. */
+    align-items: stretch;                             /* Estira los elementos hijos para que ocupen toda la altura. */
+    padding-top: 0;                                   /* Remueve el padding superior. */
+    padding-bottom: 0;                                /* Remueve el padding inferior. */
+    background-color: var(--menu-background-color);   /* Utiliza la variable CSS para el color de fondo. */
+}
+
+/* Estilos para el contenedor de los ítems de la barra de navegación. */
+.navbar-nav {
+    height: 100%;                                     /* Ocupa toda la altura del contenedor padre. */
+    display: flex;                                    /* Utiliza flexbox para distribuir los ítems. */
+}
+
+/* Estilos para los ítems individuales de la barra de navegación. */
+.navbar-nav .nav-item {
+    display: flex;                                    /* Utiliza flexbox para distribuir contenido dentro del ítem. */
+    align-items: center;                              /* Centra el contenido verticalmente. */
+    padding: 0 16px;                                  /* Define el padding horizontal. */
+    position: relative;                               /* Define una posición relativa para poder posicionar elementos absolutos dentro. */
+}
+
+/* Estilos para los enlaces dentro de los ítems de la barra de navegación. */
+.navbar-nav .nav-item .nav-link {
+    height: 100%;                                     /* Ocupa toda la altura del contenedor padre. */
+    display: flex;                                    /* Utiliza flexbox para distribuir contenido. */
+    align-items: center;                              /* Centra el contenido verticalmente. */
+    padding: 0;                                       /* Remueve el padding. */
+    text-align: center;                               /* Centra el texto. */
+    color: var(--menu-text-color);                    /* Utiliza la variable CSS para el color del texto. */
+}
+
+/* Estilos para el efecto de subrayado al pasar el cursor sobre un ítem de la barra de navegación. */
+.navbar-nav .nav-item:hover .nav-link::before {
+    width: 100%;                                      /* Ocupa todo el ancho del contenedor padre. */
+    content: '';                                      /* Contenido necesario para mostrar el pseudoelemento. */
+    position: absolute;                               /* Posiciona el pseudoelemento absolutamente dentro del contenedor relativo. */
+    bottom: 0;                                        /* Alinea el pseudoelemento en la parte inferior del contenedor. */
+    left: 0;                                          /* Alinea el pseudoelemento a la izquierda. */
+    right: 0;                                         /* Alinea el pseudoelemento a la derecha. */
+    height: 5px;                                      /* Define la altura del subrayado. */
+    background-color: var(--menu-text-color);         /* Utiliza la variable CSS para el color del subrayado. */
+}
+
+/* Estilos para el mega menú. */
+.mega-menu {
+    border-top: 1px solid #e0dede;                    /* Añade un borde superior gris. */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);         /* Añade una sombra al mega menú. */
+    z-index: 1000;                                    /* Asegura que el mega menú aparezca por encima de otros elementos. */
+    position: fixed;                                  /* Posiciona el mega menú fijo en la pantalla. */
+    left: 0;                                          /* Alinea el mega menú a la izquierda de la pantalla. */
+    width: 100vw;                                     /* Hace que el mega menú ocupe todo el ancho de la pantalla. */
+    height: 300px;                                    /* Define la altura del mega menú. */
+    display: none;                                    /* Esconde el mega menú por defecto. */
+    align-items: center;                              /* Centra el contenido verticalmente. */
+    justify-content: space-around;                    /* Distribuye el espacio entre los ítems del mega menú. */
+    background-color: var(--mega-menu-background-color) !important;
+}
+
+/* Estilos para las columnas dentro del mega menú. */
+.mega-menu > div {
+    width: 33%;                                       /* Divide el mega menú en 3 columnas. */
+    height: 100%;                                     /* Ocupa toda la altura del mega menú. */
+    display: flex;                                    /* Utiliza flexbox para distribuir el contenido de las columnas. */
+    flex-direction: column;                           /* Organiza el contenido en una columna. */
+    align-items: center;                              /* Centra el contenido horizontalmente. */
+    justify-content: center;                          /* Centra el contenido verticalmente. */
+}
+
+/* Estilos para los enlaces dentro del mega menú. */
+
+.mega-menu a {
+    color: var(--mega-menu-text-color);               /* Utiliza la variable CSS para el color del texto. */
+    text-decoration: none;                            /* Remueve el subrayado de los enlaces. */
+    padding: 8px;                                     /* Añade padding alrededor de los enlaces. */
+    text-align: center;                               /* Centra el texto de los enlaces. */
+}
+
+.mega-menu h2{
+    color: var(--mega-menu-text-color);               /* Utiliza la variable CSS para el color del texto. */
+}
+
+
+.mega-menu p{
+    color: var(--mega-menu-text-color);               /* Utiliza la variable CSS para el color del texto. */
+}
+
+
+
+.mega-menu a:hover {
+    color: var(--color_principal_texto);                             /* Cambia el color  */
+    transform: scale(1.1);                   /* Aumenta el tamaño del texto en un 10% */
+    transition: transform 0.3s ease-out;     /* Añade una transición suave al efecto de escala */
+}
+
+/* Estilos para los íconos dentro del mega menú. */
+.icon {
+    width: 40px;                                      /* Define el ancho de los íconos. */
+    height: auto;                                     /* Asegura que los íconos mantengan su proporción. */
+    margin-right: 5px;                                /* Añade un espacio a la derecha de los íconos. */
+    vertical-align: middle;                           /* Alinea verticalmente los íconos con el texto de los enlaces. */
+}
+header + section {
+    padding-top: var(--menu-height, 80px);
+}
+
+
+

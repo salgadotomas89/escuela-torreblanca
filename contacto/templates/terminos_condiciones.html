@@ -1,0 +1,122 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="bg-white p-5 rounded shadow-sm">
+                <h1 class="mb-4 text-center">Términos y Condiciones</h1>
+                {% if colegio and colegio.nombre %}
+                <h4 class="text-center text-muted mb-4">{{ colegio.nombre }}</h4>
+                {% endif %}
+                
+                <div class="mb-4">
+                    <p class="text-muted">Última actualización: {{ "now"|date:"d/m/Y" }}</p>
+                </div>
+
+                <div class="terms-content">
+                    <h3>1. Aceptación de los Términos</h3>
+                    <p>Al acceder y utilizar este sitio web, usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestro sitio web.</p>
+
+                    <h3>2. Uso del Sitio Web</h3>
+                    <p>Este sitio web es propiedad y está operado por 
+                    {% if colegio and colegio.nombre %}
+                        {{ colegio.nombre }}
+                    {% else %}
+                        nuestro colegio
+                    {% endif %}
+                    . El contenido de este sitio es solo para información general y puede estar sujeto a cambios sin previo aviso.</p>
+
+                    <h3>3. Información Personal</h3>
+                    <p>Al enviar información a través de nuestros formularios de contacto, usted consiente que:</p>
+                    <ul>
+                        <li>La información proporcionada es veraz y completa</li>
+                        <li>Podemos utilizar esta información para contactarle</li>
+                        <li>Sus datos serán tratados de acuerdo con nuestras políticas de privacidad</li>
+                        <li>No compartiremos su información con terceros sin su consentimiento</li>
+                    </ul>
+
+                    <h3>4. Política de Privacidad</h3>
+                    <p>Nos comprometemos a proteger su privacidad. Los datos personales que nos proporcione serán utilizados únicamente para:</p>
+                    <ul>
+                        <li>Responder a sus consultas</li>
+                        <li>Enviar información relacionada con nuestros servicios educativos</li>
+                        <li>Mantener registros internos</li>
+                    </ul>
+
+                    <h3>5. Comunicaciones</h3>
+                    <p>Al proporcionarnos su información de contacto, usted acepta que podemos comunicarnos con usted por:</p>
+                    <ul>
+                        <li>Correo electrónico</li>
+                        <li>Teléfono</li>
+                        <li>Otros medios que haya proporcionado</li>
+                    </ul>
+
+                    <h3>6. Derechos del Usuario</h3>
+                    <p>Usted tiene derecho a:</p>
+                    <ul>
+                        <li>Solicitar acceso a sus datos personales</li>
+                        <li>Solicitar la corrección de datos incorrectos</li>
+                        <li>Solicitar la eliminación de sus datos</li>
+                        <li>Retirar su consentimiento en cualquier momento</li>
+                    </ul>
+
+                    <h3>7. Limitación de Responsabilidad</h3>
+                    <p>En ningún caso seremos responsables por daños directos, indirectos, incidentales o consecuentes que resulten del uso de este sitio web.</p>
+
+                    <h3>8. Modificaciones</h3>
+                    <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigor inmediatamente después de su publicación en el sitio web.</p>
+
+                    <h3>9. Contacto</h3>
+                    <p>Si tiene preguntas sobre estos términos y condiciones, puede contactarnos a través de:</p>
+                    <ul>
+                        {% if colegio %}
+                            {% if colegio.email %}
+                                <li>Email: {{ colegio.email }}</li>
+                            {% endif %}
+                            {% if colegio.telefono %}
+                                <li>Teléfono: {{ colegio.telefono }}</li>
+                            {% endif %}
+                            {% if colegio.direccion %}
+                                <li>Dirección: {{ colegio.direccion }}{% if colegio.region %}, {{ colegio.region }}{% endif %}{% if colegio.pais %}, {{ colegio.pais }}{% endif %}</li>
+                            {% endif %}
+                        {% else %}
+                            <!-- Información de respaldo si no hay datos del colegio -->
+                            <li>Email: Información no disponible</li>
+                            <li>Teléfono: Información no disponible</li>
+                            <li>Dirección: Información no disponible</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="text-center mt-5">
+                    <button type="button" class="btn btn-primary" onclick="window.close()">
+                        <i class="fas fa-check me-2"></i>Entendido
+                    </button>
+                    <a href="{% url 'contacto' %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Formulario
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.terms-content h3 {
+    color: #0d6efd;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.terms-content p, .terms-content li {
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+}
+
+.terms-content ul {
+    margin-left: 1.5rem;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,343 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% block title %}<title>EducaWebs</title>{% endblock %}
+   
+   <!--Jquery-->
+   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+   <!--Ajax-->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+
+   <!--bootstrap-->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+   <!--Bootstrap Icons-->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+   
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
+
+    <link rel="stylesheet" href="{% static 'css/sidebars.css' %}"  type="text/css" />
+
+    <!--script para agregar usuarios-->
+    <script src="{% static 'js/config/usuarios.js' %}"></script>
+    
+</head>
+<body>
+    <main>
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+            <a href="{% url 'inicio' %}"  class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                <span class="fs-4">Inicio</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                {% if user.is_superuser  %}
+
+                <li class="d-flex justify-content-between">
+                    <a href="{% url 'usuarios' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Usuarios
+                    </a>
+                    <!--boton para agregar usuario-->
+                    <button id="agregar-user-btn" class="btn btn-dark" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </li>
+                
+                <li>
+                    <a href="{% url 'ajustes' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Colegio
+                    </a>
+                </li>
+
+                
+
+                <li>
+                    <a href="{% url 'asignaturas' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Asignaturas
+                    </a>
+                </li>
+
+                <li class="d-flex justify-content-between">
+                    <a href="{% url 'cursos' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Cursos
+                    </a>
+                    <button id="agregar-curso-btn" class="btn btn-dark" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'calendario_configuracion' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Calendario
+                    </a>
+                </li>
+
+                {% if user.is_superuser  %}
+
+                <li>
+                    <a href="{% url 'preguntas_frecuentes' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Preguntas Frecuentes
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link text-white dropdown-toggle" href="#" id="configDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#configSubMenu" aria-expanded="false" aria-controls="configSubMenu">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Menú
+                    </a>
+                    <div class="collapse" id="configSubMenu">
+                        <ul class="nav nav-pills flex-column ms-3">
+                            <li>
+                                <a href="{% url 'apariencia' %}" class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                                    Apariencia
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'menu' %}" class="nav-link text-white">
+                                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                                    Configuración
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="{% url 'hero_settings' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Hero
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if user.is_superuser and user.username == 'salgadotomas' %}
+                <li>
+                    <a href="{% url 'suscripcion_ia' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Configuración IA
+                    </a>
+                </li>
+                {% endif %}
+                {% if user.is_superuser  %}
+
+                <li>
+                    <a href="{% url 'configuracion_redes_sociales' %}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                        Redes Sociales
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.userprofile.foto %}
+                        <img src="{{ user.userprofile.foto.url }}" alt="Foto de perfil" width="32" height="32" class="rounded-circle me-2">
+                    {% else %}
+                        <img src="{% static 'img/default-profile.png' %}" alt="Foto de perfil por defecto" width="32" height="32" class="rounded-circle me-2">
+                    {% endif %}
+                    <strong>{{ user.username }}</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <!--boton para ir a la pagina de perfil-->
+                    <li><a class="dropdown-item" href="{% url 'perfil_usuario' %}">Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="logout-link">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--final del sidebar-->
+        <div class="col-md-7 col-lg-9 mx-4 my-4 scrollable-content">
+
+        {% block body %}
+
+
+        {% endblock %}
+        </div>
+    </main>
+
+    <!-- Agregar este modal al final del archivo, antes de </body> -->
+    <div class="modal fade" id="modalRegistroUsuario" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRegistroLabel">Registro de Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="usuarioForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password2" class="form-label">Confirmar contraseña</label>
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Tipo de usuario</label>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="">Seleccione un rol</option>
+                                {% for value, label in ROLES %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Foto de perfil</label>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                            <div class="form-text">Opcional. Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB</div>
+                            <div class="mt-2">
+                                <img id="preview-foto" class="img-thumbnail" style="max-width: 100px; max-height: 100px; display: none;" alt="Vista previa">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agregar este script antes de </body> -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botón para abrir el modal de registro de usuario
+        const btnAgregarUser = document.getElementById('agregar-user-btn');
+        if (btnAgregarUser) {
+            btnAgregarUser.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('modalRegistroUsuario'));
+                modal.show();
+            });
+        }
+
+        // Vista previa de la foto
+        const inputFoto = document.getElementById('foto');
+        const previewFoto = document.getElementById('preview-foto');
+        
+        if (inputFoto && previewFoto) {
+            inputFoto.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validar tipo de archivo
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Por favor selecciona una imagen válida (JPG, PNG, GIF)');
+                        inputFoto.value = '';
+                        previewFoto.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Validar tamaño (5MB máximo)
+                    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+                    if (file.size > maxSize) {
+                        alert('La imagen es demasiado grande. El tamaño máximo permitido es 5MB');
+                        inputFoto.value = '';
+                        previewFoto.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Mostrar vista previa
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewFoto.src = e.target.result;
+                        previewFoto.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewFoto.style.display = 'none';
+                }
+            });
+        }
+
+        // Función para obtener el valor de la cookie CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Logout functionality
+        const logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get CSRF token
+                const csrftoken = getCookie('csrftoken');
+                
+                // Make logout request
+                fetch('/configuracion/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to home page after successful logout
+                        window.location.href = '{% url "inicio" %}';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al cerrar sesión');
+                });
+            });
+        }
+    });
+    </script>
+
+    
+
+
+</body>
+</html>
+
+
+
+

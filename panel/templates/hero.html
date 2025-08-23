@@ -1,0 +1,732 @@
+{% extends "configuracion.html" %}
+{% load static %} 
+{% block body %}
+
+<link rel="stylesheet" href="{% static 'css/config/hero.css' %}">
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="display-5 fw-semibold">Configuración del Hero</h2>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post" action="{% url 'hero_settings' %}" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <!-- Imagen de Fondo -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-image-fill me-2"></i>Imagen de Fondo
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Vista previa de imagen principal -->
+                                        <div id="hero-image-preview" class="mb-3">
+                                            {% if hero.background_image %}
+                                                <div class="card" style="max-width: 400px;">
+                                                    <img src="{{ hero.background_image.url }}" 
+                                                         alt="Imagen principal del hero" 
+                                                         class="card-img-top"
+                                                         style="height: 150px; object-fit: cover;">
+                                                    <div class="card-body p-2">
+                                                        <small class="text-muted d-block">Imagen principal</small>
+                                                        <button type="button" class="btn btn-danger btn-sm mt-1" id="remove-hero-image">
+                                                            <i class="bi bi-trash"></i> Eliminar principal
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="alert alert-info py-2">
+                                                    <i class="bi bi-info-circle me-1"></i>
+                                                    <small>No hay imagen principal configurada.</small>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Campos de carga de imágenes -->
+                                        <div class="mb-3">
+                                            <label for="{{ form.background_image.id_for_label }}" class="form-label">
+                                                <i class="bi bi-image me-1"></i>Imagen Principal
+                                            </label>
+                                            {{ form.background_image }}
+                                        </div>
+                                        
+                                        <!-- Imágenes adicionales existentes -->
+                                        {% if additional_images %}
+                                        <div class="mb-3">
+                                            <h6 class="fw-semibold mb-2">
+                                                <i class="bi bi-images me-1"></i>Imágenes adicionales 
+                                                <small class="text-muted">({{ additional_images|length }} imagen{{ additional_images|length|pluralize:"es" }})</small>
+                                            </h6>
+                                            <div class="row g-2" id="additional-images-grid">
+                                                {% for img in additional_images %}
+                                                <div class="col-4" data-image-id="{{ img.id }}">
+                                                    <div class="card position-relative">
+                                                        <img src="{{ img.image.url }}" 
+                                                             alt="Imagen adicional {{ forloop.counter }}" 
+                                                             class="card-img-top"
+                                                             style="height: 80px; object-fit: cover;">
+                                                        <div class="card-img-overlay p-1 d-flex justify-content-between align-items-start">
+                                                            <span class="badge bg-primary">{{ forloop.counter }}</span>
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-danger remove-additional-image"
+                                                                    data-image-id="{{ img.id }}"
+                                                                    title="Eliminar imagen">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        <!-- Campos de carga de imágenes adicionales -->
+                                        <div class="mb-3">
+                                            <label for="{{ form.additional_images.id_for_label }}" class="form-label">
+                                                <i class="bi bi-images me-1"></i>Imágenes Adicionales
+                                            </label>
+                                            <input type="file" 
+                                                   name="{{ form.additional_images.name }}"
+                                                   id="{{ form.additional_images.id_for_label }}"
+                                                   class="form-control"
+                                                   accept="image/*"
+                                                   multiple>
+                                            <div class="form-text">
+                                                <small class="text-muted">Puedes seleccionar múltiples archivos. Las imágenes cambiarán automáticamente cada 5 segundos.</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-text">
+                                            <strong>Recomendado:</strong> 1920x1080px, formato JPG o PNG, máximo 5MB por imagen
+                                            <br><small class="text-muted">Para mejores resultados usar imágenes con buena calidad y resolución Full HD</small>
+                                        </div>
+                                        
+                                        <!-- Vista previa de archivos seleccionados -->
+                                        <div id="new-images-preview" class="mt-3" style="display: none;">
+                                            <small class="text-muted">Vista previa de archivos seleccionados:</small>
+                                            <div class="row g-2 mt-1" id="preview-images-grid">
+                                                <!-- Las imágenes se cargarán aquí via JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contenido de Texto -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-type me-2"></i>Contenido de Texto
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Título Principal -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.title.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-type-h1 me-1"></i>Título Principal
+                                                </label>
+                                                {{ form.title }}
+                                            </div>
+                                            
+                                            <!-- Color del Título -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.title_color.id_for_label }}" class="form-label">
+                                                    Color del Título
+                                                    <div class="color-preview preview-title-color"></div>
+                                                </label>
+                                                {{ form.title_color }}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <!-- Subtítulo -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.subtitle.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-textarea-t me-1"></i>Subtítulo
+                                                </label>
+                                                {{ form.subtitle }}
+                                            </div>
+                                            
+                                            <!-- Color del Subtítulo -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.subtitle_color.id_for_label }}" class="form-label">
+                                                    Color del Subtítulo
+                                                    <div class="color-preview preview-subtitle-color"></div>
+                                                </label>
+                                                {{ form.subtitle_color }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Configuración de Botones -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-mouse2 me-2"></i>Botones de Acción
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Botón Primario -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.btn_primary_text.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-cursor me-1"></i>Texto Botón Principal
+                                                </label>
+                                                {{ form.btn_primary_text }}
+                                            </div>
+                                            
+                                            <!-- URL Botón Primario -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.btn_primary_url.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-link me-1"></i>URL Botón Principal
+                                                </label>
+                                                {{ form.btn_primary_url }}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <!-- Botón Secundario -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.btn_secondary_text.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-cursor-text me-1"></i>Texto Botón Secundario
+                                                </label>
+                                                {{ form.btn_secondary_text }}
+                                            </div>
+                                            
+                                            <!-- URL Botón Secundario -->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.btn_secondary_url.id_for_label }}" class="form-label">
+                                                    <i class="bi bi-link-45deg me-1"></i>URL Botón Secundario
+                                                </label>
+                                                {{ form.btn_secondary_url }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Guardar Cambios
+                            </button>
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Vista Previa</h5>
+                </div>
+                <div class="card-body">
+                    <div id="preview-hero" class="mb-4 p-3" style="border: 1px solid #ddd; border-radius: 4px; min-height: 200px; background-size: cover; background-position: center; position: relative; {% if hero.background_image %}background-image: url('{{ hero.background_image.url }}');{% endif %}">
+                        <div class="preview-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); border-radius: 4px;"></div>
+                        <div style="position: relative; z-index: 1; color: white; text-align: center; padding: 20px;">
+                            <h6 id="preview-title" style="margin-bottom: 10px;">{{ hero.title }}</h6>
+                            <p id="preview-subtitle" style="font-size: 0.8rem; margin-bottom: 15px;">{{ hero.subtitle }}</p>
+                            <div>
+                                <small class="badge bg-primary me-1" id="preview-btn-primary">{{ hero.btn_primary_text }}</small>
+                                <small class="badge bg-light text-dark" id="preview-btn-secondary">{{ hero.btn_secondary_text }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <small class="text-muted">Vista previa actualizada en tiempo real</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.color-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.preview-title-color {
+    background-color: {{ form.title_color.value }};
+}
+
+.preview-subtitle-color {
+    background-color: {{ form.subtitle_color.value }};
+}
+
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del formulario
+    const titleInput = document.querySelector('[name="title"]');
+    const subtitleInput = document.querySelector('[name="subtitle"]');
+    const titleColorInput = document.querySelector('[name="title_color"]');
+    const subtitleColorInput = document.querySelector('[name="subtitle_color"]');
+    const btnPrimaryTextInput = document.querySelector('[name="btn_primary_text"]');
+    const btnSecondaryTextInput = document.querySelector('[name="btn_secondary_text"]');
+    const backgroundImageInput = document.querySelector('[name="background_image"]');
+    const additionalImagesInput = document.querySelector('[name="additional_images"]');
+    
+    // Elementos de vista previa
+    const previewTitle = document.getElementById('preview-title');
+    const previewSubtitle = document.getElementById('preview-subtitle');
+    const previewBtnPrimary = document.getElementById('preview-btn-primary');
+    const previewBtnSecondary = document.getElementById('preview-btn-secondary');
+    const previewHero = document.getElementById('preview-hero');
+
+    // Variables para manejo de imágenes múltiples en preview
+    let previewImages = [];
+    let currentPreviewIndex = 0;
+    let previewInterval = null;
+    
+    // Inicializar la imagen actual del hero si existe
+    {% if hero.background_image %}
+    previewHero.style.backgroundImage = "url('{{ hero.background_image.url }}')";
+    {% endif %}
+
+    // Función para actualizar vista previa
+    function updatePreview() {
+        if (titleInput) previewTitle.textContent = titleInput.value;
+        if (subtitleInput) previewSubtitle.textContent = subtitleInput.value;
+        if (btnPrimaryTextInput) previewBtnPrimary.textContent = btnPrimaryTextInput.value;
+        if (btnSecondaryTextInput) previewBtnSecondary.textContent = btnSecondaryTextInput.value;
+        
+        if (titleColorInput) previewTitle.style.color = titleColorInput.value;
+        if (subtitleColorInput) previewSubtitle.style.color = subtitleColorInput.value;
+    }
+
+    // Función para actualizar vistas previas de colores
+    function updateColorPreviews() {
+        if (titleColorInput) {
+            document.querySelector('.preview-title-color').style.backgroundColor = titleColorInput.value;
+        }
+        if (subtitleColorInput) {
+            document.querySelector('.preview-subtitle-color').style.backgroundColor = subtitleColorInput.value;
+        }
+    }
+
+    // Función para inicializar carousel de imágenes en preview
+    function initPreviewCarousel() {
+        if (previewImages.length > 1) {
+            previewInterval = setInterval(() => {
+                currentPreviewIndex = (currentPreviewIndex + 1) % previewImages.length;
+                previewHero.style.backgroundImage = `url(${previewImages[currentPreviewIndex]})`;
+            }, 3000); // Cambiar cada 3 segundos en preview
+        }
+    }
+
+    // Función para detener carousel
+    function stopPreviewCarousel() {
+        if (previewInterval) {
+            clearInterval(previewInterval);
+            previewInterval = null;
+        }
+    }
+
+    // Event listeners para actualización en tiempo real
+    if (titleInput) titleInput.addEventListener('input', updatePreview);
+    if (subtitleInput) subtitleInput.addEventListener('input', updatePreview);
+    if (titleColorInput) titleColorInput.addEventListener('input', function() {
+        updatePreview();
+        updateColorPreviews();
+    });
+    if (subtitleColorInput) subtitleColorInput.addEventListener('input', function() {
+        updatePreview();
+        updateColorPreviews();
+    });
+    if (btnPrimaryTextInput) btnPrimaryTextInput.addEventListener('input', updatePreview);
+    if (btnSecondaryTextInput) btnSecondaryTextInput.addEventListener('input', updatePreview);
+
+    // Manejo de imagen principal
+    if (backgroundImageInput) {
+        backgroundImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    stopPreviewCarousel();
+                    previewImages = [e.target.result];
+                    currentPreviewIndex = 0;
+                    previewHero.style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Manejo de múltiples imágenes adicionales
+    if (additionalImagesInput) {
+        additionalImagesInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const previewGrid = document.getElementById('preview-images-grid');
+            const newImagesPreview = document.getElementById('new-images-preview');
+            
+            if (files.length > 0) {
+                previewGrid.innerHTML = '';
+                newImagesPreview.style.display = 'block';
+                
+                stopPreviewCarousel();
+                previewImages = [];
+                
+                files.forEach((file, index) => {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        showNotification(`Archivo ${file.name} es muy grande (máx. 5MB)`, 'warning');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Agregar a preview carousel
+                        previewImages.push(e.target.result);
+                        
+                        // Mostrar miniatura
+                        const colDiv = document.createElement('div');
+                        colDiv.className = 'col-4';
+                        colDiv.innerHTML = `
+                            <div class="card">
+                                <img src="${e.target.result}" 
+                                     alt="Nueva imagen ${index + 1}" 
+                                     class="card-img-top"
+                                     style="height: 60px; object-fit: cover;">
+                                <div class="card-body p-1">
+                                    <small class="text-muted">${file.name}</small>
+                                </div>
+                            </div>
+                        `;
+                        previewGrid.appendChild(colDiv);
+                        
+                        // Si es la primera imagen, mostrarla inmediatamente
+                        if (index === 0) {
+                            previewHero.style.backgroundImage = `url(${e.target.result})`;
+                            currentPreviewIndex = 0;
+                            
+                            // Iniciar carousel si hay múltiples imágenes
+                            if (files.length > 1) {
+                                // Esperar a que se carguen todas las imágenes
+                                setTimeout(() => {
+                                    if (previewImages.length === files.length) {
+                                        initPreviewCarousel();
+                                    }
+                                }, 1000);
+                            }
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                newImagesPreview.style.display = 'none';
+                stopPreviewCarousel();
+            }
+        });
+    }
+
+    // Manejo de eliminación de imagen principal
+    const removeHeroImageBtn = document.getElementById('remove-hero-image');
+    console.log('Estado inicial del botón:', removeHeroImageBtn ? 'Encontrado' : 'No encontrado');
+    
+    if (removeHeroImageBtn) {
+        removeHeroImageBtn.addEventListener('click', function() {
+            console.log('Botón "Eliminar principal" clickeado');
+            
+            if (confirm('¿Estás seguro de que quieres eliminar la imagen principal del hero?')) {
+                console.log('Usuario confirmó la eliminación');
+                const csrfToken = getCookie('csrftoken');
+                console.log('CSRF Token obtenido:', csrfToken ? 'Presente' : 'No encontrado');
+                
+                fetch('{% url "remove_hero_image" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => {
+                    console.log('Respuesta del servidor:', response.status, response.statusText);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Datos recibidos:', data);
+                    if (data.success) {
+                        console.log('Operación exitosa, recargando página...');
+                        showNotification(data.message, 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        console.error('Error en la respuesta:', data);
+                        showNotification('Error al eliminar la imagen', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la petición:', error);
+                    showNotification('Error al eliminar la imagen', 'error');
+                });
+            } else {
+                console.log('Usuario canceló la eliminación');
+            }
+        });
+    }
+
+    // Manejo de eliminación de imágenes adicionales
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-additional-image')) {
+            const button = e.target.closest('.remove-additional-image');
+            const imageId = button.getAttribute('data-image-id');
+            
+            if (confirm('¿Estás seguro de que quieres eliminar esta imagen?')) {
+                fetch(`/hero/remove-additional-image/${imageId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message, 'success');
+                        // Remover elemento del DOM
+                        const imageElement = button.closest('[data-image-id]');
+                        if (imageElement) {
+                            imageElement.remove();
+                        }
+                    } else {
+                        showNotification('Error al eliminar la imagen', 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error al eliminar la imagen', 'error');
+                });
+            }
+        }
+    });
+
+    // Resto del código JavaScript igual...
+    
+    // Manejo del formulario con AJAX
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalContent = submitButton.innerHTML;
+        
+        // Mostrar spinner
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Guardando...
+        `;
+        
+        // Enviar datos
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(`Configuración guardada exitosamente. Total de imágenes: ${data.total_images || 1}`, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showNotification('Error al guardar la configuración', 'error');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalContent;
+            }
+        })
+        .catch(error => {
+            showNotification('Error al guardar la configuración', 'error');
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalContent;
+        });
+    });
+
+    // Función auxiliar para obtener cookies CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type) {
+        const alertClass = type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'danger');
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${alertClass} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '9999';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    // Inicializar vistas previas
+    updatePreview();
+    updateColorPreviews();
+    
+    // Inicializar imágenes existentes en el preview si las hay
+    {% if hero.get_all_images %}
+    const existingImages = [
+        {% for img_url in hero.get_all_images %}
+            "{{ img_url }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    if (existingImages.length > 0) {
+        previewImages = existingImages;
+        
+        // Siempre mostrar la primera imagen al cargar
+        if (!previewHero.style.backgroundImage || previewHero.style.backgroundImage === 'none') {
+            previewHero.style.backgroundImage = `url(${existingImages[0]})`;
+        }
+        
+        if (existingImages.length > 1) {
+            initPreviewCarousel();
+        }
+    }
+    {% endif %}
+});
+
+    // Manejo del formulario con AJAX
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalContent = submitButton.innerHTML;
+        
+        // Mostrar spinner
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Guardando...
+        `;
+        
+        // Enviar datos
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Configuración guardada exitosamente', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showNotification('Error al guardar la configuración', 'error');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalContent;
+            }
+        })
+        .catch(error => {
+            showNotification('Error al guardar la configuración', 'error');
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalContent;
+        });
+    });
+
+    // Función auxiliar para obtener cookies CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type) {
+        const alertClass = type === 'success' ? 'success' : 'danger';
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${alertClass} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '9999';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 3000);
+    }
+
+    // Inicializar vistas previas
+    updatePreview();
+    updateColorPreviews();
+});
+</script>
+
+{% endblock %}

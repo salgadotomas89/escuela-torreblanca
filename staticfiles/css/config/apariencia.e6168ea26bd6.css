@@ -1,0 +1,57 @@
+.color-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 8px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    padding: 2px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+
+#preview-menu {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.sticky-top {
+    top: 20px;
+}
+
+.preview-menu-background {
+    background-color: '{{ form.menu_background_color.value }}';
+}
+
+.preview-menu-text {
+    color: '{{ form.menu_text_color.value }}';
+}
+
+.preview-mega-menu-background {
+    background-color: '{{ form.mega_menu_background_color.value }}';
+}
+
+.preview-mega-menu-text {
+    color: '{{ form.mega_menu_text_color.value }}';
+}
+
+.preview-color-principal {
+    color: '{{ form.color_principal_texto.value }}';
+}

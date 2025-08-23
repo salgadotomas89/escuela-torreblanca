@@ -1,0 +1,68 @@
+{% extends "inicio/layout_updated.html" %}
+{% load static %}
+{% block body %}
+{% include "common_styles.html" %}
+
+<div class="container py-5">
+    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Nuestra Visión</h1>
+            <p class="lead my-3">Hacia dónde nos dirigimos como institución educativa.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-body p-5">
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-eye text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                
+                                <h2 class="text-center mb-4 text-primary">Visión {{ colegio.nombre }}</h2>
+                                
+                                <div class="vision-content">
+                                    <!-- Aquí puedes agregar el contenido específico de la visión -->
+                                    <p class="text-muted fs-5 lh-lg text-center">
+                                        Ser reconocidos como una institución educativa líder en excelencia académica y formación integral, 
+                                        que inspire a nuestros estudiantes a desarrollar su máximo potencial, fomentando valores de 
+                                        responsabilidad, respeto y compromiso social para construir un futuro mejor.
+                                    </p>
+                                    
+                                    <hr class="my-4">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4 text-center mb-3">
+                                            <i class="bi bi-star text-warning" style="font-size: 2rem;"></i>
+                                            <h5 class="mt-2">Excelencia</h5>
+                                            <p class="text-muted">Comprometidos con la calidad educativa</p>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <i class="bi bi-people text-success" style="font-size: 2rem;"></i>
+                                            <h5 class="mt-2">Comunidad</h5>
+                                            <p class="text-muted">Formando ciudadanos responsables</p>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <i class="bi bi-lightbulb text-info" style="font-size: 2rem;"></i>
+                                            <h5 class="mt-2">Innovación</h5>
+                                            <p class="text-muted">Preparando para el futuro</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-4">
+                                    <a href="{% url 'inicio' %}" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-house me-2"></i>Volver al Inicio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

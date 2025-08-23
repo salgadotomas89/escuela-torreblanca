@@ -1,0 +1,215 @@
+{% extends 'configuracion.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    <h2>Configuración del Menú</h2>
+    
+    <!-- Sección de Items del Menú -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Items del Menú</h4>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMenuItem">
+                Agregar Item
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>URL</th>
+                            <th>Orden</th>
+                            <th>Es Mega Menú</th>
+                            <th>Solo Logueados</th>
+                            <th>Reordenar</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menuItemsTable">
+                        {% for item in menu_items %}
+                        <tr data-id="{{ item.id }}" data-orden="{{ item.orden }}">
+                            <td>{{ item.nombre }}</td>
+                            <td>{{ item.url }}</td>
+                            <td class="orden-valor">{{ item.orden }}</td>
+                            <td>{{ item.es_mega_menu|yesno:"Sí,No" }}</td>
+                            <td>
+                                {% if item.solo_usuarios_logueados %}
+                                    <span class="badge bg-primary">Solo Logueados</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Público</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button class="btn btn-sm btn-outline-secondary move-up" {% if forloop.first %}disabled{% endif %} title="Mover arriba">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary move-down" {% if forloop.last %}disabled{% endif %} title="Mover abajo">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-warning edit-item" data-id="{{ item.id }}" title="Editar item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                    </svg>
+                                    <span class="d-none d-md-inline">Editar</span>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-item" data-id="{{ item.id }}" title="Eliminar item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                    </svg>
+                                    <span class="d-none d-md-inline">Eliminar</span>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Agregar/Editar Item -->
+<div class="modal fade" id="modalMenuItem" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar/Editar Item del Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="menuItemForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="itemId" name="id">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="url" class="form-label">URL</label>
+                        <input type="text" class="form-control" id="url" name="url" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="esMegaMenu" name="es_mega_menu">
+                        <label class="form-check-label" for="esMegaMenu">Es Mega Menú</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="soloUsuariosLogueados" name="solo_usuarios_logueados">
+                        <label class="form-check-label" for="soloUsuariosLogueados">Solo visible para usuarios logueados</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'js/menu/menu_manager.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const tableBody = document.getElementById('menuItemsTable');
+
+    // Función para actualizar el orden en la base de datos
+    async function actualizarOrden(itemId, nuevoOrden) {
+        try {
+            const formData = new FormData();
+            formData.append('orden', nuevoOrden);
+            
+            const response = await fetch(`/configuracion/menu/item/${itemId}/update/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error('Error al actualizar el orden');
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al actualizar el orden');
+        }
+    }
+
+    // Función para intercambiar el orden de dos filas
+    async function intercambiarOrden(fila1, fila2) {
+        const orden1 = parseInt(fila1.dataset.orden);
+        const orden2 = parseInt(fila2.dataset.orden);
+        const id1 = fila1.dataset.id;
+        const id2 = fila2.dataset.id;
+        
+        try {
+            // Actualizar los valores en la base de datos
+            await actualizarOrden(id1, orden2);
+            await actualizarOrden(id2, orden1);
+            
+            // Actualizar los valores en el DOM
+            fila1.dataset.orden = orden2;
+            fila2.dataset.orden = orden1;
+            fila1.querySelector('.orden-valor').textContent = orden2;
+            fila2.querySelector('.orden-valor').textContent = orden1;
+            
+            // Actualizar estado de los botones
+            actualizarEstadoBotones();
+        } catch (error) {
+            console.error('Error al intercambiar orden:', error);
+            alert('Error al actualizar el orden de los items');
+        }
+    }
+
+    // Función para actualizar el estado de los botones
+    function actualizarEstadoBotones() {
+        const filas = Array.from(tableBody.getElementsByTagName('tr'));
+        
+        filas.forEach((fila, index) => {
+            const btnSubir = fila.querySelector('.move-up');
+            const btnBajar = fila.querySelector('.move-down');
+            
+            if (btnSubir) btnSubir.disabled = index === 0;
+            if (btnBajar) btnBajar.disabled = index === filas.length - 1;
+        });
+    }
+
+    // Event listeners para los botones de mover
+    tableBody.addEventListener('click', async function(e) {
+        const target = e.target.closest('.move-up, .move-down');
+        if (!target) return;
+
+        const fila = target.closest('tr');
+        const filas = Array.from(tableBody.getElementsByTagName('tr'));
+        const index = filas.indexOf(fila);
+
+        if (target.classList.contains('move-up') && index > 0) {
+            const filaAnterior = filas[index - 1];
+            await intercambiarOrden(fila, filaAnterior);
+            tableBody.insertBefore(fila, filaAnterior);
+        } else if (target.classList.contains('move-down') && index < filas.length - 1) {
+            const filaSiguiente = filas[index + 1];
+            await intercambiarOrden(fila, filaSiguiente);
+            tableBody.insertBefore(filaSiguiente, fila);
+        }
+    });
+
+    // Inicializar el estado de los botones
+    actualizarEstadoBotones();
+});
+</script>
+{% endblock %}

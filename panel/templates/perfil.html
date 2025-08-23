@@ -1,0 +1,214 @@
+{% extends "configuracion.html" %}
+{% load static %} 
+{% block body %}
+
+<div class="container">
+    <h2 class="mb-4">Mi Perfil</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <form class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="row">
+                    <!-- Columna izquierda con la foto -->
+                    <div class="col-md-4 text-center">
+                        <div class="mb-4">
+                            {% if user.userprofile.foto %}
+                                <img id="preview-foto" src="{{ user.userprofile.foto.url }}" 
+                                     alt="Foto de perfil" class="img-fluid rounded-circle mb-3" 
+                                     style="width: 200px; height: 200px; object-fit: cover;">
+                            {% else %}
+                                <img id="preview-foto" src="{% static 'images/default.png' %}" 
+                                     alt="Foto de perfil" class="img-fluid rounded-circle mb-3" 
+                                     style="width: 200px; height: 200px; object-fit: cover;">
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label for="foto" class="form-label">Cambiar foto</label>
+                                <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha con la información -->
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Nombre de usuario</label>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       value="{{ user.username }}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email-usuario" name="email" 
+                                       value="{{ user.email }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre-usuario" name="first_name" 
+                                       value="{{ user.first_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="apellido-usuario" name="last_name" 
+                                       value="{{ user.last_name }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Rol</label>
+                            <input type="text" class="form-control" value="{{ user.userprofile.get_role_display }}" readonly>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h4 class="mb-3">Cambiar contraseña</h4>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="current_password" class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-control" id="current_password" name="current_password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="new_password1" class="form-label">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="new_password1" name="new_password1">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="new_password2" class="form-label">Confirmar nueva contraseña</label>
+                                <input type="password" class="form-control" id="new_password2" name="new_password2">
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="button" id="cambiar-password" class="btn btn-primary">Cambiar contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Manejar cambios en los campos de texto
+    $('#nombre-usuario, #apellido-usuario, #email-usuario').on('input', function() {
+        var fieldId = $(this).attr('id');
+        var fieldValue = $(this).val();
+        var csrftoken = getCookie('csrftoken');
+
+        var url;
+        var data = {
+            'csrfmiddlewaretoken': csrftoken
+        };
+
+        switch(fieldId) {
+            case 'nombre-usuario':
+                url = '/actualizar-nombre-usuario/';
+                data.nuevo_nombre = fieldValue;
+                break;
+            case 'apellido-usuario':
+                url = '/actualizar-apellido-usuario/';
+                data.nuevo_apellido = fieldValue;
+                break;
+            case 'email-usuario':
+                url = '/actualizar-email-usuario/';
+                data.nuevo_email = fieldValue;
+                break;
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(response) {
+                if (response.success) {
+                    console.log('Campo actualizado correctamente');
+                } else {
+                    console.error('Error al actualizar el campo');
+                }
+            }
+        });
+    });
+
+    // Manejar cambio de foto
+    $('#foto').on('change', function() {
+        var formData = new FormData();
+        formData.append('foto', this.files[0]);
+        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+        $.ajax({
+            url: '/actualizar-foto-usuario/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    $('#preview-foto').attr('src', response.new_url);
+                }
+            }
+        });
+    });
+
+    // Manejar cambio de contraseña
+    $('#cambiar-password').click(function() {
+        var currentPassword = $('#current_password').val();
+        var newPassword1 = $('#new_password1').val();
+        var newPassword2 = $('#new_password2').val();
+
+        if (!currentPassword || !newPassword1 || !newPassword2) {
+            alert('Por favor complete todos los campos de contraseña');
+            return;
+        }
+
+        if (newPassword1 !== newPassword2) {
+            alert('Las nuevas contraseñas no coinciden');
+            return;
+        }
+
+        $.ajax({
+            url: '/actualizar-password-usuario/',
+            type: 'POST',
+            data: {
+                'current_password': currentPassword,
+                'new_password1': newPassword1,
+                'new_password2': newPassword2,
+                'csrfmiddlewaretoken': getCookie('csrftoken')
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Contraseña actualizada correctamente');
+                    // Limpiar campos
+                    $('#current_password, #new_password1, #new_password2').val('');
+                } else {
+                    alert(response.error || 'Error al actualizar la contraseña');
+                }
+            }
+        });
+    });
+
+    // Función para obtener el CSRF token
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+
+{% endblock %}
