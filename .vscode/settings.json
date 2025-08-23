@@ -1,5 +1,7 @@
 {
     "python.analysis.extraPaths": [
         "./openai-1.1.2/src"
-    ]
+    ],
+    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.pythonPath": "./venv/bin/python"
 }
