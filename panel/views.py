@@ -360,7 +360,6 @@ def asignar_profesor_jefe(request):
         return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
 
 def quitar_profesor_jefe(request):
-    print('hola ')
     if request.method == 'POST':
         curso_id = request.POST.get('cursoId')
         curso = Curso.objects.get(id=curso_id)
@@ -1065,125 +1064,10 @@ def obtener_pregunta_frecuente(request, pregunta_id):
 
 
 
-@login_required
-def remove_hero_image(request):
-    
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        try:
-            hero = HeroSettings.get_or_create_default()
-            
-            if hero.background_image:
-                # Usar el método del modelo para eliminar la imagen de forma segura
-                success = hero.delete_background_image()
-                
-                if success:
-                    return JsonResponse({
-                        'success': True,
-                        'message': 'Imagen del hero eliminada exitosamente'
-                    })
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'error': 'Error al eliminar la imagen del hero'
-                    })
-            else:
-                return JsonResponse({
-                    'success': False,
-                    'error': 'No hay imagen configurada para eliminar'
-                })
-                
-        except Exception as e:
-            print(f"Error al eliminar imagen del hero: {str(e)}")  # Log del error
-            return JsonResponse({
-                'success': False,
-                'error': f'Error interno al eliminar la imagen'
-            })
-    
-    return JsonResponse({
-        'success': False,
-        'error': 'Método no permitido'
-    })
+
               
 
-@login_required
-def toggle_hero_status(request):
-    """
-    Vista para activar/desactivar el hero - DESACTIVADA porque eliminamos el campo is_active
-    """
-    return JsonResponse({
-        'success': False,
-        'error': 'Funcionalidad no disponible - campo is_active eliminado'
-    })
 
-@login_required
-def remove_hero_additional_image(request, image_id):
-    """
-    Vista para eliminar una imagen adicional del hero
-    """
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        try:
-            hero_image = get_object_or_404(HeroImage, id=image_id)
-            
-            # Eliminar archivo físico
-            hero_image.delete_image_file()
-            
-            # Eliminar de la base de datos
-            hero_image.delete()
-            
-            return JsonResponse({
-                'success': True,
-                'message': 'Imagen eliminada exitosamente'
-            })
-                
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': f'Error interno: {str(e)}'
-            })
-    
-    return JsonResponse({
-        'success': False,
-        'error': 'Método no permitido'
-    })
-
-
-@login_required
-def reorder_hero_images(request):
-    """
-    Vista para reordenar las imágenes del hero
-    """
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        try:
-            import json
-            data = json.loads(request.body)
-            image_orders = data.get('image_orders', [])
-            
-            for item in image_orders:
-                image_id = item.get('id')
-                new_order = item.get('order')
-                
-                try:
-                    hero_image = HeroImage.objects.get(id=image_id)
-                    hero_image.order = new_order
-                    hero_image.save()
-                except HeroImage.DoesNotExist:
-                    continue
-            
-            return JsonResponse({
-                'success': True,
-                'message': 'Orden de imágenes actualizado exitosamente'
-            })
-                
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': f'Error interno: {str(e)}'
-            })
-    
-    return JsonResponse({
-        'success': False,
-        'error': 'Método no permitido'
-    })
 
 def actualizar_whatsapp_colegio(request):
     print('guardando número de WhatsApp')

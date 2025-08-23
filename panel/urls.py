@@ -36,11 +36,7 @@ urlpatterns = [
     
     # URLs para Hero Settings
     path('hero/', views.hero_settings, name='hero_settings'),
-    path('hero/remove-image/', views.remove_hero_image, name='remove_hero_image'),
-    path('hero/remove-additional-image/<int:image_id>/', views.remove_hero_additional_image, name='remove_hero_additional_image'),
-    path('hero/reorder-images/', views.reorder_hero_images, name='reorder_hero_images'),
-    path('hero/toggle-status/', views.toggle_hero_status, name='toggle_hero_status'),
-
+    
     path('menu', views.menu, name="menu"),
 
     path('actualizar/', views.actualizar_nombre_colegio, name='actualizar_nombre_colegio'),

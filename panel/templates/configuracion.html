@@ -81,12 +81,7 @@
                     </button>
                 </li>
                 {% endif %}
-                <li>
-                    <a href="{% url 'calendario_configuracion' %}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-                        Calendario
-                    </a>
-                </li>
+                
 
                 {% if user.is_superuser  %}
 
@@ -128,14 +123,14 @@
                 </li>
                 {% endif %}
 
-                {% if user.is_superuser and user.username == 'salgadotomas' %}
+                {% comment %} {% if user.is_superuser and user.username == 'salgadotomas' %}
                 <li>
                     <a href="{% url 'suscripcion_ia' %}" class="nav-link text-white">
                         <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
                         Configuración IA
                     </a>
                 </li>
-                {% endif %}
+                {% endif %} {% endcomment %}
                 {% if user.is_superuser  %}
 
                 <li>

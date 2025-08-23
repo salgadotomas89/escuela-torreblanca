@@ -19,7 +19,6 @@
     backface-visibility: hidden; /* Prevenir flickering */
 }
 
-
 /* Pseudo-elemento para la imagen con opacidad */
 .hero-parallax::before {
     content: '';
