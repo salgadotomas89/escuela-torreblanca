@@ -23,6 +23,7 @@ urlpatterns = [
     path('directiva', views.directiva, name="directiva"),
   
     path('guardar-evento/', views.guardar_evento, name='guardar_evento'),
+    path('eliminar-evento/<int:evento_id>/', views.eliminar_evento, name='eliminar_evento'),
 
 
     path('calendario', views.calendario, name="calendario"),

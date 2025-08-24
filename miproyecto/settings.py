@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'profesores',
     'contacto',
     'panel',
-    'compressor',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -189,8 +188,6 @@ LOGOUT_REDIRECT_URL = 'inicio'
 # Cargar variables de entorno para OpenAI
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
 
-
-
 # Configuración para archivos multimedia
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -203,12 +200,6 @@ FILE_UPLOAD_HANDLERS = [
 
 # Tamaño máximo de archivo (5MB)
 MAX_UPLOAD_SIZE = 5242880
-
-
-COMPRESS_ENABLED = True
-
-COMPRESS_OFFLINE = True
-
 
 # Configuración de codificación de caracteres
 # Asegurarse de que la codificación de caracteres sea UTF-8

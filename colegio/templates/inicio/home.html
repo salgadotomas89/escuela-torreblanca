@@ -3,8 +3,6 @@
 {% load static %}
 {% load whatsapp_tags %}
 
-{% load compress %}
-{% compress css %}
 <!-- Cargamos los estilos para la sección noticias -->
 <link rel="stylesheet" href="{% static 'css/home/secciones/noticias.css' %}">
 <!-- Cargamos los estilos para la sección hero -->
@@ -19,7 +17,6 @@
 
 <link rel="stylesheet" href="{% static 'css/home/secciones/actividades.css' %}">
 <link rel="stylesheet" href="{% static 'css/home/secciones/profesores.css' %}">
-{% endcompress %}
 
 <!--seccion hero image parallax-->
 {% if hero %}
@@ -334,6 +331,16 @@
                     <div class="group">
                         {% for evento in eventos %}
                             <div class="card event-card card-carousel h-100">
+                                {% if user.is_superuser %}
+                                    <button type="button" 
+                                            class="btn btn-danger btn-sm position-absolute delete-event-btn" 
+                                            data-evento-id="{{ evento.id }}"
+                                            data-evento-titulo="{{ evento.titulo }}"
+                                            style="top: 10px; right: 10px; z-index: 10;"
+                                            title="Eliminar evento">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                {% endif %}
                                 <div class="card-body d-flex">
                                     <div class="event-date">
                                         <span class="event-day">{{ evento.fecha|date:"d" }}</span>
@@ -351,6 +358,16 @@
                     <div aria-hidden class="group">
                         {% for evento in eventos %}
                             <div class="card event-card card-carousel h-100">
+                                {% if user.is_superuser %}
+                                    <button type="button" 
+                                            class="btn btn-danger btn-sm position-absolute delete-event-btn" 
+                                            data-evento-id="{{ evento.id }}"
+                                            data-evento-titulo="{{ evento.titulo }}"
+                                            style="top: 10px; right: 10px; z-index: 10;"
+                                            title="Eliminar evento">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                {% endif %}
                                 <div class="card-body d-flex">
                                     <div class="event-date">
                                         <span class="event-day">{{ evento.fecha|date:"d" }}</span>
@@ -394,6 +411,41 @@
 
 <!--vamos a cargar los estilos de eventos-empty.css-->
 <link rel="stylesheet" href="{% static 'css/home/secciones/eventos-empty.css' %}">
+
+<!-- Estilos para los botones de eliminar eventos -->
+<style>
+.event-card .card-body {
+    position: relative;
+}
+
+.event-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.delete-event-btn {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.delete-event-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.delete-event-btn i {
+    font-size: 14px;
+}
+</style>
 
 <!--seccion de profesores-->
 
@@ -528,6 +580,25 @@
 
 {% include 'modal_nuevo_profesor.html' %}
 
+<!-- Modal de confirmación para eliminar evento -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEventModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el evento "<span id="eventTitle"></span>"?</p>
+                <p class="text-muted">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--modal evento-->
 <div class="modal fade" id="nuevoEvento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -572,18 +643,19 @@
 <link rel="stylesheet" href="{% static 'css/home/secciones/profesores-empty.css' %}">
 <link rel="stylesheet" href="{% static 'css/home/secciones/noticias-empty.css' %}">
 
-{% compress js %}
 
 <script src="{% static 'js/home/profesores.js' %}"></script>
 <script src="{% static 'js/comunicados.js' %}"></script>
-<script src="{% static 'js/evento.js' %}"></script>
 <script src="{% static 'js/desplazamiento.js' %}"></script>
 <script src="{% static 'js/home/hero-parallax.js' %}"></script>
 <script src="{% static 'js/home/hero-multiple-images.js' %}"></script>
 <script src="{% static 'js/whatsapp-float.js' %}"></script>
 <script src="{% static 'js/home/actividades.js' %}"></script>
+<script src="{% static 'js/eliminar-evento.js' %}"></script>
 
-{% endcompress %}
+
+<script src="{% static 'js/evento.js' %}"></script>
+
 {% endblock %}
 
 

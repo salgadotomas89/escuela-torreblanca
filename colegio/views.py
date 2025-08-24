@@ -190,6 +190,38 @@ def guardar_evento(request):
         return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
 
 
+def eliminar_evento(request, evento_id):
+    if request.method == 'DELETE':
+        try:
+            # Verificar que el usuario sea superusuario
+            if not request.user.is_superuser:
+                return JsonResponse({'success': False, 'error': 'No tienes permisos para eliminar eventos'})
+            
+            # Buscar el evento
+            evento = Evento.objects.get(id=evento_id)
+            titulo_evento = evento.titulo
+            
+            # Eliminar el evento
+            evento.delete()
+            print(f'Evento eliminado: {titulo_evento}')
+            
+            # Invalidar cache del home cuando se elimina un evento
+            cache.delete('home_data_v1')
+            
+            return JsonResponse({
+                'success': True, 
+                'message': f'Evento "{titulo_evento}" eliminado correctamente'
+            })
+            
+        except Evento.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'El evento no existe'})
+        except Exception as e:
+            print(f'Error al eliminar evento: {str(e)}')
+            return JsonResponse({'success': False, 'error': 'Error interno del servidor'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
+
+
 @csrf_exempt
 def registro_usuario(request):
     if request.method == 'POST':

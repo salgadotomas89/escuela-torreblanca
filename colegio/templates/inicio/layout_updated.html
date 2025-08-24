@@ -20,8 +20,6 @@
 
     <script src="{% static 'libs/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
     <link rel="stylesheet" href="{% static 'libs/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" type="text/css" />
-    {% load compress %}
-{% compress css %}
     <link rel="stylesheet" href="{% static 'css/home/secciones/profesores.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'css/carousel.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'css/comunicados.css' %}" type="text/css" />
@@ -34,7 +32,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/iconos-menu.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/menu/mega-menu-custom.css' %}">
-{% endcompress %}
 
 
     {% include "common_styles.html" %}
@@ -230,13 +227,11 @@
             <a class="text-reset fw-bold" href="https://academics.cl">Academics</a>
         </div>
     </footer>
-{% compress js %}
 
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/tooltips.js' %}"></script>
     <script src="{% static 'js/logout.js' %}"></script>
 
-{% endcompress %}
 
 <!-- Lazy Loading CSS -->
 <style>
