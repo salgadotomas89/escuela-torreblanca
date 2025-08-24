@@ -1,0 +1,120 @@
+<nav class="navbar navbar-expand-md fixed-top">
+    <div class="py-3 d-flex align-items-center ms-4">
+        {% if colegio.logo %}
+            <img src="{{ colegio.logo.url }}" alt="Logo {{ colegio.nombre }}" class="navbar-logo me-2" style="height: 80px; width: auto;">
+            <a class="navbar-brand navbar-brand-infantil" href="{% url 'inicio' %}">
+                {% for palabra in colegio.nombre.split %}
+                    <span class="infantil-color infantil-color-{{ forloop.counter }}">{{ palabra }}</span>{% if not forloop.last %} {% endif %}
+                {% endfor %}
+            </a>
+        {% else %}
+            <a class="navbar-brand navbar-brand-infantil" href="{% url 'inicio' %}">
+                {% for palabra in colegio.nombre.split %}
+                    <span class="infantil-color infantil-color-{{ forloop.counter }}">{{ palabra }}</span>{% if not forloop.last %} {% endif %}
+                {% endfor %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            {% for item in menu_items %}
+                <li class="nav-item">
+                    
+                    {% if item.url == 'noticias'  %}
+                        <a class="nav-link btn btn-primary mx-1" href="{% url item.url 0 %}">{{ item.nombre }}</a>
+                    {% else %}
+                        <a class="nav-link btn btn-primary" href="{% url item.url %}">{{ item.nombre }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            
+
+            {% for mega_menu in mega_menus %}
+                <li class="nav-item colegio">
+                    <a class="nav-link btn btn-primary">
+                        {{ mega_menu.nombre }}&nbsp;
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="d-flex align-items-center ms-auto me-4">
+        <div class="py-3 d-none d-md-flex align-items-center">
+            {% if user.is_authenticated %}
+                <a href="#" id="logout-link" class="btn btn-primary">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            {% endif %}
+        </div>
+   
+        <div class="py-0 d-flex d-md-none align-items-center">
+            <button id="hamburger-btn" class="btn btn-hamburger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">0</button>
+            <div class="dropdown-menu menu-hamburguesa" id="hamburger-dropdown">
+                {% for item in menu_items %}
+                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="{% if item.url == 'noticias' %}{% url item.url 0 %}{% else %}{% url item.url %}{% endif %}">
+                        {{ item.nombre }}
+                        <div class="icon-circle icon-item ms-2">
+                            {% if item.icono %}
+                                <i class="bi {{ item.icono }}" style="font-size: 1.5rem;"></i>
+                            {% else %}
+                                <i class="bi bi-chevron-right ms-2"></i>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+                                        
+                {% for mega_menu in mega_menus %}
+                    <div class="submenu-parent">
+                        <span class="submenu-toggle" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                            {{ mega_menu.nombre }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down ms-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </span>
+                        <div class="submenu" style="position: absolute; left: 0; top: 100%; min-width: 200px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: none;">
+                            <a class="dropdown-item" href="{% url 'mision' %}">Misi�n</a>
+                            <a class="dropdown-item" href="{% url 'vision' %}">Visi�n</a>
+                            <a class="dropdown-item" href="{% url 'valores' %}">Valores</a>
+                            <a class="dropdown-item" href="{% url 'proyecto_educativo' %}">Proyecto Educativo</a>
+                            <a class="dropdown-item" href="{% url 'reglamentos' %}">Reglamentos</a>
+                            <a class="dropdown-item" href="{% url 'directiva_megamenu' %}">Directiva</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="mega-menu">
+    <div class="mega-menu-column mega-menu-about">
+        <h2>Acerca del Colegio</h2>
+        <p>
+            Educacion de calidad en San Javier<br>
+            para el desarrollo del lenguaje en niños y niñas.
+        </p>
+    </div>
+
+    <div class="mega-menu-column mega-menu-links">
+        <a href="{% url 'mision' %}"><i class="bi bi-heart icon"></i> Misión</a>
+        <a href="{% url 'vision' %}"><i class="bi bi-eye icon"></i> Visión</a>
+        <a href="{% url 'valores' %}"><i class="bi bi-heart icon"></i> Valores</a>
+    </div>
+
+    <div class="mega-menu-column mega-menu-links">
+        <a href="{% url 'proyecto_educativo' %}"><i class="bi bi-book icon"></i> Proyecto Educativo</a>
+        <a href="{% url 'reglamentos' %}"><i class="bi bi-file-text icon"></i> Reglamentos</a>
+        <a href="{% url 'directiva_megamenu' %}"><i class="bi bi-people icon"></i> Directiva</a>
+    </div>
+    
+    <div class="mega-menu-column mega-menu-links">
+        <a href="{% url 'noticias' id=0 %}"><i class="bi bi-book icon"></i> Noticias</a>
+        <a href="{% url 'comunicados' %}"><i class="bi bi-calendar icon"></i> Comunicados</a>
+        <a href="{% url 'lista_actividades' %}"><i class="bi bi-camera icon"></i> Fotos</a>
+    </div>
+</div>

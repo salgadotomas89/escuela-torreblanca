@@ -1,6 +1,5 @@
 from django.urls import include, path
 from . import views
-# Importa la vista creada anteriormente
 from colegio.views import not_found
 from rest_framework.routers import DefaultRouter
 from .views import EventoViewSet,ColegioViewSet
@@ -26,7 +25,6 @@ urlpatterns = [
     path('eliminar-evento/<int:evento_id>/', views.eliminar_evento, name='eliminar_evento'),
 
 
-    path('calendario', views.calendario, name="calendario"),
     
 
 

@@ -9,9 +9,9 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Items del Menú</h4>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMenuItem">
+            {% comment %} <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMenuItem">
                 Agregar Item
-            </button>
+            </button> {% endcomment %}
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -63,12 +63,14 @@
                                     </svg>
                                     <span class="d-none d-md-inline">Editar</span>
                                 </button>
+                                {% if user.is_superuser %}
                                 <button class="btn btn-sm btn-danger delete-item" data-id="{{ item.id }}" title="Eliminar item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                         <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                     </svg>
                                     <span class="d-none d-md-inline">Eliminar</span>
                                 </button>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -97,14 +99,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="url" class="form-label">URL</label>
-                        <input type="text" class="form-control" id="url" name="url" required>
+                        <input type="text" class="form-control" id="url" name="url" required disabled>
                     </div>
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="esMegaMenu" name="es_mega_menu">
+                        <input type="checkbox" class="form-check-input" id="esMegaMenu" name="es_mega_menu" disabled>
                         <label class="form-check-label" for="esMegaMenu">Es Mega Menú</label>
                     </div>
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="soloUsuariosLogueados" name="solo_usuarios_logueados">
+                        <input type="checkbox" class="form-check-input" id="soloUsuariosLogueados" name="solo_usuarios_logueados" disabled>
                         <label class="form-check-label" for="soloUsuariosLogueados">Solo visible para usuarios logueados</label>
                     </div>
                     <div class="modal-footer">
@@ -119,97 +121,5 @@
 
 <!-- Scripts -->
 <script src="{% static 'js/menu/menu_manager.js' %}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    const tableBody = document.getElementById('menuItemsTable');
-
-    // Función para actualizar el orden en la base de datos
-    async function actualizarOrden(itemId, nuevoOrden) {
-        try {
-            const formData = new FormData();
-            formData.append('orden', nuevoOrden);
-            
-            const response = await fetch(`/configuracion/menu/item/${itemId}/update/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                },
-                body: formData
-            });
-            
-            if (!response.ok) {
-                throw new Error('Error al actualizar el orden');
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al actualizar el orden');
-        }
-    }
-
-    // Función para intercambiar el orden de dos filas
-    async function intercambiarOrden(fila1, fila2) {
-        const orden1 = parseInt(fila1.dataset.orden);
-        const orden2 = parseInt(fila2.dataset.orden);
-        const id1 = fila1.dataset.id;
-        const id2 = fila2.dataset.id;
-        
-        try {
-            // Actualizar los valores en la base de datos
-            await actualizarOrden(id1, orden2);
-            await actualizarOrden(id2, orden1);
-            
-            // Actualizar los valores en el DOM
-            fila1.dataset.orden = orden2;
-            fila2.dataset.orden = orden1;
-            fila1.querySelector('.orden-valor').textContent = orden2;
-            fila2.querySelector('.orden-valor').textContent = orden1;
-            
-            // Actualizar estado de los botones
-            actualizarEstadoBotones();
-        } catch (error) {
-            console.error('Error al intercambiar orden:', error);
-            alert('Error al actualizar el orden de los items');
-        }
-    }
-
-    // Función para actualizar el estado de los botones
-    function actualizarEstadoBotones() {
-        const filas = Array.from(tableBody.getElementsByTagName('tr'));
-        
-        filas.forEach((fila, index) => {
-            const btnSubir = fila.querySelector('.move-up');
-            const btnBajar = fila.querySelector('.move-down');
-            
-            if (btnSubir) btnSubir.disabled = index === 0;
-            if (btnBajar) btnBajar.disabled = index === filas.length - 1;
-        });
-    }
-
-    // Event listeners para los botones de mover
-    tableBody.addEventListener('click', async function(e) {
-        const target = e.target.closest('.move-up, .move-down');
-        if (!target) return;
-
-        const fila = target.closest('tr');
-        const filas = Array.from(tableBody.getElementsByTagName('tr'));
-        const index = filas.indexOf(fila);
-
-        if (target.classList.contains('move-up') && index > 0) {
-            const filaAnterior = filas[index - 1];
-            await intercambiarOrden(fila, filaAnterior);
-            tableBody.insertBefore(fila, filaAnterior);
-        } else if (target.classList.contains('move-down') && index < filas.length - 1) {
-            const filaSiguiente = filas[index + 1];
-            await intercambiarOrden(fila, filaSiguiente);
-            tableBody.insertBefore(filaSiguiente, fila);
-        }
-    });
-
-    // Inicializar el estado de los botones
-    actualizarEstadoBotones();
-});
-</script>
+<script src="{% static 'js/menu/menu_edit.js' %}"></script>
 {% endblock %}

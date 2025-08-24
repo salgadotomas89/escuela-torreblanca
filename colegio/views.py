@@ -1,84 +1,43 @@
-from django.core.cache import cache
-from django.db.models import Q, Max
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from django.template.loader import render_to_string
-from django.db.models import Q
-from colegio.models import AppearanceSettings, Asignatura, Colegio, Curso, CursoAsignatura, Evento, HeroSettings, HeroImage, Menu, MenuItem, PreguntaFrecuente, UserProfile, ColegioSubscription, Profesor, Administrativo, Asistente, Alumno, Apoderado
-from comunicados.models import Comunicado, Comunicados
-from noticias.models import Images, Noticia
-from .forms import AppearanceSettingsForm, CustomUserForm, FormEvento, HeroSettingsForm, MenuForm, MenuItemForm
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
-from django.contrib import messages
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import update_session_auth_hash
-from django.core.files.storage import default_storage
 import os
-from .forms import MenuItemForm, MenuForm  # Agrega esto a tus imports si no lo tienes
-from django.db.models import Max  # Agregar al inicio del archivo
-from django.conf import settings
-from django.contrib.auth import logout, login, authenticate
+from datetime import datetime
+from django.contrib.auth import authenticate, login
+from django.core.cache import cache
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.response import Response
+from colegio.models import AppearanceSettings, Colegio, Evento, HeroSettings, PreguntaFrecuente, UserProfile
+from comunicados.models import Comunicados
+from noticias.models import Noticia
+from .forms import CustomUserForm, FormEvento
+from .serializers import ColegioCreateUpdateSerializer, ColegioSerializer, EventoCreateUpdateSerializer, EventoSerializer
 
+
+# ============================================================================
+# VISTAS DE ERROR
+# ============================================================================
 
 def not_found(request, exception):
     error_message = "Lo sentimos, la página que estás buscando no se encuentra disponible."
     return render(request, '404.html', {'error_message': error_message}, status=404)
 
-#datos de acceso a admin salgadotomas, miercoles
 
-from django.core import serializers
+# ============================================================================
+# VISTAS DE PÁGINAS PRINCIPALES
+# ============================================================================
 
-
-#funcion para registrar un profesor
-def registro_profesor(request):
-    if request.method == 'POST':
-        form = CustomUserForm(request.POST)
-        if form.is_valid():
-            # Guardar los datos del formulario
-            form.save()
-            # Puedes devolver una respuesta JSON con un mensaje de éxito
-            return JsonResponse({"message": "Profesor guardado con éxito"})
-        else:
-            # Si el formulario no es válido, devuelve un error
-            return JsonResponse({"error": form.errors}, status=400)
-    return JsonResponse({"error": "Solicitud no válida"}, status=400)
+def admision(request):
+    return render(request, 'admision.html')
 
 
-def nuevo_formato(fecha):
-    print('hola')
+def contacto(request):
+    return render(request, 'contacto.html')
 
-
-def calendario(request):
-    cursos = Curso.objects.all()
-    print(cursos)
-    context = {
-        "cursos": cursos,
-    }
-    return render(request, 'calendario_evaluaciones_2.html', context)
-
-
-from rest_framework import viewsets
-from .models import Administrativo, Alumno, Apoderado, Asistente, Evento, Profesor, UserRole
-from .serializers import EventoSerializer
-
-class EventoViewSet(viewsets.ModelViewSet):
-    queryset = Evento.objects.all()
-    serializer_class = EventoSerializer
-
-
-
-def directiva(request):
-    context = {'lista': ['directiva','misión', 'visión', 'direccion', 'reglamentos']
-}
-    return render(request, 'directiva.html', context)
-
-#devuelve la vista para ver a todos los profesores del colegio
-def profesores(request):
-    return render(request, 'profesores.html')
 
 def inicio(request):
     # Cache key único para el home
@@ -142,6 +101,76 @@ def inicio(request):
     return render(request, 'inicio/home.html', context)
 
 
+# ============================================================================
+# VISTAS DEL MEGAMENÚ/INSTITUCIONAL
+# ============================================================================
+
+def directiva(request):
+    return render(request, 'directiva.html')
+
+
+def directiva_megamenu(request):
+    """Vista para mostrar la página de directiva del colegio desde el megamenú"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/directiva.html', context)
+
+
+def mision(request):
+    """Vista para mostrar la página de misión del colegio"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/mision.html', context)
+
+
+def profesores(request):
+    return render(request, 'profesores.html')
+
+
+def proyecto_educativo(request):
+    """Vista para mostrar la página del proyecto educativo del colegio"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/proyecto_educativo.html', context)
+
+
+def reglamentos(request):
+    """Vista para mostrar la página de reglamentos del colegio"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/reglamentos.html', context)
+
+
+def valores(request):
+    """Vista para mostrar la página de valores del colegio"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/valores.html', context)
+
+
+def vision(request):
+    """Vista para mostrar la página de visión del colegio"""
+    colegio = Colegio.objects.first()
+    context = {
+        'colegio': colegio,
+    }
+    return render(request, 'megamenu/vision.html', context)
+
+
+# ============================================================================
+# VISTAS DE REGISTRO Y USUARIOS
+# ============================================================================
+
 def registro(request):
     if request.method == 'POST':
         form = CustomUserForm(request.POST)
@@ -156,70 +185,18 @@ def registro(request):
     return render(request, 'registration/form.html', {'form': form})
 
 
-def guardar_evento(request):
+def registro_profesor(request):
     if request.method == 'POST':
-        # Acceder a los datos del evento enviados en la solicitud
-        evento = FormEvento(request.POST)
-        print('guardando evento')
-        print('Datos recibidos:', request.POST)
-        
-        if evento.is_valid():
-            evento_guardado = evento.save()
-            print('evento creado')
-            
-            # Invalidar cache del home cuando se crea un evento
-            cache.delete('home_data_v1')
-            
-            return JsonResponse({
-                'success': True, 
-                'message': 'Evento guardado correctamente',
-                'evento': {
-                    'id': evento_guardado.id,
-                    'titulo': evento_guardado.titulo,
-                    'fecha': evento_guardado.fecha.strftime('%Y-%m-%d') if evento_guardado.fecha else None
-                }
-            })
+        form = CustomUserForm(request.POST)
+        if form.is_valid():
+            # Guardar los datos del formulario
+            form.save()
+            # Puedes devolver una respuesta JSON con un mensaje de éxito
+            return JsonResponse({"message": "Profesor guardado con éxito"})
         else:
-            print('Errores de validación:', evento.errors)
-            return JsonResponse({
-                'success': False, 
-                'error': 'Error de validación',
-                'errors': evento.errors
-            })
-    else:
-        return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
-
-
-def eliminar_evento(request, evento_id):
-    if request.method == 'DELETE':
-        try:
-            # Verificar que el usuario sea superusuario
-            if not request.user.is_superuser:
-                return JsonResponse({'success': False, 'error': 'No tienes permisos para eliminar eventos'})
-            
-            # Buscar el evento
-            evento = Evento.objects.get(id=evento_id)
-            titulo_evento = evento.titulo
-            
-            # Eliminar el evento
-            evento.delete()
-            print(f'Evento eliminado: {titulo_evento}')
-            
-            # Invalidar cache del home cuando se elimina un evento
-            cache.delete('home_data_v1')
-            
-            return JsonResponse({
-                'success': True, 
-                'message': f'Evento "{titulo_evento}" eliminado correctamente'
-            })
-            
-        except Evento.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'El evento no existe'})
-        except Exception as e:
-            print(f'Error al eliminar evento: {str(e)}')
-            return JsonResponse({'success': False, 'error': 'Error interno del servidor'})
-    else:
-        return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
+            # Si el formulario no es válido, devuelve un error
+            return JsonResponse({"error": form.errors}, status=400)
+    return JsonResponse({"error": "Solicitud no válida"}, status=400)
 
 
 @csrf_exempt
@@ -244,21 +221,17 @@ def registro_usuario(request):
                 # Crear el UserProfile con el rol
                 user_profile = UserProfile.objects.create(user=user, role=role)
                 
-                # Debug: Verificar si hay archivos en la request
-                print(f"FILES en request: {request.FILES}")
-                print(f"Foto en FILES: {'foto' in request.FILES}")
+                
                 
                 # Procesar la foto si se subió una
                 if 'foto' in request.FILES:
                     foto = request.FILES['foto']
-                    print(f"Archivo recibido: {foto.name}, Tipo: {foto.content_type}, Tamaño: {foto.size}")
                     
                     # Validar el archivo
                     allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
                     if foto.content_type in allowed_types and foto.size <= 5 * 1024 * 1024:  # 5MB máximo
                         user_profile.foto = foto
                         user_profile.save()
-                        print(f"Foto guardada correctamente: {user_profile.foto.url}")
                     else:
                         print(f"Archivo no válido - Tipo: {foto.content_type}, Tamaño: {foto.size}")
                 else:
@@ -273,7 +246,6 @@ def registro_usuario(request):
                 # Si algo falla, eliminar el usuario creado
                 if 'user' in locals():
                     user.delete()
-                print(f"Error al crear usuario: {str(e)}")
                 return JsonResponse({
                     "success": False,
                     "error": {"general": [str(e)]}
@@ -285,6 +257,74 @@ def registro_usuario(request):
             })
     return JsonResponse({"success": False, "error": {"general": ["Método no permitido"]}})
 
+
+# ============================================================================
+# VISTAS DE EVENTOS
+# ============================================================================
+
+def eliminar_evento(request, evento_id):
+    if request.method == 'DELETE':
+        try:
+            # Verificar que el usuario sea superusuario
+            if not request.user.is_superuser:
+                return JsonResponse({'success': False, 'error': 'No tienes permisos para eliminar eventos'})
+            
+            # Buscar el evento
+            evento = Evento.objects.get(id=evento_id)
+            titulo_evento = evento.titulo
+            
+            # Eliminar el evento
+            evento.delete()
+            
+            # Invalidar cache del home cuando se elimina un evento
+            cache.delete('home_data_v1')
+            
+            return JsonResponse({
+                'success': True, 
+                'message': f'Evento "{titulo_evento}" eliminado correctamente'
+            })
+            
+        except Evento.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'El evento no existe'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': 'Error interno del servidor'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
+
+
+def guardar_evento(request):
+    if request.method == 'POST':
+        # Acceder a los datos del evento enviados en la solicitud
+        evento = FormEvento(request.POST)
+        
+        if evento.is_valid():
+            evento_guardado = evento.save()
+            
+            # Invalidar cache del home cuando se crea un evento
+            cache.delete('home_data_v1')
+            
+            return JsonResponse({
+                'success': True, 
+                'message': 'Evento guardado correctamente',
+                'evento': {
+                    'id': evento_guardado.id,
+                    'titulo': evento_guardado.titulo,
+                    'fecha': evento_guardado.fecha.strftime('%Y-%m-%d') if evento_guardado.fecha else None
+                }
+            })
+        else:
+            return JsonResponse({
+                'success': False, 
+                'error': 'Error de validación',
+                'errors': evento.errors
+            })
+    else:
+        return JsonResponse({'success': False, 'error': 'Método de solicitud no válido'})
+
+
+# ============================================================================
+# VISTAS DE CONFIGURACIÓN/APARIENCIA
+# ============================================================================
 
 def guardar_color_comunicados(request):
     if request.method == 'POST':
@@ -314,6 +354,7 @@ def guardar_color_comunicados(request):
         'error': 'Método no permitido'
     }, status=405)
 
+
 def guardar_color_profesores(request):
     if request.method == 'POST':
         try:
@@ -341,83 +382,74 @@ def guardar_color_profesores(request):
     }, status=405)
 
 
-def contacto(request):
-    return render(request, 'contacto.html')
+# ============================================================================
+# API VIEWSETS
+# ============================================================================
 
-
-
-
-
-
-
-# Vistas para los templates del megamenú
-def vision(request):
-    """Vista para mostrar la página de visión del colegio"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/vision.html', context)
-
-def mision(request):
-    """Vista para mostrar la página de misión del colegio"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/mision.html', context)
-
-def valores(request):
-    """Vista para mostrar la página de valores del colegio"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/valores.html', context)
-
-def proyecto_educativo(request):
-    """Vista para mostrar la página del proyecto educativo del colegio"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/proyecto_educativo.html', context)
-
-def reglamentos(request):
-    """Vista para mostrar la página de reglamentos del colegio"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/reglamentos.html', context)
-
-def directiva_megamenu(request):
-    """Vista para mostrar la página de directiva del colegio desde el megamenú"""
-    colegio = Colegio.objects.first()
-    context = {
-        'colegio': colegio,
-    }
-    return render(request, 'megamenu/directiva.html', context)
-
-
-def admision(request):
-    return render(request, 'admision.html')
+class ColegioViewSet(viewsets.ModelViewSet):
+    queryset = Colegio.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.AllowAny]  # Cambiar a acceso público completo
     
+    def get_serializer_class(self):
+        """Usar diferentes serializers para diferentes acciones"""
+        if self.action in ['create', 'update', 'partial_update']:
+            return ColegioCreateUpdateSerializer
+        return ColegioSerializer
     
+    def get_serializer_context(self):
+        """Agregar request al contexto para URLs completas"""
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
+    def perform_create(self, serializer):
+        """Personalizar la creación"""
+        serializer.save()
+        # Invalidar cache si lo usas
+        from django.core.cache import cache
+        cache.delete('home_data_v1')
+    
+    def perform_update(self, serializer):
+        """Personalizar la actualización"""
+        # Si hay una nueva imagen, eliminar la anterior
+        instance = self.get_object()
+        if 'logo' in self.request.FILES and instance.logo:
+            # Eliminar archivo anterior
+            try:
+                import os
+                if os.path.exists(instance.logo.path):
+                    os.remove(instance.logo.path)
+            except Exception:
+                pass
+        
+        serializer.save()
+        # Invalidar cache si lo usas
+        from django.core.cache import cache
+        cache.delete('home_data_v1')
+    
+    def perform_destroy(self, instance):
+        """Personalizar eliminación para limpiar archivos"""
+        # Eliminar archivo del logo si existe
+        if instance.logo:
+            try:
+                import os
+                if os.path.exists(instance.logo.path):
+                    os.remove(instance.logo.path)
+            except Exception:
+                pass
+        super().perform_destroy(instance)
+    
+    @action(detail=False, methods=['get'])
+    def info_basica(self, request):
+        """Endpoint para obtener solo información básica del colegio"""
+        colegio = self.get_queryset().first()
+        if not colegio:
+            return Response({'error': 'No hay información del colegio configurada'}, status=404)
+        
+        serializer = self.get_serializer(colegio)
+        return Response(serializer.data)
 
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django.db.models import Q
-from django.utils import timezone
-from .serializers import EventoSerializer, EventoCreateUpdateSerializer
-
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django.db.models import Q
-from django.utils import timezone
-from .serializers import EventoSerializer, EventoCreateUpdateSerializer
 
 class EventoViewSet(viewsets.ModelViewSet):
     queryset = Evento.objects.all().order_by('-fecha')
@@ -513,75 +545,3 @@ class EventoViewSet(viewsets.ModelViewSet):
             'proximos': eventos_proximos,
             'pasados': eventos_pasados
         })
-
-
-# ...existing code...
-
-from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import ColegioSerializer, ColegioCreateUpdateSerializer
-
-class ColegioViewSet(viewsets.ModelViewSet):
-    queryset = Colegio.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.AllowAny]  # Cambiar a acceso público completo
-    
-    def get_serializer_class(self):
-        """Usar diferentes serializers para diferentes acciones"""
-        if self.action in ['create', 'update', 'partial_update']:
-            return ColegioCreateUpdateSerializer
-        return ColegioSerializer
-    
-    def get_serializer_context(self):
-        """Agregar request al contexto para URLs completas"""
-        context = super().get_serializer_context()
-        context['request'] = self.request
-        return context
-    
-    def perform_create(self, serializer):
-        """Personalizar la creación"""
-        serializer.save()
-        # Invalidar cache si lo usas
-        from django.core.cache import cache
-        cache.delete('home_data_v1')
-    
-    def perform_update(self, serializer):
-        """Personalizar la actualización"""
-        # Si hay una nueva imagen, eliminar la anterior
-        instance = self.get_object()
-        if 'logo' in self.request.FILES and instance.logo:
-            # Eliminar archivo anterior
-            try:
-                import os
-                if os.path.exists(instance.logo.path):
-                    os.remove(instance.logo.path)
-            except Exception:
-                pass
-        
-        serializer.save()
-        # Invalidar cache si lo usas
-        from django.core.cache import cache
-        cache.delete('home_data_v1')
-    
-    def perform_destroy(self, instance):
-        """Personalizar eliminación para limpiar archivos"""
-        # Eliminar archivo del logo si existe
-        if instance.logo:
-            try:
-                import os
-                if os.path.exists(instance.logo.path):
-                    os.remove(instance.logo.path)
-            except Exception:
-                pass
-        super().perform_destroy(instance)
-    
-    @action(detail=False, methods=['get'])
-    def info_basica(self, request):
-        """Endpoint para obtener solo información básica del colegio"""
-        colegio = self.get_queryset().first()
-        if not colegio:
-            return Response({'error': 'No hay información del colegio configurada'}, status=404)
-        
-        serializer = self.get_serializer(colegio)
-        return Response(serializer.data)
-
-# ...existing code...
