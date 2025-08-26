@@ -19,20 +19,20 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
             {% for item in menu_items %}
-                <li class="nav-item">
+                <li class="nav-item" data-menu-item="{{ item.nombre|lower }}">
                     
                     {% if item.url == 'noticias'  %}
-                        <a class="nav-link btn btn-primary mx-1" href="{% url item.url 0 %}">{{ item.nombre }}</a>
+                        <a class="nav-link btn btn-primary mx-1" href="{% url item.url 0 %}" data-menu-url="{{ item.url }}">{{ item.nombre }}</a>
                     {% else %}
-                        <a class="nav-link btn btn-primary" href="{% url item.url %}">{{ item.nombre }}</a>
+                        <a class="nav-link btn btn-primary" href="{% url item.url %}" data-menu-url="{{ item.url }}">{{ item.nombre }}</a>
                     {% endif %}
                 </li>
             {% endfor %}
             
 
             {% for mega_menu in mega_menus %}
-                <li class="nav-item colegio">
-                    <a class="nav-link btn btn-primary">
+                <li class="nav-item colegio" data-menu-item="{{ mega_menu.nombre|lower }}">
+                    <a class="nav-link btn btn-primary" data-menu-url="colegio">
                         {{ mega_menu.nombre }}&nbsp;
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>

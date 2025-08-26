@@ -2,136 +2,19 @@
 {% load static %} 
 {% block body %}
 
+<link rel="stylesheet" href="{% static 'css/galeria-styles.css' %}">
+
 {% include "common_styles.html" %}
 
-<style>
-    .negrita { font-weight: bold; }
-    .btn-dark:hover { background-color: #14dddd; }
-    .actividad, .noticia-galeria { background-color: #f6f7f7; }
-    .image-gallery img {
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .image-gallery img:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Animación para nuevas actividades */
-    .actividad {
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    
-    .actividad.nueva-actividad {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    
-    .actividad.nueva-actividad.mostrar {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    /* Fondo oscuro con opacidad para el carrusel en el modal */
-    .carousel-modal-bg {
-        background: rgba(30, 30, 30, 0.92) !important;
-    }
-    
-    /* Estilos para el estado vacío */
-    .empty-events-container {
-        background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-        border-radius: 20px;
-        padding: 4rem 2rem;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.1);
-        margin: 2rem auto;
-        background-color: #f8f9fa;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .empty-events-content {
-        text-align: center;
-        width: 100%;
-    }
-    
-    .empty-events-icon {
-        color: #0d6efd;
-        margin-bottom: 1.5rem;
-        opacity: 0.9;
-        animation: float 3s ease-in-out infinite;
-    }
-    
-    .empty-events-icon i {
-        font-size: 4rem;
-    }
-    
-    .empty-events-title {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        background: linear-gradient(90deg, #0d6efd, #0a58ca);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    
-    .empty-events-message {
-        font-size: 1.1rem;
-        color: #6c757d;
-        line-height: 1.6;
-        margin-bottom: 2rem;
-    }
-    
-    .empty-events-animation {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        margin: 0 auto;
-    }
-    
-    .empty-events-animation .pulse-circle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 20px;
-        height: 20px;
-        background: #0d6efd;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-    }
-    
-    @keyframes float {
-        0% {
-            transform: translateY(0px);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
-        100% {
-            transform: translateY(0px);
-        }
-    }
-    
-    @keyframes pulse {
-        0% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-        100% {
-            transform: translate(-50%, -50%) scale(3);
-            opacity: 0;
-        }
-    }
-</style>
+
 
 <div class="container py-5">
-    <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+    <div id="hero-banner" class="p-4 p-md-5 mb-4 rounded text-bg-light">
     <div class="col-md-6 px-0">
         <h1 class="display-4 fst-italic">GALERÍA</h1>
         <p class="lead my-3">¡Bienvenido a nuestra glaería de fotos.</p>
         {% if user.is_authenticated %}
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subirActividadModal">
+                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#subirActividadModal">
                     Subir Nueva Actividad
                 </button>
         {% endif %}

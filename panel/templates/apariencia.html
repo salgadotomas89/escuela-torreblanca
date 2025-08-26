@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
         removeHeroImageBtn.addEventListener('click', function() {
             if (confirm('¿Estás seguro de que quieres eliminar la imagen del hero? Se usará la imagen por defecto.')) {
                 // Realizar petición AJAX para eliminar imagen
-                fetch('{% url "remove_hero_image" %}', {
+                fetch('{% url "hero_remove_background_image" %}', {
                     method: 'POST',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',

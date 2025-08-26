@@ -3,6 +3,49 @@ document.addEventListener('DOMContentLoaded', function () {
     const navbar = document.querySelector('.navbar');
     const megaMenu = document.querySelector('.mega-menu');
     const navbarItem = document.querySelector('.nav-item.colegio');
+    
+    // Función para manejar la selección de items del menú
+    const handleMenuSelection = () => {
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll('.navbar-nav .nav-item .nav-link');
+        
+        // Remover clase 'selected' de todos los links
+        menuLinks.forEach(link => {
+            link.classList.remove('selected');
+        });
+        
+        // Añadir clase 'selected' al link correspondiente según la URL actual
+        menuLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (currentPath === href || (href !== '/' && currentPath.includes(href.split('/').pop())))) {
+                link.classList.add('selected');
+            }
+        });
+        
+        // Manejar caso especial para la página de inicio
+        if (currentPath === '/' || currentPath === '/inicio/') {
+            const homeLink = document.querySelector('.navbar-nav .nav-item .nav-link[href*="inicio"]');
+            if (homeLink) {
+                homeLink.classList.add('selected');
+            }
+        }
+    };
+    
+    // Ejecutar la función al cargar la página
+    handleMenuSelection();
+    
+    // Añadir event listeners para clicks en los items del menú
+    const menuLinks = document.querySelectorAll('.navbar-nav .nav-item .nav-link');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Remover clase 'selected' de todos los links
+            menuLinks.forEach(otherLink => {
+                otherLink.classList.remove('selected');
+            });
+            // Añadir clase 'selected' al link clickeado
+            this.classList.add('selected');
+        });
+    });
 
     // Verifica si los elementos existen antes de continuar
     if (!navbar || !megaMenu || !navbarItem) return;

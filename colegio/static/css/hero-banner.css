@@ -1,0 +1,15 @@
+/* CSS para controlar el background color del hero banner */
+:root {
+    --menu-background-color: #FFFFFF;            /* Color de fondo por defecto para el menú principal. */
+    --menu-text-color: #000000;                  /* Color de texto por defecto para el menú principal. */
+    --menu-height: 80px;                         /* Altura por defecto para el menú. */
+    /* ... mega menu ... */
+    --mega-menu-background-color: white;       /* Color de fondo por defecto para el mega menú. */
+    --mega-menu-text-color: #000000;             /* Color de texto por defecto para el mega menú. */
+    --color_principal_texto: #000000;
+    --color_principal_texto-dark: color-mix(in srgb, var(--color_principal_texto) 70%, black 30%);
+}
+
+#hero-banner {
+    background-color: var(--color_principal_texto) !important; /* Azul claro suave */
+}

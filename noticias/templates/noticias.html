@@ -8,13 +8,14 @@
 <link rel="stylesheet" href="{% static 'css/noticias-style.css' %}">
 
 
+
 <div class="container py-5">
-  <div class="p-4 p-md-5 mb-4 rounded text-bg-light">
+  <div id="hero-banner" class="p-4 p-md-5 mb-4 rounded text-bg-light">
     <div class="col-md-6 px-0">
       <h1 class="display-4 fst-italic">NOTICIAS</h1>
       <p class="lead my-3">¡Bienvenido a nuestra sección de noticias, aquí encontrarás las últimas novedades y eventos educativos!.</p>
       {% if user.is_authenticated %}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNoticia">
+        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modalNoticia">
           Agregar noticia
         </button>
       {% endif %}
