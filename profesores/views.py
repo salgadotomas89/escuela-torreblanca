@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from colegio.models import UserProfile, Profesor, Curso, CursoAsignatura
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+import os
 
 
 # Create your views here.
@@ -92,6 +93,7 @@ def perfil_profesor(request, id):
     return render(request, 'perfil_profesor.html', context)
 
 
+
 @login_required
 @require_POST
 def eliminar_profesor(request, id):
@@ -108,6 +110,17 @@ def eliminar_profesor(request, id):
         
         # Obtener el usuario asociado
         user = profesor_profile.user
+        
+        # Eliminar la foto asociada si existe
+        if profesor_profile.foto and profesor_profile.foto.name:
+            try:
+                # Verificar que no sea la foto por defecto
+                if 'default-profile.png' not in profesor_profile.foto.name:
+                    if os.path.exists(profesor_profile.foto.path):
+                        os.remove(profesor_profile.foto.path)
+            except Exception as e:
+                # Si hay error eliminando la foto, continuar con la eliminación del usuario
+                print(f"Error eliminando foto: {e}")
         
         # Eliminar el usuario (esto eliminará automáticamente el UserProfile y Profesor por CASCADE)
         user.delete()
